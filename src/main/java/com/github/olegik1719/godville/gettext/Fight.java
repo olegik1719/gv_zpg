@@ -32,8 +32,8 @@ public class Fight {
     private Document fight;
     private Hero[] heroes = new Hero[2];
     private int turns;
-    private int money;
     private int winner;
+    private int money;
     private String currency;
     private Date dateFight;
     private boolean isZPG;
