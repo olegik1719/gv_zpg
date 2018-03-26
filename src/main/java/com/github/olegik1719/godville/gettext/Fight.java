@@ -6,13 +6,25 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Fight {
     private static final String ERINOME_PREFIX="https://gv.erinome.net/duels/log/";
-    private static final String regexpGold="золотой кирпич и (\\d+) (.+)\\.";
-    private static final Pattern pattern = Pattern.compile(regexpGold);
+
+    private static final String REGEXP_GOLD="золотой кирпич и (\\d+) (.+)\\.";
+
+    private static final Pattern PATTERN_GOLD = Pattern.compile(REGEXP_GOLD);
+
+    private static final SimpleDateFormat GV_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+
+    private static final String[] ZPG_BEGIN={"По обоюдному желанию богов поединок пройдет без их вмешательства."
+            ,"Боги отложили пульты влияния и молча взирают с небес. Героям никто не помешает. "};
+
+
     private String id;
     private Document fight;
     private Hero[] heroes = new Hero[2];
@@ -20,6 +32,7 @@ public class Fight {
     private int money;
     private int winner;
     private String currency;
+    private Date dateFight;
 
     public boolean equals(Object o){
         return id.equals(o);
@@ -29,17 +42,18 @@ public class Fight {
         return id.hashCode();
     }
 
-    public Fight(String url){
+    public Fight(String url) throws ParseException {
         id = url.substring(url.lastIndexOf('/')+1);
         try {
             fight = Jsoup.connect(ERINOME_PREFIX+id).get();
+            dateFight = GV_DATE_FORMATTER.parse(fight.select("div.ft").first().text());
             for (int i = 0; i<2;i++)
                 heroes[i] = new Hero(fight,i);
             winner = heroes[0].isWinner()?0:1;
             turns = Integer.parseInt(fight.getElementById("turn_num").text());
             {
                 String lastTurn = fight.select("[data-t$=\""+turns+"\"]").text();
-                Matcher matcher = pattern.matcher(lastTurn);
+                Matcher matcher = PATTERN_GOLD.matcher(lastTurn);
                 if (matcher.find()) {
                     money = Integer.parseInt(matcher.group(1));
                     currency = matcher.group(2);
@@ -85,6 +99,11 @@ public class Fight {
     public String getCurrency() {
         return currency;
     }
+
+    public Date getTime(){
+        return dateFight;
+    }
+
 
     class Hero{
         private String godName;
