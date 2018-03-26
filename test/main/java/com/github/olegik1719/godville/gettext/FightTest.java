@@ -18,11 +18,6 @@ public class FightTest {
         current = new Fight("e183mbz38");
     }
 
-    @Test
-    public void getGods() {
-        System.out.println(current.getGod1());
-        System.out.println(current.getGod2());
-    }
 
 
 
@@ -34,5 +29,10 @@ public class FightTest {
     @Test
     public void getTime() throws ParseException {
         System.out.println(current.getTime());
+    }
+
+    @Test
+    public void isZPG() {
+        System.out.println(current.isZPG());
     }
 }

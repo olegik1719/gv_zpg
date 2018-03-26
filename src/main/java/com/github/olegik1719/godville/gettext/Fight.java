@@ -4,6 +4,7 @@ package com.github.olegik1719.godville.gettext;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -15,6 +16,8 @@ import java.util.regex.Pattern;
 public class Fight {
     private static final String ERINOME_PREFIX="https://gv.erinome.net/duels/log/";
 
+    private static final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
+
     private static final String REGEXP_GOLD="золотой кирпич и (\\d+) (.+)\\.";
 
     private static final Pattern PATTERN_GOLD = Pattern.compile(REGEXP_GOLD);
@@ -22,7 +25,7 @@ public class Fight {
     private static final SimpleDateFormat GV_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
     private static final String[] ZPG_BEGIN={"По обоюдному желанию богов поединок пройдет без их вмешательства."
-            ,"Боги отложили пульты влияния и молча взирают с небес. Героям никто не помешает. "};
+            ,"Боги отложили пульты влияния и молча взирают с небес. Героям никто не помешает."};
 
 
     private String id;
@@ -33,6 +36,7 @@ public class Fight {
     private int winner;
     private String currency;
     private Date dateFight;
+    private boolean isZPG;
 
     public boolean equals(Object o){
         return id.equals(o);
@@ -59,21 +63,17 @@ public class Fight {
                     currency = matcher.group(2);
                 }
             }
+            Element bonus =
+                    fight.select("[data-t$=\"1\"][style='border-bottom: 1px dashed #888888;']").first();
+            String bonus_text = bonus != null ? bonus.text(): null;
+            for (String zpg_phrase:ZPG_BEGIN) {
+                    if (bonus_text.contains(zpg_phrase)){
+                        isZPG = true;
+                    }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private String getHeroInfo(int num){
-        return '\"'+heroes[num].getGodName()+"\":" + heroes[num].getGodLink() + (heroes[num].isWinner()? " win":" lose");
-    }
-
-    public String getGod1() {
-        return getHeroInfo(0);
-    }
-
-    public String getGod2() {
-        return getHeroInfo(1);
     }
 
     public int getTurns(){
@@ -104,24 +104,41 @@ public class Fight {
         return dateFight;
     }
 
+    public boolean isZPG() {
+        return isZPG;
+    }
 
     class Hero{
+        //private final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
         private String godName;
         private String godLink;
         private boolean isWinner;
         private int heroID;
+        private int wins;
+        private int loses;
 
         private Hero(Element fight, int ID){
             heroID = ID;
-            //System.out.println(ID);
             Element hero = fight.getElementById("hero" + (heroID+1));
             Element info = hero.getElementById("hero" + (heroID+1) + "_info");
             Element god  = info.select("a").first();
             godLink = god.attr("href");
             godName = god.text();
-            //System.out.println(heroID);
-            Element health = hero.getElementById("hp0");
+            Element stats = hero.getElementById("hero" + (heroID+1) + "_stats");
+            Element health = stats.getElementById("hp0");
             isWinner = !(health != null?health.html().equals("1"):hero.getElementById("hp1").html().equals("1"));
+            Elements new_lines = stats.select("div.new_line");
+            for (Element el: new_lines) {
+                if ((el.select("span.l_capt") != null)
+                        &&(el.select("span.l_capt").text().equals("Побед / Поражений"))){
+                    String winsLoses = el.select("span.field_content").text();
+                    Matcher matcher = PATTERN_WINSLOSES.matcher(winsLoses);
+                    if (matcher.find()) {
+                        wins = Integer.parseInt(matcher.group(1));
+                        loses = Integer.parseInt(matcher.group(2));
+                    }
+                }
+            }
         }
 
         public boolean isWinner(){
@@ -134,6 +151,14 @@ public class Fight {
 
         public String getGodLink() {
             return godLink;
+        }
+
+        public int getLoses() {
+            return loses;
+        }
+
+        public int getWins() {
+            return wins;
         }
     }
 }
