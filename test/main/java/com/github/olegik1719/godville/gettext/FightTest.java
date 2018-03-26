@@ -10,12 +10,8 @@ public class FightTest {
 
     @Before
     public void setUp() {
-        current = new Fight("2aqwf8sgd");
-    }
-
-    @Test
-    public void getHtml() {
-        current.getHtml();
+        //current = new Fight("2aqwf8sgd");e183mbz38
+        current = new Fight("e183mbz38");
     }
 
     @Test
@@ -29,10 +25,5 @@ public class FightTest {
     @Test
     public void getTurns() {
         System.out.println(current.getTurns());
-    }
-
-    @Test
-    public void getLastTurn() {
-        System.out.println(current.getLastTurn());
     }
 }
