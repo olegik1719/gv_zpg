@@ -21,6 +21,13 @@ public class Fight {
     private int winner;
     private String currency;
 
+    public boolean equals(Object o){
+        return id.equals(o);
+    }
+
+    public int hashCode(){
+        return id.hashCode();
+    }
 
     public Fight(String url){
         id = url.substring(url.lastIndexOf('/')+1);
@@ -57,6 +64,26 @@ public class Fight {
 
     public int getTurns(){
         return turns;
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public String getWinner(){
+        return heroes[winner].godName;
+    }
+
+    public String getLoser(){
+        return heroes[(winner+1)%2].godName;
+    }
+
+    public int getMoney(){
+        return money;
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 
     class Hero{
