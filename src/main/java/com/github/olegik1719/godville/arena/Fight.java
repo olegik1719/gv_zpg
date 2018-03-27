@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.gettext;
+package com.github.olegik1719.godville.arena;
 
 
 import org.jsoup.Jsoup;
@@ -6,61 +6,83 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Fight {
+public class Fight implements Serializable{
     private static final String ERINOME_PREFIX="https://gv.erinome.net/duels/log/";
 
     private static final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
 
-    private static final String REGEXP_GOLD="золотой кирпич и (\\d+) (.+)\\.";
+    private static final String REGEXP_GOLD="золотой кирпич и (\\d+) (.+?)\\.";
 
     private static final Pattern PATTERN_GOLD = Pattern.compile(REGEXP_GOLD);
 
     private static final SimpleDateFormat GV_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+    private static final SimpleDateFormat ERINOME_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
 
     private static final String[] ZPG_BEGIN={"По обоюдному желанию богов поединок пройдет без их вмешательства."
             ,"Боги отложили пульты влияния и молча взирают с небес. Героям никто не помешает."};
 
 
     private String id;
-    private Document fight;
     private Hero[] heroes = new Hero[2];
     private int turns;
     private int winner;
     private int money;
-    private String currency;
+    //private String currency;
     private Date dateFight;
     private boolean isZPG;
+    private boolean young;
 
-    public boolean equals(Object o){
-        return id.equals(o);
-    }
-
-    public int hashCode(){
-        return id.hashCode();
-    }
-
-    public Fight(String url) throws ParseException {
-        id = url.substring(url.lastIndexOf('/')+1);
+    public Fight(String id) {
+        this.id = id;
         try {
-            fight = Jsoup.connect(ERINOME_PREFIX+id).get();
-            dateFight = GV_DATE_FORMATTER.parse(fight.select("div.ft").first().text());
+            if (id == null) throw new IOException("It's null!");
+            String filePath = "res/log/"+id+".html";
+            File logfile = new File(filePath);
+            Document fight;
+            if (!logfile.exists()) {
+                fight = Jsoup.connect(ERINOME_PREFIX + id).get();
+                try(FileWriter writer = new FileWriter(logfile,true))
+                {
+                    writer.write(fight.html() + '\n');
+//                    writer.flush();
+                }
+                catch(IOException ex){
+                    System.out.println(ex.getMessage());
+                }
+            }else {
+                fight = Jsoup.parse(logfile, "UTF-8", "/");
+            }
+            if (fight.select("div.lastduelpl_f").first() == null) {
+                throw new IOException("It's not log");
+            }
+            try {
+                dateFight = ERINOME_DATE_FORMATTER.parse(fight.select("div.lastduelpl_f>div").first().text().substring(5));
+            }catch (ParseException exception){
+                System.out.println(id);
+                exception.printStackTrace();
+            }
             for (int i = 0; i<2;i++)
                 heroes[i] = new Hero(fight,i);
             winner = heroes[0].isWinner()?0:1;
+            young = heroes[0].isYoung();
             turns = Integer.parseInt(fight.getElementById("turn_num").text());
             {
                 String lastTurn = fight.select("[data-t$=\""+turns+"\"]").text();
                 Matcher matcher = PATTERN_GOLD.matcher(lastTurn);
                 if (matcher.find()) {
-                    money = Integer.parseInt(matcher.group(1));
-                    currency = matcher.group(2);
+                    int sum = Integer.parseInt(matcher.group(1));
+                    String currency = matcher.group(2);
+                    money = Common.getMoney(sum,currency);
                 }
             }
             Element bonus =
@@ -72,7 +94,8 @@ public class Fight {
                     }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println(e.getMessage()+" " + id);
         }
     }
 
@@ -84,21 +107,21 @@ public class Fight {
         return id;
     }
 
-    public String getWinner(){
-        return heroes[winner].godName;
+    public Hero getWinner(){
+        return heroes[winner];
     }
 
-    public String getLoser(){
-        return heroes[(winner+1)%2].godName;
+    public Hero getLoser(){
+        return heroes[(winner+1)%2];
     }
 
     public int getMoney(){
         return money;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
+//    public String getCurrency() {
+//        return currency;
+//    }
 
     public Date getTime(){
         return dateFight;
@@ -108,7 +131,7 @@ public class Fight {
         return isZPG;
     }
 
-    class Hero{
+    class Hero implements Serializable{
         //private final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
         private String godName;
         private String godLink;
@@ -116,6 +139,7 @@ public class Fight {
         private int heroID;
         private int wins;
         private int loses;
+        private boolean young;
 
         private Hero(Element fight, int ID){
             heroID = ID;
@@ -128,14 +152,19 @@ public class Fight {
             Element health = stats.getElementById("hp0");
             isWinner = !(health != null?health.html().equals("1"):hero.getElementById("hp1").html().equals("1"));
             Elements new_lines = stats.select("div.new_line");
-            for (Element el: new_lines) {
+            for (Element el: new_lines) {//
                 if ((el.select("span.l_capt") != null)
-                        &&(el.select("span.l_capt").text().equals("Побед / Поражений"))){
+                        &&(el.select("span.l_capt").text().contains("Побед / Поражений"))){
                     String winsLoses = el.select("span.field_content").text();
                     Matcher matcher = PATTERN_WINSLOSES.matcher(winsLoses);
                     if (matcher.find()) {
                         wins = Integer.parseInt(matcher.group(1));
                         loses = Integer.parseInt(matcher.group(2));
+                    }
+                }else{
+                    if ((el.select("span.l_capt") != null)
+                            &&(el.select("span.l_capt").text().contains("Кирпичей для храма"))){
+                        young = false;
                     }
                 }
             }
@@ -159,6 +188,10 @@ public class Fight {
 
         public int getWins() {
             return wins;
+        }
+
+        public boolean isYoung() {
+            return young;
         }
     }
 }

@@ -1,0 +1,1131 @@
+<!doctype html>
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <title>Хроника Годвилля</title> 
+  <script type="text/javascript" src="/javascripts/jquery-1.12.4.min.js"></script> 
+  <script src="/javascripts/awardj.js" type="text/javascript"></script> 
+  <link href="/stylesheets/common.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/common-mini.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/progress_bar.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/hero_log.css" media="screen" rel="stylesheet" type="text/css"> 
+  <meta NAME="gvdt" CONTENT="hero_log_n">
+  <script src="/javascripts/nt.js" type="text/javascript"></script> 
+  <script src="/javascripts/st.js" type="text/javascript"></script>
+  <script src="/javascripts/stjq.js" type="text/javascript"></script> 
+  <script src="/javascripts/ga.js" type="text/javascript"></script> 
+  <script src="/javascripts/garu.js" type="text/javascript"></script> 
+  <meta name="keywords" content="Годвилль, Godville, Zero Player Game, ZPG, ZRPG, самоиграйка, тамагочи, браузерная игра, божественная комедия">
+  <meta name="description" content="Божественная комедия-самоиграйка с участием бога и, кхм, героя. А еще MMO и ZPG, если вы знаете эти слова."> 
+  <link rel="shortcut icon" href="/images/favicon.ico"> 
+  <script nonce="d91caca74114d81fdfc578fca82f8d72">
+function to_mobile(){
+	$.post('/hero/to_mobile', {}, function(data) {
+		location.reload();
+	});
+}
+$(document).ready(function() {
+    $('.to_mobile').click(function(){
+        to_mobile();
+        return false;
+    });
+    $('.to_top').click(function(e){
+        $(window).scrollTop(0);
+        return false;
+    })
+    $('#reload').click(function(e){
+        location.reload(true)
+        return false;
+    });
+    $('a[data-rv]').click(function(e){
+        var v = $(this).data('rv');
+        report_godvoice(v[0],v[1],v[2],v[3]);
+        return false;
+    })
+    $('.n_wn').click(function(e){
+        window.open(this.href);
+        return false;
+    })
+	if (typeof(jq_mfp_init) != 'undefined'){
+		jq_mfp_init();
+	}    
+});
+</script> 
+ </head> 
+ <body> 
+  <div id="wrap"> 
+   <div id="page_wrapper"> 
+    <div class="lastduelpl"> 
+     <span><a href="/duels/log/f3suw1xub">Арена</a></span> 
+    </div> 
+    <div class="ft" style="display:none;">
+     26.03.2018 12:02 
+    </div> 
+    <div class="lastduelpl"> 
+    </div> 
+    <div id="arena_block" style="float: left; width: 100%;"> 
+     <div id="p_status" style="text-align:center;"></div> 
+     <div style="text-align:center;display: none;" id="app_bar"> 
+      <span id="app_status">Подключаемся к сервису быстрых обновлений...</span> 
+      <span title="Скрыть"><a href="#" onclick="Effect.toggle(&quot;app_bar&quot;,'blind',{});; return false;">[X]</a></span> 
+     </div> 
+     <div class="rpl"> 
+      <input id="slider" type="range" min="1" max="31" value="31" data-role="none"> 
+      <span id="sback" title="Предыдущий ход (стрелка влево)">⏪︎</span> 
+      <span id="splay" title="Проигрывание/пауза (Enter)">▶︎</span> 
+      <span id="sps" title="Проигрывание/пауза (Enter)" style="display:none;">⏸︎</span> 
+      <span id="sfwd" title="Следующий ход (стрелка вправо)">⏩︎</span> 
+     </div> 
+     <script nonce="d91caca74114d81fdfc578fca82f8d72">
+
+$(document).ready(function() {
+    var hp = {"-1":{"0":336,"1":336},"0":{"0":336,"1":336},"1":{"0":336,"1":336},"2":{"0":308,"1":336},"3":{"0":308,"1":336},"4":{"0":281,"1":336},"5":{"0":281,"1":308},"6":{"0":260,"1":308},"7":{"0":260,"1":284},"8":{"0":232,"1":284},"9":{"0":232,"1":260},"10":{"0":215,"1":260},"11":{"0":215,"1":227},"12":{"0":188,"1":227},"13":{"0":188,"1":195},"14":{"0":166,"1":195},"15":{"0":166,"1":195},"16":{"0":127,"1":195},"17":{"0":127,"1":171},"18":{"0":127,"1":171},"19":{"0":127,"1":146},"20":{"0":110,"1":146},"21":{"0":110,"1":110},"22":{"0":86,"1":110},"23":{"0":86,"1":86},"24":{"0":55,"1":86},"25":{"0":55,"1":54},"26":{"0":33,"1":54},"27":{"0":33,"1":22},"28":{"0":33,"1":22},"29":{"0":6,"1":22},"30":{"0":6,"1":1},"31":{"0":6,"1":1}};    
+    var moves = [];
+    
+    var last= parseInt($('#turn_num').text());
+    
+    
+    var play_timer = undefined;
+    
+    var cur_turn=last;
+    
+        
+	var scroll_to = function(element){
+        if (element.length == 0){
+            return;
+        }
+
+		var elHeight = 0;
+		element.each(function() {
+		  elHeight += $(this).height();
+		});        
+        
+        var offset = element.offset().top + elHeight;
+            if(!element.is(":visible")) {
+                element.css({"visibility":"hidden"}).show();
+                var offset = element.offset().top;
+                element.css({"visibility":"", "display":""});
+            }
+
+            var visible_area_start = $(window).scrollTop();
+            var visible_area_end = visible_area_start + window.innerHeight;
+
+            if(offset < visible_area_start || offset > visible_area_end){
+                 // Not in view so scroll to it
+                 $('html,body').animate({scrollTop: offset - window.innerHeight/3}, 300);
+                 return false;
+            }
+            return true;
+	}        
+    
+    var map_scroll = function(){
+        
+        if ($('.dmh').length == 0){
+            return;
+        }
+        
+        var m_width = $('.dmh').width();
+        var m_left = $('.dmh').position().left;
+        
+        var map_width = $('#dmap').width();
+        
+        var s_left = $('#dmap').scrollLeft();
+        if ( s_left < m_left || 
+            s_left > m_left
+        ) {
+            $('#dmap').scrollLeft( m_left - map_width / 2);
+//            console.log('dungeon map scrolled ' + s_left + ' ' + m_left);
+        }
+    }
+
+    
+    var is_out_of_view = function(element){
+        if (element.length == 0){
+            return;
+        }
+        var elementTop = element.offset().top;
+        var elementBottom = element.outerHeight();
+
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+
+        if (viewportTop > elementTop) {
+//        if (elementBottom < viewportBottom ){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+        
+    var add_on_scroll = function(el_id){
+        if ($(el_id).length > 0){
+            ($(el_id).parent().parent()).addClass('bldn');
+        }
+    }
+
+    var on_scroll = function(el_id){
+        var fixed_mode = undefined;
+        var dmap = $($('.bldn')[0]);
+        var covered = is_out_of_view($(dmap.parent()));
+        if (!dmap.hasClass('block_fixed')){
+            if (covered && $('.d_content').innerHeight() > window.innerHeight){
+                fixed_mode = true;
+            }
+        }
+        else if (!covered) {
+            fixed_mode = false
+        }
+        if (fixed_mode){
+            $('.bldn').each(function(index){
+                $(this).addClass('block_fixed');
+                $(this).offset({'left':$(this).parent().offset().left});
+            });
+            $('.hide_on_scroll').hide();
+        }
+        else if (fixed_mode == false) {
+            $('.bldn').each(function(index){
+                $(this).removeClass('block_fixed');
+                $(this).removeAttr('style');
+            });
+            $('.hide_on_scroll').show();
+        }
+    }
+    
+    add_on_scroll('#dmap');
+    add_on_scroll('#alls');
+    add_on_scroll('#opps');
+    add_on_scroll($('#hpp1').parent().parent().parent());
+    add_on_scroll($('#hpp0').parent().parent().parent());
+
+    $(window).on('resize scroll', function() {
+        on_scroll();
+    });        
+    
+    
+    var show_turn = function(turn_num, no_scroll){
+        
+        if (no_scroll == undefined){
+            scroll_to($('.t'+turn_num));
+        }        
+        
+        
+        $('.ct').removeClass('ct ctbg');
+        $('.t'+turn_num).addClass('ct ctbg');
+        
+
+
+        var thp = hp[turn_num];
+        var thpp = hp[turn_num-1];
+        
+        if (thp){
+            for (var key in thp) {
+                var hpd = undefined;
+                var h = $('#hp'+key);
+                if (h.length > 0){
+                    h.text(thp[key]);
+                }
+                if (thpp[key] != undefined){
+                    hpd = thp[key] - thpp[key];
+                }
+                
+                var h_p = $('#hpd'+key).text('');
+                if (hpd){
+                    var h_p = $('#hpd'+key);
+                    if (h_p.length > 0){
+                        h_p.removeClass('hpd_green');
+                        h_p.removeClass('hpd_red');
+                        if (hpd > 0){
+                            h_p.text('+'+(hpd));
+                            h_p.addClass('hpd_green');
+                        }
+                        else {
+                            h_p.text((hpd));
+                            h_p.addClass('hpd_red');
+                        }
+                    }
+                }
+                
+                
+                if (h_p.length > 0){
+                    if (thp[key] == undefined) {
+                        h_p.parent().parent().hide();
+                    }
+                    else {
+                        h_p.parent().parent().show();
+                    }
+                }
+
+                var hpp = $('#hpp'+key);
+                if (hpp.length > 0){
+                    var hpm = $('#hpm'+key).text();
+                    var prct = (thp[key]/hpm*100).toFixed();
+                    hpp.css('width', (100 - prct)+'%');
+                    
+                    var p = hpp.parent();
+                    
+                    var pc_color = 'green';
+                    if (prct < 30 ){
+                       pc_color = 'red'
+                    }
+                    else if (prct < 70){
+                      pc_color = 'yellow'
+                    }
+                    p.css('background-color', pc_color);
+                    p.attr('title', prct+'%')
+                }
+            }
+        }
+        
+        $('#turn_num').text(turn_num);
+        $('#slider').val(turn_num);
+        map_scroll();
+        $('.dmh').removeClass('dmh');
+        if (moves.length > 0){
+            $('#'+moves[turn_num-1]).addClass('dmh');
+        }
+        if (turn_num == last){
+//            $('#sfwd').addClass('rpld');
+            $('.dt').show();
+        }
+        else {
+            // $('#sfwd').removeClass('rpld');
+            $('.dt').hide();
+        }
+        if (turn_num == 1){
+            // $('#sback').addClass('rpld');
+        }
+        else {
+            // $('#sback').removeClass('rpld');
+        }
+    }
+        
+	var stop_replay = function(){
+		if (play_timer != undefined){
+			clearInterval(play_timer);
+			play_timer = undefined;
+		}
+        $('#sps').hide();
+        $('#splay').show();        
+	}
+    
+	var play_step_func = function(){
+		show_turn(cur_turn);
+		
+		if (cur_turn == last){
+            stop_replay();
+            cur_turn = 1;
+			return;
+		}
+        cur_turn++;
+	}
+    
+    var back_f = function(){
+        if (cur_turn== 1){
+            cur_turn = last+1;
+        }
+        stop_replay();
+        if (cur_turn > 1){
+            cur_turn--;
+            show_turn(cur_turn);
+        }        
+    }
+    
+	var forward_f = function(){
+        if (cur_turn==last){
+            cur_turn = 0;
+        }				        
+		stop_replay();
+        if (cur_turn < last){
+            cur_turn++;
+            show_turn(cur_turn);
+        }        
+    }
+    
+    var play_f = function(){
+        stop_replay();
+        if (cur_turn==last){
+            cur_turn = 1;
+        }
+        play_timer = setInterval(play_step_func, 1000);
+        play_step_func();
+        $('#splay').hide();
+        $('#sps').show();        
+    }
+    
+    
+    $('#slider').change(function() {
+        cur_turn = $(this).val();
+        show_turn(cur_turn);
+    });
+    
+    $('#sback').click(function(){
+        back_f();
+    });
+    $('#sfwd').click(function(){
+        forward_f();
+    });
+    
+    $('#splay').click(function(){
+        play_f();
+    });
+    $('#sps').click(function(){
+        stop_replay();
+    });
+    
+	$("body").keydown(function(e){
+		if ((e.keyCode || e.which) == 37) { // left arrow
+			back_f();
+		}
+		else if ((e.keyCode || e.which) == 39){ // right arrow
+			forward_f();
+		}
+		else if ((e.keyCode || e.which) == 13 && !e.ctrlKey){ // enter
+			if ($('#splay').css('display') != 'none'){
+				play_f();
+			}
+			else {
+				stop_replay();
+			}
+		}
+	});
+    
+	$('.dtc').click(function(e){
+		var turn = $(this).data("t")
+		if (turn != undefined){
+            stop_replay();
+            cur_turn = turn;
+			show_turn(turn);
+		}
+	});
+    
+    
+    show_turn(cur_turn, true);
+    
+    
+});
+</script> 
+     <div id="left_block"> 
+      <div id="hero1"> 
+       <div id="hero1_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Logick 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/Olegik1719">Olegik1719</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           6 лет 6 месяцев
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>[Я] пришёл сюда играть!%)</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">агрессивный</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/Гильдия Геев" onclick="window.open(this.href);return false;" style="text-decoration:none;">Гильдия Геев</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero1_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            123
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="51%"> 
+            <div id="pr_l" class="pr_bar" style="width:49%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            15 / 50
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="30%"> 
+            <div id="pr_q" class="pr_bar" style="width:70%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd0"></span>
+            <span id="hp0">6</span> / 
+            <span id="hpm0">336</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="1%"> 
+            <div id="hpp0" class="pr_bar" style="width:99%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            около 75 тысяч
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">109</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">389 / 430</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero1_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> антропоморфий </span> </li> 
+           <li> <span style=""> постапокалаптечку </span> </li> 
+           <li> <span style=""> срастительное масло </span> </li> 
+           <li> <span style=""> деревянную вайпалку </span> </li> 
+           <li> <span style=""> ковер-самоплёт </span> </li> 
+           <li> <span style=""> двуручную отвёртку </span> </li> 
+           <li> <span style="font-weight:bold;"> прогнозатор пантеонов </span> </li> 
+           <li> <span style="font-weight:bold;"> эквиваленту </span> </li> 
+           <li> <span style=""> часы-скороходы </span> </li> 
+           <li> <span style="font-weight:bold;"> ухо босса Хлиппи </span> </li> 
+           <li> <span style="font-weight:bold;"> хвост босса Хлиппи </span> </li> 
+           <li> <span style=""> супницу жизни </span> </li> 
+           <li> <span style=""> опечатки пальцев </span> </li> 
+           <li> <span style=""> капельку терпения </span> </li> 
+           <li> <span style="font-weight:bold;"> золотой кирпич </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="c_spacer"></div> 
+      </div> 
+     </div> 
+     <div id="central_block"> 
+      <div class="box" id="last_items_arena"> 
+       <script nonce="d91caca74114d81fdfc578fca82f8d72">
+	function report_godvoice(voice_id, sid, link, t) {
+        var c_text = 'Вы уверены, что этот глас нарушает правила хорошего тона Годвилля? Кстати, чужие гласы в дневнике можно отключить в настройках.';
+		if (typeof Ajax === 'undefined'){
+			var element_id = '#av_c_'+voice_id;
+			var ans =  confirm(c_text);
+			if (ans){
+			    $.post('/hero/report_arena_voice_m', {'id':voice_id, 'text':t, 'sid':sid, 'link':link}, function(data) {
+						if (data && data['status'] == 'success'){
+							$(element_id).addClass('cmplt_status');
+						  $(element_id).html(data['text']);
+							setTimeout(function(){
+								$(element_id).hide();
+							},5000);
+						}
+				});														
+			}
+			return false;
+		}
+		else {
+			if (confirm(c_text)) { new Ajax.Request('/hero/report_arena_voice/'+voice_id+'?'+Object.toQueryString({'text':t, 'link':link, 'sid':sid}), {asynchronous:true, evalScripts:true}); }; return false;
+		}
+	}
+</script> 
+       <div class="afl block"> 
+        <div class="block_h">
+          Вести с арены (шаг 
+         <span id="turn_num">31</span> / 31) 
+         <a href="/duels/log/f3suw1xub?sort=desc" title="Обратная сортировка (нажмите, чтобы изменить порядок записей)">▼</a> 
+        </div> 
+        <div class="d_content"> 
+         <div class="new_line dtc t1  " data-t="1" style=""> 
+          <div class="d_capt">
+           12:02 
+           <div class="d_turn">
+            шаг 1
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули и Logick расходятся на 15 шагов друг от друга, нервно оглядываясь. Судья даёт отмашку, и дуэль начинается! 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t1  " data-t="1" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt"> 
+           <div class="d_turn"></div> 
+          </div> 
+          <div class="text_content ">
+            Боги отложили пульты влияния и молча взирают с небес. Героям никто не помешает. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t2  " data-t="2" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:02 
+           <div class="d_turn">
+            шаг 2
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули бьёт противника по хребту. Logick знакомится с болезненными последствиями эффекта преломления. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t3  " data-t="3" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:02 
+           <div class="d_turn">
+            шаг 3
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick предложил противнику выйти и разобраться один на один. Кинзо Мараули ржёт и просит пересчитать присутствующих. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t4  " data-t="4" style=""> 
+          <div class="d_capt">
+           12:03 
+           <div class="d_turn">
+            шаг 4
+           </div> 
+          </div> 
+          <div class="text_content infl">
+            Герои не слышат прилетевший сверху глас: «Приветствую участников конкурса на ЗПГ-арене!». 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t4  " data-t="4" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt"> 
+           <div class="d_turn"></div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули тянет носочек, потом пяточку. Logick нелепо трясёт вывихнутой ступнёй. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t5  " data-t="5" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:03 
+           <div class="d_turn">
+            шаг 5
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick совершает серию быстрых движений руками, ногами, ушами и парочкой чакр. Кинзо Мараули чувствует себя хуже и не полностью. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t6  " data-t="6" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:04 
+           <div class="d_turn">
+            шаг 6
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули вскружил противнику голову, дал от ворот поворот и вывел из себя. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t7  " data-t="7" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:04 
+           <div class="d_turn">
+            шаг 7
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули угрожающе закатывает рукава. Logick быстро накладывает жгут и берёт кровь на анализ. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t8  " data-t="8" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:05 
+           <div class="d_turn">
+            шаг 8
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули в бреющем полёте отбривает макушку соперника. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t9  " data-t="9" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:05 
+           <div class="d_turn">
+            шаг 9
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick ударил, но Кинзо Мараули критически отнёсся к полученному урону. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t10  " data-t="10" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:06 
+           <div class="d_turn">
+            шаг 10
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули извернулся и повязал противнику розовый бантик. Самолюбие и здоровье того заметно пострадали. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t11  " data-t="11" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:06 
+           <div class="d_turn">
+            шаг 11
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули мнит себя гордой птицей, за что получает по клюву. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t12  " data-t="12" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:07 
+           <div class="d_turn">
+            шаг 12
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули заботливо выпрямляет противнику кривой позвоночник. Logick благодарно стонет и корчится от боли. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t13  " data-t="13" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:07 
+           <div class="d_turn">
+            шаг 13
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули заявляет, что он сопернику не по зубам. Logick наглядно демонстрирует — по зубам, по зубам и ещё раз по зубам. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t14  " data-t="14" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:08 
+           <div class="d_turn">
+            шаг 14
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Камень, ножницы, бумага... Кинзо Мараули победил и, разбежавшись, отвешивает сопернику щелбан. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t15  " data-t="15" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:08 
+           <div class="d_turn">
+            шаг 15
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick считает врага жалкой, ничтожной личностью и в знак презрения к нему пропускает ход. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t16  " data-t="16" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:08 
+           <div class="d_turn">
+            шаг 16
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули мощным пинком ускоряет метаболизм противника. Logick чувствует метаболь. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t17  " data-t="17" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:09 
+           <div class="d_turn">
+            шаг 17
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick словесно изощряется и лингвистически неистовствует. Кинзо Мараули поражён, а у зрителей вянут уши. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t18  " data-t="18" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:09 
+           <div class="d_turn">
+            шаг 18
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули зазевался и пропустил свой удар. Logick посмотрел на него с укоризной. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t19  " data-t="19" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:10 
+           <div class="d_turn">
+            шаг 19
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick делает сопернику точечный массаж челюсти, убавляя тому красоты и здоровья. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t20  " data-t="20" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:10 
+           <div class="d_turn">
+            шаг 20
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули ударил противника одуванчиком. Рыльце у того теперь в пушку. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t21  " data-t="21" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:11 
+           <div class="d_turn">
+            шаг 21
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick долго и однообразно лупит противника, набивая тому оскомину. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t22  " data-t="22" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:11 
+           <div class="d_turn">
+            шаг 22
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули бросает в противника камни. Logick жалуется на кидалово и попадалово. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t23  " data-t="23" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:12 
+           <div class="d_turn">
+            шаг 23
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick, продемонстрировав диплом мабританского биолога, берёт образцы крови и тканей противника. Кинзо Мараули морщится от боли и вполголоса проклинает современную науку. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t24  " data-t="24" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:12 
+           <div class="d_turn">
+            шаг 24
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули бьёт оппонента по макушке, и этот удар надолго врезается в память противнику. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t25  " data-t="25" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:13 
+           <div class="d_turn">
+            шаг 25
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick рубанул сплеча. Кинзо Мараули надолго запомнит этот удар. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t26  " data-t="26" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:13 
+           <div class="d_turn">
+            шаг 26
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули тянет противника за язык. Logick выбалтывает свои детские секреты и осознаёт, кто его враг. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t27  " data-t="27" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:14 
+           <div class="d_turn">
+            шаг 27
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick отбивает противнику поклоны, чечетку и почки. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t28  " data-t="28" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:14 
+           <div class="d_turn">
+            шаг 28
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Проходившие мимо босяки остановились посмотреть на потасовку. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t29  " data-t="29" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:14 
+           <div class="d_turn">
+            шаг 29
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Размеренно нанося удары по противнику, Кинзо Мараули увлекается и начинает пританцовывать в ритм. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t30  " data-t="30" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:15 
+           <div class="d_turn">
+            шаг 30
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick в бреющем полёте отбривает макушку соперника. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t31  " data-t="31" style=""> 
+          <div class="d_capt">
+           12:15 
+           <div class="d_turn">
+            шаг 31
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Кинзо Мараули выбрасывает белый флаг, а Logick великодушно принимает капитуляцию. Победитель получает золотой кирпич и 4642 монеты. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div style="margin-bottom:0.2em;clear:both;"></div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="right_block"> 
+      <div id="hero2"> 
+       <div id="hero2_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Кинзо Мараули 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/Andy2029">Andy2029</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           1 год 5 месяцев
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>Вот и хавчик идёт!</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">нейтральный</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/Недонаторы" onclick="window.open(this.href);return false;" style="text-decoration:none;">Недонаторы</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero2_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            60
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="82%"> 
+            <div id="pr_l" class="pr_bar" style="width:18%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            10 / 37
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="27%"> 
+            <div id="pr_q" class="pr_bar" style="width:73%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd1"></span>
+            <span id="hp1">1</span> / 
+            <span id="hpm1">336</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="0%"> 
+            <div id="hpp1" class="pr_bar" style="width:100%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            ни одного
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">92</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">530 / 530</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero2_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> наручные солнечные часы </span> </li> 
+           <li> <span style=""> щепотку байтов </span> </li> 
+           <li> <span style=""> список жертв красоты </span> </li> 
+           <li> <span style=""> пузырёк антихрипина </span> </li> 
+           <li> <span style=""> прямую извилину </span> </li> 
+           <li> <span style=""> левые сапоги </span> </li> 
+           <li> <span style=""> песчинку времени </span> </li> 
+           <li> <span style=""> вурдалакмусовую бумажку </span> </li> 
+           <li> <span style="font-weight:bold;"> билет в фанатский сектор арены </span> </li> 
+           <li> <span style=""> заливное «Тварь дрожащая» </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="c_spacer"></div> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="lastduelpl_f"> 
+    <div>
+     Дата: 26.03.2018 12:02 +03:00
+    </div> 
+    <div>
+     Хроники хранятся по мере возможности.
+    </div> 
+   </div> 
+  </div>  
+  <!--
+     CHRONICLE ARCHIVED FROM GODVILLE.NET ON Tue, 27 Mar 2018 19:08:20 +0300 BY ERINOME GUI+ BROWSER EXTENSION
+     AND SLIGHTLY MODIFIED BY ERINOME.NET PROCESSING SOFTWARE TO COMPLY WITH CHRONICLE ARCHIVE REQUIREMENTS
+
+     ORIGINAL CHRONICLE CONTENT MIGHT BE PROTECTED BY COPYRIGHT
+--> 
+  <div class="lastduelpl_f">
+   Архив хроник Годвилля
+   <br>gv.erinome.net
+  </div>
+ </body>
+</html>

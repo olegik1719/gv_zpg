@@ -1,11 +1,9 @@
-package com.github.olegik1719.godville.gettext;
+package com.github.olegik1719.godville.arena;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 public class FightTest {
@@ -14,8 +12,8 @@ public class FightTest {
 
     @Before
     public void setUp() throws ParseException {
-        //current = new Fight("2aqwf8sgd");e183mbz38
-        current = new Fight("e183mbz38");
+        //current = new Fight("2aqwf8sgd");//e183mbz38;n85c5rqbl
+        current = new Fight("n85c5rqbl");
     }
 
 
@@ -27,7 +25,7 @@ public class FightTest {
     }
 
     @Test
-    public void getTime() throws ParseException {
+    public void getTime() {
         System.out.println(current.getTime());
     }
 
