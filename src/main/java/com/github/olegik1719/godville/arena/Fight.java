@@ -16,14 +16,14 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Fight implements Serializable{
+public class Fight{
     private static final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
 
     private static final String REGEXP_GOLD="золотой кирпич и (\\d+) (.+?)\\.";
 
     private static final Pattern PATTERN_GOLD = Pattern.compile(REGEXP_GOLD);
 
-    private static final SimpleDateFormat GV_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+    //private static final SimpleDateFormat GV_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm");
     private static final SimpleDateFormat ERINOME_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
 
     private static final String[] ZPG_BEGIN={"По обоюдному желанию богов поединок пройдет без их вмешательства."
@@ -129,7 +129,11 @@ public class Fight implements Serializable{
         return isZPG;
     }
 
-    class Hero implements Serializable{
+    public boolean isYoung(){
+        return young;
+    }
+
+    class Hero{
         //private final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
         private String godName;
         private String godLink;
@@ -162,7 +166,7 @@ public class Fight implements Serializable{
                 }else{
                     if ((el.select("span.l_capt") != null)
                             &&(el.select("span.l_capt").text().contains("Кирпичей для храма"))){
-                        young = false;
+                        young = true;
                     }
                 }
             }

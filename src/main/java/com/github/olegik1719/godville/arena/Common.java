@@ -73,10 +73,11 @@ public class Common {
                 }else {
                     for (String error : error_logs) System.out.println(error);
                 }
+                Fights fights = new Fights(ids);
                 if (args.length > 2){
                     try(FileWriter writer = new FileWriter(args[2],false))
                     {
-                        for (String goodlog: ids) {
+                        for (String goodlog: fights.getGood()) {
                             writer.write(getLink(goodlog) + "\n");
                         }
                     }
@@ -84,8 +85,10 @@ public class Common {
                         System.out.println(ex.getMessage());
                     }
                 }
-                Fights fights = new Fights(ids);
+
                 System.out.println(fights.getSize());
+                System.out.println(fights.getZPGcount());
+                System.out.println(fights.getYoungCount());
             }catch (IOException e){
                 System.out.println("Ошибка");
             }
