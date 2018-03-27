@@ -17,8 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Fight implements Serializable{
-    private static final String ERINOME_PREFIX="https://gv.erinome.net/duels/log/";
-
     private static final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
 
     private static final String REGEXP_GOLD="золотой кирпич и (\\d+) (.+?)\\.";
@@ -50,7 +48,7 @@ public class Fight implements Serializable{
             File logfile = new File(filePath);
             Document fight;
             if (!logfile.exists()) {
-                fight = Jsoup.connect(ERINOME_PREFIX + id).get();
+                fight = Jsoup.connect(Common.getLink(id)).get();
                 try(FileWriter writer = new FileWriter(logfile,true))
                 {
                     writer.write(fight.html() + '\n');

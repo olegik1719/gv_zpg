@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class Fights implements Serializable{
-    HashMap<String, Fight> fights;
+    private HashMap<String, Fight> fights;
     public Fights(Collection<String> args) {
         fights = new HashMap<>();
         for (String id:args) {
@@ -13,6 +13,10 @@ public class Fights implements Serializable{
                 fights.put(id, new Fight(id));
             }
         }
+    }
+
+    public int getSize(){
+        return fights.size();
     }
 
     public Fights addFight(String url){

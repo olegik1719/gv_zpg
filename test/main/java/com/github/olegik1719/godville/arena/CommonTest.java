@@ -11,7 +11,7 @@ public class CommonTest {
 
     @Test
     public void main() {
-        Common.main("res/links_list.lst","res/error_links.lst");
+        Common.main("res/links_list.lst","res/bad_links.lst","res/good_links.lst");
     }
 
     @Test

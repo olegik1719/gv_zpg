@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 public class Common {
 
+    private static final String ERINOME_PREFIX="https://gv.erinome.net/duels/log/";
     private static final String LOG_ID_REGEXP = "http[s]{0,1}:\\/\\/[^\\/]+\\/duels\\/log\\/([A-Za-z0-9]+).*";//http[s]{0,1}:\/\/[^\/]+\/duels\/log\/([A-Za-z0-9]+).*
     private static final Pattern PATTERN_LOG = Pattern.compile(LOG_ID_REGEXP);
     private static Set<String> error_logs = new TreeSet<>();
@@ -33,6 +34,10 @@ public class Common {
         //System.out.println(url);
         error_logs.add(url);
         return null;
+    }
+
+    public static String getLink(String id){
+        return ERINOME_PREFIX+id;
     }
 
     public static int getMoney(int sum, String currency){
@@ -68,7 +73,19 @@ public class Common {
                 }else {
                     for (String error : error_logs) System.out.println(error);
                 }
-                new Fights(ids);
+                if (args.length > 2){
+                    try(FileWriter writer = new FileWriter(args[2],false))
+                    {
+                        for (String goodlog: ids) {
+                            writer.write(getLink(goodlog) + "\n");
+                        }
+                    }
+                    catch(IOException ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                Fights fights = new Fights(ids);
+                System.out.println(fights.getSize());
             }catch (IOException e){
                 System.out.println("Ошибка");
             }
