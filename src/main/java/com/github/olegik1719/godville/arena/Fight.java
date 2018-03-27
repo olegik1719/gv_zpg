@@ -19,11 +19,14 @@ import java.util.regex.Pattern;
 public class Fight{
     private static final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
 
-    private static final String REGEXP_GOLD="золотой кирпич и (\\d+) (.+?)\\.";
+    private static final String REGEXP_GOLD_1="золотой кирпич и (\\d+) (.+?)\\.";
 
-    private static final Pattern PATTERN_GOLD = Pattern.compile(REGEXP_GOLD);
+    private static final Pattern PATTERN_GOLD_1 = Pattern.compile(REGEXP_GOLD_1);
 
-    //private static final SimpleDateFormat GV_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+    private static final String REGEXP_GOLD_2="на (\\d+) (.+?) и золотой кирпич";
+
+    private static final Pattern PATTERN_GOLD_2 = Pattern.compile(REGEXP_GOLD_2);
+
     private static final SimpleDateFormat ERINOME_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
 
     private static final String[] ZPG_BEGIN={"По обоюдному желанию богов поединок пройдет без их вмешательства."
@@ -43,7 +46,6 @@ public class Fight{
     public Fight(String id) {
         this.id = id;
         try {
-            if (id == null) throw new IOException("It's null!");
             String filePath = "res/log/"+id+".html";
             File logfile = new File(filePath);
             Document fight;
@@ -52,7 +54,6 @@ public class Fight{
                 try(FileWriter writer = new FileWriter(logfile,true))
                 {
                     writer.write(fight.html() + '\n');
-//                    writer.flush();
                 }
                 catch(IOException ex){
                     System.out.println(ex.getMessage());
@@ -64,7 +65,8 @@ public class Fight{
                 throw new IOException("It's not log");
             }
             try {
-                dateFight = ERINOME_DATE_FORMATTER.parse(fight.select("div.lastduelpl_f>div").first().text().substring(5));
+                String date = fight.select("div.lastduelpl_f>div").first().text().substring(5);
+                dateFight = ERINOME_DATE_FORMATTER.parse(date);
             }catch (ParseException exception){
                 System.out.println(id);
                 exception.printStackTrace();
@@ -76,23 +78,38 @@ public class Fight{
             turns = Integer.parseInt(fight.getElementById("turn_num").text());
             {
                 String lastTurn = fight.select("[data-t$=\""+turns+"\"]").text();
-                Matcher matcher = PATTERN_GOLD.matcher(lastTurn);
+//                System.out.println(id);
+//                System.out.println(lastTurn);
+                Matcher matcher = PATTERN_GOLD_1.matcher(lastTurn);
                 if (matcher.find()) {
                     int sum = Integer.parseInt(matcher.group(1));
                     String currency = matcher.group(2);
                     money = Common.getMoney(sum,currency);
+                }
+
+                if (money == 0){
+//                    System.out.println(lastTurn);
+                    matcher = PATTERN_GOLD_2.matcher(lastTurn);
+                    if (matcher.find()) {
+                        int sum = Integer.parseInt(matcher.group(1));
+                        String currency = matcher.group(2);
+                        money = Common.getMoney(sum,currency);
+                    }
+                }
+
+                if (money == 0){
+                    System.out.println("Сумма опять ноль");
                 }
             }
             Element bonus =
                     fight.select("[data-t$=\"1\"][style='border-bottom: 1px dashed #888888;']").first();
             String bonus_text = bonus != null ? bonus.text(): null;
             for (String zpg_phrase:ZPG_BEGIN) {
-                    if (bonus_text.contains(zpg_phrase)){
+                    if (bonus_text != null && bonus_text.contains(zpg_phrase)){
                         isZPG = true;
                     }
             }
         } catch (IOException e) {
-            //e.printStackTrace();
             System.out.println(e.getMessage()+" " + id);
         }
     }
@@ -117,10 +134,6 @@ public class Fight{
         return money;
     }
 
-//    public String getCurrency() {
-//        return currency;
-//    }
-
     public Date getTime(){
         return dateFight;
     }
@@ -133,8 +146,17 @@ public class Fight{
         return young;
     }
 
+    @Override
+    public int hashCode(){
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Fight && this.id.equals(((Fight) o).id);
+    }
+
     class Hero{
-        //private final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
         private String godName;
         private String godLink;
         private boolean isWinner;

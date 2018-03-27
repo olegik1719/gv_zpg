@@ -12,8 +12,8 @@ public class FightTest {
 
     @Before
     public void setUp() throws ParseException {
-        //current = new Fight("2aqwf8sgd");//e183mbz38;n85c5rqbl
-        current = new Fight("n85c5rqbl");
+        //current = new Fight("2aqwf8sgd");//e183mbz38;n85c5rqbl;ehd2kuls6
+        current = new Fight("ehd2kuls6");
     }
 
 

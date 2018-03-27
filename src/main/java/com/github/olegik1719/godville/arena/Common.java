@@ -17,10 +17,12 @@ public class Common {
         exchange = new HashMap<>();
         exchange.put("монет",1);//золотые монеты
         exchange.put("монеты",1);
+        exchange.put("монету",1);
         exchange.put("золотых монет",1);
         exchange.put("золотые монеты",1);
         exchange.put("золотых",1);
         exchange.put("золотой",1);
+        exchange.put("золотую монету",1);
         exchange.put("золотых червонца",10);
         exchange.put("золотых червонца",10);
     }
@@ -53,7 +55,7 @@ public class Common {
                 FileInputStream fstream = new FileInputStream(args[0]);
                 BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
                 String strLine;
-                HashSet<String> ids = new HashSet<>();
+                Set<String> ids = new HashSet<>();
                 while ((strLine = br.readLine()) != null){
                     String id = getID(strLine);
                     if (id != null)
@@ -77,8 +79,8 @@ public class Common {
                 if (args.length > 2){
                     try(FileWriter writer = new FileWriter(args[2],false))
                     {
-                        for (String goodlog: fights.getGood()) {
-                            writer.write(getLink(goodlog) + "\n");
+                        for (String goodLog: fights.getGood()) {
+                            writer.write(getLink(goodLog) + "\n");
                         }
                     }
                     catch(IOException ex){
@@ -86,9 +88,11 @@ public class Common {
                     }
                 }
 
-                System.out.println(fights.getSize());
-                System.out.println(fights.getZPGcount());
-                System.out.println(fights.getYoungCount());
+//                System.out.println(fights.getSize());
+//                System.out.println(fights.getZPGCount());
+//                System.out.println(fights.getYoungCount());
+                System.out.println(fights.getResult());
+//                fights.getYoung();
             }catch (IOException e){
                 System.out.println("Ошибка");
             }

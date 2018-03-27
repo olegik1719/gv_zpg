@@ -1,23 +1,14 @@
 package com.github.olegik1719.godville.arena;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Fights{
-    private HashMap<String, Fight> fights;
-    public Fights(Collection<String> args) {
-        fights = new HashMap<>();
-        for (String id:args) {
-            if (fights.get(id) == null){
-                Fight fight =  new Fight(id);
-                if (fight.getTime() != null) {
-                    fights.put(id, new Fight(id));
-                }
-            }
-        }
+    private Collection<Fight> fights;
+    public Fights(Collection<String> logs) {
+        fights = logs.stream().map(Fight::new).collect(Collectors.toList());
     }
 
     public int getSize(){
@@ -25,36 +16,42 @@ public class Fights{
     }
 
     public Collection<String> getGood(){
-        return fights.keySet();
+        return fights.stream().map(Fight::getId).collect(Collectors.toList());
     }
 
-    public int getZPGcount(){
-        Set<String> set = new HashSet<>();
-        for(String id:fights.keySet()){
-            if (fights.get(id).isZPG()){
-                set.add(id);
-            }
-        }
-        return set.size();
+    public int getZPGCount(){
+        return (int) fights.stream().filter(Fight::isZPG).count();
     }
 
     public int getYoungCount(){
-        Set<String> set = new HashSet<>();
-        for(String id:fights.keySet()){
-            if (fights.get(id).isYoung()){
-                set.add(id);
-            }
-        }
-        return set.size();
+        return (int) fights.stream().filter(Fight::isYoung).count();
     }
 
+    public int getYoungMax(){
+        return fights.stream().filter(Fight::isYoung).map(Fight::getMoney).max(Integer::compareTo).get();
+    }
+    public int getOldMax(){
+        return fights.stream()
+                .filter(((Predicate<Fight>)(Fight::isYoung)).negate())
+                .map(Fight::getMoney)
+                .max(Integer::compareTo).get();
+    }
 
+    public void getYoung(){
+        for (Fight f:fights){
+            if (f.isYoung()){
+                System.out.printf("%s : %s \\ %s %d%n",f.getId(),f.getWinner().getGodName(), f.getLoser().getGodName(), f.getMoney());
+            }
+        }
+    }
 
-//    public Fights addFight(String url){
-//        String id = Common.getID(url);
-//        if (fights.get(id) == null){
-//            fights.put(id, new Fight(id));
-//        }
-//        return this;
-//    }
+    public String getResult(){
+        String result = "";
+        result += getSize() +"\n";
+        result += getZPGCount() + "\n";
+        result += getYoungCount() + "\n";
+        result += getYoungMax() + "\n";
+        result += getOldMax() + "\n";
+        return result;
+    }
 }
