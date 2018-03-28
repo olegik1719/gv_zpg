@@ -1,0 +1,1195 @@
+<!doctype html>
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <title>Хроника Годвилля</title> 
+  <script type="text/javascript" src="/javascripts/jquery-1.12.4.min.js"></script> 
+  <script src="/javascripts/awardj.js" type="text/javascript"></script> 
+  <link href="/stylesheets/common.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/common-mini.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/progress_bar.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/hero_log.css" media="screen" rel="stylesheet" type="text/css"> 
+  <meta NAME="gvdt" CONTENT="hero_log_n">
+  <script src="/javascripts/nt.js" type="text/javascript"></script> 
+  <script src="/javascripts/st.js" type="text/javascript"></script>
+  <script src="/javascripts/stjq.js" type="text/javascript"></script> 
+  <script src="/javascripts/ga.js" type="text/javascript"></script> 
+  <script src="/javascripts/garu.js" type="text/javascript"></script> 
+  <meta name="keywords" content="Годвилль, Godville, Zero Player Game, ZPG, ZRPG, самоиграйка, тамагочи, браузерная игра, божественная комедия">
+  <meta name="description" content="Божественная комедия-самоиграйка с участием бога и, кхм, героя. А еще MMO и ZPG, если вы знаете эти слова."> 
+  <link rel="shortcut icon" href="/images/favicon.ico"> 
+  <script nonce="52ff52aa56d10a1287274ecf02dccb5f">
+function to_mobile(){
+	$.post('/hero/to_mobile', {}, function(data) {
+		location.reload();
+	});
+}
+$(document).ready(function() {
+    $('.to_mobile').click(function(){
+        to_mobile();
+        return false;
+    });
+    $('.to_top').click(function(e){
+        $(window).scrollTop(0);
+        return false;
+    })
+    $('#reload').click(function(e){
+        location.reload(true)
+        return false;
+    });
+    $('a[data-rv]').click(function(e){
+        var v = $(this).data('rv');
+        report_godvoice(v[0],v[1],v[2],v[3]);
+        return false;
+    })
+    $('.n_wn').click(function(e){
+        window.open(this.href);
+        return false;
+    })
+	if (typeof(jq_mfp_init) != 'undefined'){
+		jq_mfp_init();
+	}    
+});
+</script> 
+ </head> 
+ <body> 
+  <div id="wrap"> 
+   <div id="page_wrapper"> 
+    <div class="lastduelpl"> 
+     <span><a href="/duels/log/kp3pg9pne">Арена</a></span> 
+    </div> 
+    <div class="ft" style="display:none;">
+     28.03.2018 11:01 
+    </div> 
+    <div class="lastduelpl"> 
+    </div> 
+    <div id="arena_block" style="float: left; width: 100%;"> 
+     <div id="p_status" style="text-align:center;"></div> 
+     <div style="text-align:center;display: none;" id="app_bar"> 
+      <span id="app_status">Подключаемся к сервису быстрых обновлений...</span> 
+      <span title="Скрыть"><a href="#" onclick="Effect.toggle(&quot;app_bar&quot;,'blind',{});; return false;">[X]</a></span> 
+     </div> 
+     <div class="rpl"> 
+      <input id="slider" type="range" min="1" max="34" value="34" data-role="none"> 
+      <span id="sback" title="Предыдущий ход (стрелка влево)">⏪︎</span> 
+      <span id="splay" title="Проигрывание/пауза (Enter)">▶︎</span> 
+      <span id="sps" title="Проигрывание/пауза (Enter)" style="display:none;">⏸︎</span> 
+      <span id="sfwd" title="Следующий ход (стрелка вправо)">⏩︎</span> 
+     </div> 
+     <script nonce="52ff52aa56d10a1287274ecf02dccb5f">
+
+$(document).ready(function() {
+    var hp = {"-1":{"0":300,"1":300},"0":{"0":300,"1":300},"1":{"0":300,"1":300},"2":{"0":282,"1":300},"3":{"0":282,"1":276},"4":{"0":282,"1":276},"5":{"0":250,"1":276},"6":{"0":250,"1":276},"7":{"0":250,"1":276},"8":{"0":226,"1":276},"9":{"0":226,"1":250},"10":{"0":199,"1":250},"11":{"0":199,"1":223},"12":{"0":172,"1":223},"13":{"0":172,"1":223},"14":{"0":172,"1":190},"15":{"0":142,"1":190},"16":{"0":142,"1":174},"17":{"0":120,"1":174},"18":{"0":120,"1":158},"19":{"0":100,"1":158},"20":{"0":100,"1":130},"21":{"0":76,"1":130},"22":{"0":76,"1":113},"23":{"0":57,"1":113},"24":{"0":57,"1":99},"25":{"0":36,"1":99},"26":{"0":36,"1":66},"27":{"0":15,"1":66},"28":{"0":15,"1":66},"29":{"0":15,"1":46},"30":{"0":15,"1":46},"31":{"0":15,"1":46},"32":{"0":15,"1":29},"33":{"0":1,"1":29},"34":{"0":1,"1":29}};    
+    var moves = [];
+    
+    var last= parseInt($('#turn_num').text());
+    
+    
+    var play_timer = undefined;
+    
+    var cur_turn=last;
+    
+        
+	var scroll_to = function(element){
+        if (element.length == 0){
+            return;
+        }
+
+		var elHeight = 0;
+		element.each(function() {
+		  elHeight += $(this).height();
+		});        
+        
+        var offset = element.offset().top + elHeight;
+            if(!element.is(":visible")) {
+                element.css({"visibility":"hidden"}).show();
+                var offset = element.offset().top;
+                element.css({"visibility":"", "display":""});
+            }
+
+            var visible_area_start = $(window).scrollTop();
+            var visible_area_end = visible_area_start + window.innerHeight;
+
+            if(offset < visible_area_start || offset > visible_area_end){
+                 // Not in view so scroll to it
+                 $('html,body').animate({scrollTop: offset - window.innerHeight/3}, 300);
+                 return false;
+            }
+            return true;
+	}        
+    
+    var map_scroll = function(){
+        
+        if ($('.dmh').length == 0){
+            return;
+        }
+        
+        var m_width = $('.dmh').width();
+        var m_left = $('.dmh').position().left;
+        
+        var map_width = $('#dmap').width();
+        
+        var s_left = $('#dmap').scrollLeft();
+        if ( s_left < m_left || 
+            s_left > m_left
+        ) {
+            $('#dmap').scrollLeft( m_left - map_width / 2);
+//            console.log('dungeon map scrolled ' + s_left + ' ' + m_left);
+        }
+    }
+
+    
+    var is_out_of_view = function(element){
+        if (element.length == 0){
+            return;
+        }
+        var elementTop = element.offset().top;
+        var elementBottom = element.outerHeight();
+
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+
+        if (viewportTop > elementTop) {
+//        if (elementBottom < viewportBottom ){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+        
+    var add_on_scroll = function(el_id){
+        if ($(el_id).length > 0){
+            ($(el_id).parent().parent()).addClass('bldn');
+        }
+    }
+
+    var on_scroll = function(el_id){
+        var fixed_mode = undefined;
+        var dmap = $($('.bldn')[0]);
+        var covered = is_out_of_view($(dmap.parent()));
+        if (!dmap.hasClass('block_fixed')){
+            if (covered && $('.d_content').innerHeight() > window.innerHeight){
+                fixed_mode = true;
+            }
+        }
+        else if (!covered) {
+            fixed_mode = false
+        }
+        if (fixed_mode){
+            $('.bldn').each(function(index){
+                $(this).addClass('block_fixed');
+                $(this).offset({'left':$(this).parent().offset().left});
+            });
+            $('.hide_on_scroll').hide();
+        }
+        else if (fixed_mode == false) {
+            $('.bldn').each(function(index){
+                $(this).removeClass('block_fixed');
+                $(this).removeAttr('style');
+            });
+            $('.hide_on_scroll').show();
+        }
+    }
+    
+    add_on_scroll('#dmap');
+    add_on_scroll('#alls');
+    add_on_scroll('#opps');
+    add_on_scroll($('#hpp1').parent().parent().parent());
+    add_on_scroll($('#hpp0').parent().parent().parent());
+
+    $(window).on('resize scroll', function() {
+        on_scroll();
+    });        
+    
+    
+    var show_turn = function(turn_num, no_scroll){
+        
+        if (no_scroll == undefined){
+            scroll_to($('.t'+turn_num));
+        }        
+        
+        
+        $('.ct').removeClass('ct ctbg');
+        $('.t'+turn_num).addClass('ct ctbg');
+        
+
+
+        var thp = hp[turn_num];
+        var thpp = hp[turn_num-1];
+        
+        if (thp){
+            for (var key in thp) {
+                var hpd = undefined;
+                var h = $('#hp'+key);
+                if (h.length > 0){
+                    h.text(thp[key]);
+                }
+                if (thpp[key] != undefined){
+                    hpd = thp[key] - thpp[key];
+                }
+                
+                var h_p = $('#hpd'+key).text('');
+                if (hpd){
+                    var h_p = $('#hpd'+key);
+                    if (h_p.length > 0){
+                        h_p.removeClass('hpd_green');
+                        h_p.removeClass('hpd_red');
+                        if (hpd > 0){
+                            h_p.text('+'+(hpd));
+                            h_p.addClass('hpd_green');
+                        }
+                        else {
+                            h_p.text((hpd));
+                            h_p.addClass('hpd_red');
+                        }
+                    }
+                }
+                
+                
+                if (h_p.length > 0){
+                    if (thp[key] == undefined) {
+                        h_p.parent().parent().hide();
+                    }
+                    else {
+                        h_p.parent().parent().show();
+                    }
+                }
+
+                var hpp = $('#hpp'+key);
+                if (hpp.length > 0){
+                    var hpm = $('#hpm'+key).text();
+                    var prct = (thp[key]/hpm*100).toFixed();
+                    hpp.css('width', (100 - prct)+'%');
+                    
+                    var p = hpp.parent();
+                    
+                    var pc_color = 'green';
+                    if (prct < 30 ){
+                       pc_color = 'red'
+                    }
+                    else if (prct < 70){
+                      pc_color = 'yellow'
+                    }
+                    p.css('background-color', pc_color);
+                    p.attr('title', prct+'%')
+                }
+            }
+        }
+        
+        $('#turn_num').text(turn_num);
+        $('#slider').val(turn_num);
+        map_scroll();
+        $('.dmh').removeClass('dmh');
+        if (moves.length > 0){
+            $('#'+moves[turn_num-1]).addClass('dmh');
+        }
+        if (turn_num == last){
+//            $('#sfwd').addClass('rpld');
+            $('.dt').show();
+        }
+        else {
+            // $('#sfwd').removeClass('rpld');
+            $('.dt').hide();
+        }
+        if (turn_num == 1){
+            // $('#sback').addClass('rpld');
+        }
+        else {
+            // $('#sback').removeClass('rpld');
+        }
+    }
+        
+	var stop_replay = function(){
+		if (play_timer != undefined){
+			clearInterval(play_timer);
+			play_timer = undefined;
+		}
+        $('#sps').hide();
+        $('#splay').show();        
+	}
+    
+	var play_step_func = function(){
+		show_turn(cur_turn);
+		
+		if (cur_turn == last){
+            stop_replay();
+            cur_turn = 1;
+			return;
+		}
+        cur_turn++;
+	}
+    
+    var back_f = function(){
+        if (cur_turn== 1){
+            cur_turn = last+1;
+        }
+        stop_replay();
+        if (cur_turn > 1){
+            cur_turn--;
+            show_turn(cur_turn);
+        }        
+    }
+    
+	var forward_f = function(){
+        if (cur_turn==last){
+            cur_turn = 0;
+        }				        
+		stop_replay();
+        if (cur_turn < last){
+            cur_turn++;
+            show_turn(cur_turn);
+        }        
+    }
+    
+    var play_f = function(){
+        stop_replay();
+        if (cur_turn==last){
+            cur_turn = 1;
+        }
+        play_timer = setInterval(play_step_func, 1000);
+        play_step_func();
+        $('#splay').hide();
+        $('#sps').show();        
+    }
+    
+    
+    $('#slider').change(function() {
+        cur_turn = $(this).val();
+        show_turn(cur_turn);
+    });
+    
+    $('#sback').click(function(){
+        back_f();
+    });
+    $('#sfwd').click(function(){
+        forward_f();
+    });
+    
+    $('#splay').click(function(){
+        play_f();
+    });
+    $('#sps').click(function(){
+        stop_replay();
+    });
+    
+	$("body").keydown(function(e){
+		if ((e.keyCode || e.which) == 37) { // left arrow
+			back_f();
+		}
+		else if ((e.keyCode || e.which) == 39){ // right arrow
+			forward_f();
+		}
+		else if ((e.keyCode || e.which) == 13 && !e.ctrlKey){ // enter
+			if ($('#splay').css('display') != 'none'){
+				play_f();
+			}
+			else {
+				stop_replay();
+			}
+		}
+	});
+    
+	$('.dtc').click(function(e){
+		var turn = $(this).data("t")
+		if (turn != undefined){
+            stop_replay();
+            cur_turn = turn;
+			show_turn(turn);
+		}
+	});
+    
+    
+    show_turn(cur_turn, true);
+    
+    
+});
+</script> 
+     <div id="left_block"> 
+      <div id="hero1"> 
+       <div id="hero1_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Logick 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/Olegik1719">Olegik1719</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           6 лет 6 месяцев
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>[Я] пришёл сюда играть!%)</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">беззлобный</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/Гильдия Геев" onclick="window.open(this.href);return false;" style="text-decoration:none;">Гильдия Геев</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero1_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            123
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="56%"> 
+            <div id="pr_l" class="pr_bar" style="width:44%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            43 / 50
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="86%"> 
+            <div id="pr_q" class="pr_bar" style="width:14%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd0"></span>
+            <span id="hp0">1</span> / 
+            <span id="hpm0">300</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="0%"> 
+            <div id="hpp0" class="pr_bar" style="width:100%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            ни одного
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">109</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">390 / 433</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero1_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> кулёк конфетаминов </span> </li> 
+           <li> <span style=""> панацелин </span> </li> 
+           <li> <span style=""> накладную полоску здоровья </span> </li> 
+           <li> <span style=""> бутылочку рыбьего жира </span> </li> 
+           <li> <span style=""> гемутаген </span> </li> 
+           <li> <span style=""> сферу кубизма </span> </li> 
+           <li> <span style=""> растягиватель понятий </span> </li> 
+           <li> <span style="font-weight:bold;"> лаксианский ключ </span> </li> 
+           <li> <span style=""> износилки </span> </li> 
+           <li> <span style=""> держатель марок </span> </li> 
+           <li> <span style="font-weight:bold;"> призму жизненного опыта </span> </li> 
+           <li> <span style="font-weight:bold;"> карликовое государство </span> </li> 
+           <li> <span style=""> эталон равновесия </span> </li> 
+           <li> <span style="font-weight:bold;"> воскресало </span> </li> 
+           <li> <span style="font-weight:bold;"> полиграф «Пиноккио» </span> </li> 
+           <li> <span style="font-weight:bold;"> движок по фазе </span> </li> 
+           <li> <span style="font-weight:bold;"> фейспальмовую ветвь </span> </li> 
+           <li> <span style="font-weight:bold;"> счётчик упущенной выгоды </span> </li> 
+           <li> <span style="font-weight:bold;"> непозволительную роскошь </span> </li> 
+           <li> <span style="font-weight:bold;"> сдиральную машинку </span> </li> 
+           <li> <span style=""> битый пиксель </span> </li> 
+           <li> <span style="font-weight:bold;"> ауронизатор воздуха </span> </li> 
+           <li> <span style="font-weight:bold;"> освятительный прибор </span> </li> 
+           <li> <span style="font-weight:bold;"> плагиатомный реактор </span> </li> 
+           <li> <span style=""> маманегорючее вещество </span> </li> 
+           <li> <span style=""> марку бутылочной почты </span> </li> 
+           <li> <span style="font-weight:bold;"> эталон бита </span> </li> 
+           <li> <span style="font-weight:bold;"> коготь грифа секретности </span> </li> 
+           <li> <span style="font-weight:bold;"> концептуальную модель макинтоша </span> </li> 
+           <li> <span style="font-weight:bold;"> трансмутирующую установку </span> </li> 
+           <li> <span style="font-weight:bold;"> активируемый уголь </span> </li> 
+           <li> <span style=""> законодатчик </span> </li> 
+           <li> <span style=""> таблицу трезвых расчётов </span> </li> 
+           <li> <span style=""> трёхручный топор </span> </li> 
+           <li> <span style=""> словарь заковыристых словосочетаний </span> </li> 
+           <li> <span style=""> книгу отзыва предложений </span> </li> 
+           <li> <span style=""> мешочек заговорённых зубов </span> </li> 
+           <li> <span style=""> осколок блюдца с надписью «...няя Чайка» </span> </li> 
+           <li> <span style=""> эликсир здоровья с мякотью </span> </li> 
+           <li> <span style=""> развивающуюся игрушку </span> </li> 
+           <li> <span style=""> подвывальник </span> </li> 
+           <li> <span style=""> пулеутоляющее </span> </li> 
+           <li> <span style="font-weight:bold;"> золотой кирпич </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="c_spacer"></div> 
+      </div> 
+     </div> 
+     <div id="central_block"> 
+      <div class="box" id="last_items_arena"> 
+       <script nonce="52ff52aa56d10a1287274ecf02dccb5f">
+	function report_godvoice(voice_id, sid, link, t) {
+        var c_text = 'Вы уверены, что этот глас нарушает правила хорошего тона Годвилля? Кстати, чужие гласы в дневнике можно отключить в настройках.';
+		if (typeof Ajax === 'undefined'){
+			var element_id = '#av_c_'+voice_id;
+			var ans =  confirm(c_text);
+			if (ans){
+			    $.post('/hero/report_arena_voice_m', {'id':voice_id, 'text':t, 'sid':sid, 'link':link}, function(data) {
+						if (data && data['status'] == 'success'){
+							$(element_id).addClass('cmplt_status');
+						  $(element_id).html(data['text']);
+							setTimeout(function(){
+								$(element_id).hide();
+							},5000);
+						}
+				});														
+			}
+			return false;
+		}
+		else {
+			if (confirm(c_text)) { new Ajax.Request('/hero/report_arena_voice/'+voice_id+'?'+Object.toQueryString({'text':t, 'link':link, 'sid':sid}), {asynchronous:true, evalScripts:true}); }; return false;
+		}
+	}
+</script> 
+       <div class="afl block"> 
+        <div class="block_h">
+          Вести с арены (шаг 
+         <span id="turn_num">34</span> / 34) 
+         <a href="/duels/log/kp3pg9pne?sort=desc" title="Обратная сортировка (нажмите, чтобы изменить порядок записей)">▼</a> 
+        </div> 
+        <div class="d_content"> 
+         <div class="new_line dtc t1  " data-t="1" style=""> 
+          <div class="d_capt">
+           11:01 
+           <div class="d_turn">
+            шаг 1
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад предъявляет судье дубль-пусто и получает право на первый удар. Logick нервно ворчит. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t1  " data-t="1" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt"> 
+           <div class="d_turn"></div> 
+          </div> 
+          <div class="text_content ">
+            Боги отложили пульты влияния и молча взирают с небес. Героям никто не помешает. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t2  " data-t="2" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:02 
+           <div class="d_turn">
+            шаг 2
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Фрустрированный Ндоиавидофад прикладывает к лицу противника кисти рук, предварительно сжав их в кулаки. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t3  " data-t="3" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:02 
+           <div class="d_turn">
+            шаг 3
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick рубанул сплеча. Ндоиавидофад надолго запомнит этот удар. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t4  " data-t="4" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:03 
+           <div class="d_turn">
+            шаг 4
+           </div> 
+          </div> 
+          <div class="text_content ">
+            С трибун слышен богатырский храп. Кажется, зрителей не очень волнует поединок. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t5  " data-t="5" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:03 
+           <div class="d_turn">
+            шаг 5
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад утверждает, что победит в поединке, и, чтобы не сглазить, стучит противником по дереву. Logick трижды сплёвывает зубы через левое плечо. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t6  " data-t="6" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:04 
+           <div class="d_turn">
+            шаг 6
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад не своим голосом кричит: «Защищайся!» Logick послушно становится в защитную стойку, забыв, что это его ход. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t7  " data-t="7" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:04 
+           <div class="d_turn">
+            шаг 7
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад сегодня так прекрасен, что присутствующие на трибунах дамы забросали его цветами. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t8  " data-t="8" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:04 
+           <div class="d_turn">
+            шаг 8
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад кусает противника за палец и высасывает оттуда вот эту запись. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t9  " data-t="9" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:05 
+           <div class="d_turn">
+            шаг 9
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick заботливо выпрямляет противнику кривой позвоночник. Ндоиавидофад благодарно стонет и корчится от боли. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t10  " data-t="10" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:05 
+           <div class="d_turn">
+            шаг 10
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад лупит соперника по затылку. Logick хватается за щёки, пытаясь не потерять лицо. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t11  " data-t="11" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:06 
+           <div class="d_turn">
+            шаг 11
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick заливает соперника горючими слезами и поджигает их, чиркнув спичкой. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t12  " data-t="12" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:06 
+           <div class="d_turn">
+            шаг 12
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад пытается достучаться до совести противника кулаками по лицу. Logick бессовестно отмахивается. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t13  " data-t="13" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:07 
+           <div class="d_turn">
+            шаг 13
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Некто, похожий на Администратора Годвилля, отозвал одного из противников в сторону и предложил проиграть бой за пару почти настоящих золотых кирпичей. Logick с негодованием отказывается. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t14  " data-t="14" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:07 
+           <div class="d_turn">
+            шаг 14
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick берёт противника за душу. Ндоиавидофад чувствует, как сердце рвётся из груди. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t15  " data-t="15" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:08 
+           <div class="d_turn">
+            шаг 15
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад сворачивает противнику шею. Logick смотрит на ситуацию под другим углом. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t16  " data-t="16" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:08 
+           <div class="d_turn">
+            шаг 16
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick бьёт противника куском известкового налёта из котелка. Накипело. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t17  " data-t="17" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:09 
+           <div class="d_turn">
+            шаг 17
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад старается намять сопернику бока. Logick страдает от побочных эффектов. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t18  " data-t="18" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:09 
+           <div class="d_turn">
+            шаг 18
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick утверждает, что от противника за версту несет зеленкой и требует повторного проведения допинг-проб. Ндоиавидофад добровольно передает часть своей полоски здоровья на анализы. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t19  " data-t="19" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:10 
+           <div class="d_turn">
+            шаг 19
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад сообщает противнику о силе, с которой на него давит атмосферный столб. Logick справляется у судьи о точности цифр, и его начинает плющить. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t20  " data-t="20" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:10 
+           <div class="d_turn">
+            шаг 20
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пока Logick готовится к удару, Ндоиавидофад пытается раствориться в воздухе. Почти получилось, но в последний момент он успел-таки схлопотать по улыбке. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t21  " data-t="21" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:10 
+           <div class="d_turn">
+            шаг 21
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад бьёт противника по хребту. Logick знакомится с болезненными последствиями эффекта преломления. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t22  " data-t="22" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:11 
+           <div class="d_turn">
+            шаг 22
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick своими язвительными подколками вызывает у противника желудочные колики. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t23  " data-t="23" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:11 
+           <div class="d_turn">
+            шаг 23
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад трогает врага холодными руками. Logick мёрзнет и ёжится. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t24  " data-t="24" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:12 
+           <div class="d_turn">
+            шаг 24
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick открыл рот, и Ндоиавидофад задохнулся от душистого выдоха. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t25  " data-t="25" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:12 
+           <div class="d_turn">
+            шаг 25
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад заметил, что противнику явно жмут зубы, и помог немного их проредить. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t26  " data-t="26" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:13 
+           <div class="d_turn">
+            шаг 26
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick с размаха залепил в челюсть. Ндоиавидофад зашатался, словно обречённый зуб. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t27  " data-t="27" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:13 
+           <div class="d_turn">
+            шаг 27
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад бьёт и гордится ударом. Logick тоже гордится, но не помнит чем. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t28  " data-t="28" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:14 
+           <div class="d_turn">
+            шаг 28
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Противники кровожадно поглядывают на уши друг друга. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t29  " data-t="29" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:14 
+           <div class="d_turn">
+            шаг 29
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick своими язвительными подколками вызывает у противника желудочные колики. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t30  " data-t="30" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:15 
+           <div class="d_turn">
+            шаг 30
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад сбит с ног телепортировавшимся прямо ему на голову посторонним героем. Новоприбывший извиняется за неудобства и убегает в раздевалку. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t31  " data-t="31" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:15 
+           <div class="d_turn">
+            шаг 31
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Судья просит противников бить по правилам, а не по нему. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t32  " data-t="32" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:16 
+           <div class="d_turn">
+            шаг 32
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick закружил противника в танце. Ндоиавидофад мотает головой, пытаясь прийти в себя. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t33  " data-t="33" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           11:16 
+           <div class="d_turn">
+            шаг 33
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Logick так сильно тронут ударом противника, что аж прослезился. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t34  " data-t="34" style=""> 
+          <div class="d_capt">
+           11:16 
+           <div class="d_turn">
+            шаг 34
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Ндоиавидофад торжественно поднимает руку судьи, смакуя свою победу. Едва держащийся на ногах Logick бросает кошель победителю. Победитель стал богаче на 72298 золотых монет и золотой кирпич. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div style="margin-bottom:0.2em;clear:both;"></div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="right_block"> 
+      <div id="hero2"> 
+       <div id="hero2_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Ндоиавидофад 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/%D0%A6%D0%B8%D1%82%D1%80%D0%B0%D0%BD">Цитран</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           10 месяцев 18 дней
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>Ути!</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">агрессивный</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/СтаканЫ" onclick="window.open(this.href);return false;" style="text-decoration:none;">СтаканЫ</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero2_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            51
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="42%"> 
+            <div id="pr_l" class="pr_bar" style="width:58%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            19 / 32
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="59%"> 
+            <div id="pr_q" class="pr_bar" style="width:41%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd1"></span>
+            <span id="hp1">29</span> / 
+            <span id="hpm1">300</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="9%"> 
+            <div id="hpp1" class="pr_bar" style="width:91%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            около 73 тысяч
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">47</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">219 / 146</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero2_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> долговую расписку под хохлому </span> </li> 
+           <li> <span style=""> моль внимания </span> </li> 
+           <li> <span style=""> первоначальный блин </span> </li> 
+           <li> <span style=""> фломастер на все руки </span> </li> 
+           <li> <span style=""> программатор для шарманки </span> </li> 
+           <li> <span style=""> табличку «Пива нет» </span> </li> 
+           <li> <span style=""> навалялочку </span> </li> 
+           <li> <span style=""> бумажный секс-символ </span> </li> 
+           <li> <span style=""> ахилесицу </span> </li> 
+           <li> <span style=""> протон с двумя спинами </span> </li> 
+           <li> <span style=""> мёртвого попугая </span> </li> 
+           <li> <span style=""> план лирического отступления </span> </li> 
+           <li> <span style=""> подвывальник </span> </li> 
+           <li> <span style=""> самоучитель по самовоскрешению </span> </li> 
+           <li> <span style="font-weight:bold;"> админоискатель </span> </li> 
+           <li> <span style=""> бумеранг в один конец </span> </li> 
+           <li> <span style=""> ясный пень </span> </li> 
+           <li> <span style=""> пособие «Макраме и власть» (авт. Гордий) </span> </li> 
+           <li> <span style="font-weight:bold;"> золотой кирпич </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="c_spacer"></div> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="lastduelpl_f"> 
+    <div>
+     Дата: 28.03.2018 11:01 +03:00
+    </div> 
+    <div>
+     Хроники хранятся по мере возможности.
+    </div> 
+   </div> 
+  </div>  
+  <!--
+     CHRONICLE ARCHIVED FROM GODVILLE.NET ON Wed, 28 Mar 2018 15:36:10 +0300 BY ERINOME GUI+ BROWSER EXTENSION
+     AND SLIGHTLY MODIFIED BY ERINOME.NET PROCESSING SOFTWARE TO COMPLY WITH CHRONICLE ARCHIVE REQUIREMENTS
+
+     ORIGINAL CHRONICLE CONTENT MIGHT BE PROTECTED BY COPYRIGHT
+--> 
+  <div class="lastduelpl_f">
+   Архив хроник Годвилля
+   <br>gv.erinome.net
+  </div>
+ </body>
+</html>
