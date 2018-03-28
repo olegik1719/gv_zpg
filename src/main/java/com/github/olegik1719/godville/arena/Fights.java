@@ -1,5 +1,7 @@
 package com.github.olegik1719.godville.arena;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -37,21 +39,32 @@ public class Fights{
                 .max(Integer::compareTo).get();
     }
 
-    public void getYoung(){
-        for (Fight f:fights){
-            if (f.isYoung()){
-                System.out.printf("%s : %s \\ %s %d%n",f.getId(),f.getWinner().getGodName(), f.getLoser().getGodName(), f.getMoney());
-            }
-        }
+    public int getGodsCount(){
+        //fights.stream().map()
+        return  (int)fights.stream()
+                    .flatMap(fight -> Arrays.asList(fight.getWinner(),fight.getLoser()).stream())
+                .distinct().count();
     }
 
+    public int getYoungGodsCount(){
+        //fights.stream().map()
+        return  (int)fights.stream().filter(Fight::isYoung)
+                .flatMap(fight -> Arrays.asList(fight.getWinner(),fight.getLoser()).stream())
+                .distinct().count();
+    }
+
+    //public
+
     public String getResult(){
-        String result = "";
-        result += getSize() +"\n";
+        String result = "bq. Немного статистики:\n\n* Всего логов получено:\t";
+        //result += getSize() +"\n";
         result += getZPGCount() + "\n";
+        result += "* Из них на дохраме:\t";
         result += getYoungCount() + "\n";
-        result += getYoungMax() + "\n";
-        result += getOldMax() + "\n";
+        result += "* Приняло участие богов:\t";
+        result += getGodsCount() + "\n";
+        result += "* Из них на дохраме:\t";
+        result += getYoungGodsCount() + "\n";
         return result;
     }
 }

@@ -165,6 +165,16 @@ public class Fight{
         private int loses;
         private boolean young;
 
+        @Override
+        public int hashCode(){
+            return godName.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof Hero && this.godName.equals(((Hero) o).godName);
+        }
+
         private Hero(Element fight, int ID){
             heroID = ID;
             Element hero = fight.getElementById("hero" + (heroID+1));
