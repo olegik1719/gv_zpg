@@ -18,7 +18,7 @@ public class Fights{
     }
 
     public Collection<String> getGood(){
-        return fights.stream().map(Fight::getId).collect(Collectors.toList());
+        return fights.stream().map(Fight::getId).sorted().collect(Collectors.toList());
     }
 
     public int getZPGCount(){
