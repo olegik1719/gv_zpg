@@ -6,14 +6,14 @@ import org.junit.Test;
 import java.text.ParseException;
 
 
-public class FightTest {
+public class ParserTest {
 
-    Fight current;
+    Parser current;
 
     @Before
     public void setUp() throws ParseException {
         //current = new Fight("2aqwf8sgd");//e183mbz38;n85c5rqbl;ehd2kuls6
-        current = new Fight("ehd2kuls6");
+        current = new Parser("ehd2kuls6");
     }
 
 

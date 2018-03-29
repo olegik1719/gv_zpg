@@ -9,14 +9,13 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Fight{
+public class Parser {
     private static final Pattern PATTERN_WINSLOSES = Pattern.compile("(\\d+) / (\\d+)");
 
     private static final String REGEXP_GOLD_1="золотой кирпич и (\\d+) (.+?)\\.";
@@ -43,7 +42,7 @@ public class Fight{
     private boolean isZPG;
     private boolean young;
 
-    public Fight(String id) {
+    public Parser(String id) {
         this.id = id;
         try {
             String filePath = "res/log/"+id+".html";
@@ -153,7 +152,7 @@ public class Fight{
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof Fight && this.id.equals(((Fight) o).id);
+        return o instanceof Parser && this.id.equals(((Parser) o).id);
     }
 
     class Hero{
