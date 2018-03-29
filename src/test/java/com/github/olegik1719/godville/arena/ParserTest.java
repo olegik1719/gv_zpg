@@ -26,7 +26,7 @@ public class ParserTest {
 
     @Test
     public void getTime() {
-        System.out.println(current.getTime());
+        //System.out.println(current.getTime());
     }
 
     @Test

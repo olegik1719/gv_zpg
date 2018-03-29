@@ -1,0 +1,1129 @@
+<!doctype html>
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <title>Хроника Годвилля</title> 
+  <script type="text/javascript" src="/javascripts/jquery-1.12.4.min.js"></script> 
+  <script src="/javascripts/awardj.js" type="text/javascript"></script> 
+  <link href="/stylesheets/common.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/common-mini.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/progress_bar.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/hero_log.css" media="screen" rel="stylesheet" type="text/css"> 
+  <meta NAME="gvdt" CONTENT="hero_log_n">
+  <script src="/javascripts/nt.js" type="text/javascript"></script> 
+  <script src="/javascripts/st.js" type="text/javascript"></script>
+  <script src="/javascripts/stjq.js" type="text/javascript"></script> 
+  <script src="/javascripts/ga.js" type="text/javascript"></script> 
+  <script src="/javascripts/garu.js" type="text/javascript"></script> 
+  <meta name="keywords" content="Годвилль, Godville, Zero Player Game, ZPG, ZRPG, самоиграйка, тамагочи, браузерная игра, божественная комедия">
+  <meta name="description" content="Божественная комедия-самоиграйка с участием бога и, кхм, героя. А еще MMO и ZPG, если вы знаете эти слова."> 
+  <link rel="shortcut icon" href="/images/favicon.ico"> 
+  <script nonce="cec6f62cfb44b1be110b7bf70c8362d8">
+function to_mobile(){
+	$.post('/hero/to_mobile', {}, function(data) {
+		location.reload();
+	});
+}
+$(document).ready(function() {
+    $('.to_mobile').click(function(){
+        to_mobile();
+        return false;
+    });
+    $('.to_top').click(function(e){
+        $(window).scrollTop(0);
+        return false;
+    })
+    $('#reload').click(function(e){
+        location.reload(true)
+        return false;
+    });
+    $('a[data-rv]').click(function(e){
+        var v = $(this).data('rv');
+        report_godvoice(v[0],v[1],v[2],v[3]);
+        return false;
+    })
+    $('.n_wn').click(function(e){
+        window.open(this.href);
+        return false;
+    })
+	if (typeof(jq_mfp_init) != 'undefined'){
+		jq_mfp_init();
+	}    
+});
+</script> 
+ </head> 
+ <body> 
+  <div id="wrap"> 
+   <div id="page_wrapper"> 
+    <div class="lastduelpl"> 
+     <span><a href="/duels/log/ytuy8wwjy">Арена</a></span> 
+    </div> 
+    <div class="ft" style="display:none;">
+     28.03.2018 12:02 
+    </div> 
+    <div class="lastduelpl"> 
+    </div> 
+    <div id="arena_block" style="float: left; width: 100%;"> 
+     <div id="p_status" style="text-align:center;"></div> 
+     <div style="text-align:center;display: none;" id="app_bar"> 
+      <span id="app_status">Подключаемся к сервису быстрых обновлений...</span> 
+      <span title="Скрыть"><a href="#" onclick="Effect.toggle(&quot;app_bar&quot;,'blind',{});; return false;">[X]</a></span> 
+     </div> 
+     <div class="rpl"> 
+      <input id="slider" type="range" min="1" max="29" value="29" data-role="none"> 
+      <span id="sback" title="Предыдущий ход (стрелка влево)">⏪︎</span> 
+      <span id="splay" title="Проигрывание/пауза (Enter)">▶︎</span> 
+      <span id="sps" title="Проигрывание/пауза (Enter)" style="display:none;">⏸︎</span> 
+      <span id="sfwd" title="Следующий ход (стрелка вправо)">⏩︎</span> 
+     </div> 
+     <script nonce="cec6f62cfb44b1be110b7bf70c8362d8">
+
+$(document).ready(function() {
+    var hp = {"-1":{"0":440,"1":440},"0":{"0":440,"1":440},"1":{"0":440,"1":440},"2":{"0":404,"1":440},"3":{"0":404,"1":440},"4":{"0":376,"1":440},"5":{"0":376,"1":383},"6":{"0":333,"1":383},"7":{"0":333,"1":357},"8":{"0":303,"1":357},"9":{"0":303,"1":357},"10":{"0":273,"1":357},"11":{"0":273,"1":302},"12":{"0":273,"1":302},"13":{"0":273,"1":264},"14":{"0":241,"1":264},"15":{"0":241,"1":264},"16":{"0":186,"1":264},"17":{"0":186,"1":236},"18":{"0":152,"1":236},"19":{"0":152,"1":204},"20":{"0":120,"1":204},"21":{"0":120,"1":165},"22":{"0":65,"1":165},"23":{"0":65,"1":133},"24":{"0":41,"1":133},"25":{"0":41,"1":94},"26":{"0":3,"1":94},"27":{"0":3,"1":68},"28":{"0":1,"1":68},"29":{"0":1,"1":68}};    
+    var moves = [];
+    
+    var last= parseInt($('#turn_num').text());
+    
+    
+    var play_timer = undefined;
+    
+    var cur_turn=last;
+    
+        
+	var scroll_to = function(element){
+        if (element.length == 0){
+            return;
+        }
+
+		var elHeight = 0;
+		element.each(function() {
+		  elHeight += $(this).height();
+		});        
+        
+        var offset = element.offset().top + elHeight;
+            if(!element.is(":visible")) {
+                element.css({"visibility":"hidden"}).show();
+                var offset = element.offset().top;
+                element.css({"visibility":"", "display":""});
+            }
+
+            var visible_area_start = $(window).scrollTop();
+            var visible_area_end = visible_area_start + window.innerHeight;
+
+            if(offset < visible_area_start || offset > visible_area_end){
+                 // Not in view so scroll to it
+                 $('html,body').animate({scrollTop: offset - window.innerHeight/3}, 300);
+                 return false;
+            }
+            return true;
+	}        
+    
+    var map_scroll = function(){
+        
+        if ($('.dmh').length == 0){
+            return;
+        }
+        
+        var m_width = $('.dmh').width();
+        var m_left = $('.dmh').position().left;
+        
+        var map_width = $('#dmap').width();
+        
+        var s_left = $('#dmap').scrollLeft();
+        if ( s_left < m_left || 
+            s_left > m_left
+        ) {
+            $('#dmap').scrollLeft( m_left - map_width / 2);
+//            console.log('dungeon map scrolled ' + s_left + ' ' + m_left);
+        }
+    }
+
+    
+    var is_out_of_view = function(element){
+        if (element.length == 0){
+            return;
+        }
+        var elementTop = element.offset().top;
+        var elementBottom = element.outerHeight();
+
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+
+        if (viewportTop > elementTop) {
+//        if (elementBottom < viewportBottom ){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+        
+    var add_on_scroll = function(el_id){
+        if ($(el_id).length > 0){
+            ($(el_id).parent().parent()).addClass('bldn');
+        }
+    }
+
+    var on_scroll = function(el_id){
+        var fixed_mode = undefined;
+        var dmap = $($('.bldn')[0]);
+        var covered = is_out_of_view($(dmap.parent()));
+        if (!dmap.hasClass('block_fixed')){
+            if (covered && $('.d_content').innerHeight() > window.innerHeight){
+                fixed_mode = true;
+            }
+        }
+        else if (!covered) {
+            fixed_mode = false
+        }
+        if (fixed_mode){
+            $('.bldn').each(function(index){
+                $(this).addClass('block_fixed');
+                $(this).offset({'left':$(this).parent().offset().left});
+            });
+            $('.hide_on_scroll').hide();
+        }
+        else if (fixed_mode == false) {
+            $('.bldn').each(function(index){
+                $(this).removeClass('block_fixed');
+                $(this).removeAttr('style');
+            });
+            $('.hide_on_scroll').show();
+        }
+    }
+    
+    add_on_scroll('#dmap');
+    add_on_scroll('#alls');
+    add_on_scroll('#opps');
+    add_on_scroll($('#hpp1').parent().parent().parent());
+    add_on_scroll($('#hpp0').parent().parent().parent());
+
+    $(window).on('resize scroll', function() {
+        on_scroll();
+    });        
+    
+    
+    var show_turn = function(turn_num, no_scroll){
+        
+        if (no_scroll == undefined){
+            scroll_to($('.t'+turn_num));
+        }        
+        
+        
+        $('.ct').removeClass('ct ctbg');
+        $('.t'+turn_num).addClass('ct ctbg');
+        
+
+
+        var thp = hp[turn_num];
+        var thpp = hp[turn_num-1];
+        
+        if (thp){
+            for (var key in thp) {
+                var hpd = undefined;
+                var h = $('#hp'+key);
+                if (h.length > 0){
+                    h.text(thp[key]);
+                }
+                if (thpp[key] != undefined){
+                    hpd = thp[key] - thpp[key];
+                }
+                
+                var h_p = $('#hpd'+key).text('');
+                if (hpd){
+                    var h_p = $('#hpd'+key);
+                    if (h_p.length > 0){
+                        h_p.removeClass('hpd_green');
+                        h_p.removeClass('hpd_red');
+                        if (hpd > 0){
+                            h_p.text('+'+(hpd));
+                            h_p.addClass('hpd_green');
+                        }
+                        else {
+                            h_p.text((hpd));
+                            h_p.addClass('hpd_red');
+                        }
+                    }
+                }
+                
+                
+                if (h_p.length > 0){
+                    if (thp[key] == undefined) {
+                        h_p.parent().parent().hide();
+                    }
+                    else {
+                        h_p.parent().parent().show();
+                    }
+                }
+
+                var hpp = $('#hpp'+key);
+                if (hpp.length > 0){
+                    var hpm = $('#hpm'+key).text();
+                    var prct = (thp[key]/hpm*100).toFixed();
+                    hpp.css('width', (100 - prct)+'%');
+                    
+                    var p = hpp.parent();
+                    
+                    var pc_color = 'green';
+                    if (prct < 30 ){
+                       pc_color = 'red'
+                    }
+                    else if (prct < 70){
+                      pc_color = 'yellow'
+                    }
+                    p.css('background-color', pc_color);
+                    p.attr('title', prct+'%')
+                }
+            }
+        }
+        
+        $('#turn_num').text(turn_num);
+        $('#slider').val(turn_num);
+        map_scroll();
+        $('.dmh').removeClass('dmh');
+        if (moves.length > 0){
+            $('#'+moves[turn_num-1]).addClass('dmh');
+        }
+        if (turn_num == last){
+//            $('#sfwd').addClass('rpld');
+            $('.dt').show();
+        }
+        else {
+            // $('#sfwd').removeClass('rpld');
+            $('.dt').hide();
+        }
+        if (turn_num == 1){
+            // $('#sback').addClass('rpld');
+        }
+        else {
+            // $('#sback').removeClass('rpld');
+        }
+    }
+        
+	var stop_replay = function(){
+		if (play_timer != undefined){
+			clearInterval(play_timer);
+			play_timer = undefined;
+		}
+        $('#sps').hide();
+        $('#splay').show();        
+	}
+    
+	var play_step_func = function(){
+		show_turn(cur_turn);
+		
+		if (cur_turn == last){
+            stop_replay();
+            cur_turn = 1;
+			return;
+		}
+        cur_turn++;
+	}
+    
+    var back_f = function(){
+        if (cur_turn== 1){
+            cur_turn = last+1;
+        }
+        stop_replay();
+        if (cur_turn > 1){
+            cur_turn--;
+            show_turn(cur_turn);
+        }        
+    }
+    
+	var forward_f = function(){
+        if (cur_turn==last){
+            cur_turn = 0;
+        }				        
+		stop_replay();
+        if (cur_turn < last){
+            cur_turn++;
+            show_turn(cur_turn);
+        }        
+    }
+    
+    var play_f = function(){
+        stop_replay();
+        if (cur_turn==last){
+            cur_turn = 1;
+        }
+        play_timer = setInterval(play_step_func, 1000);
+        play_step_func();
+        $('#splay').hide();
+        $('#sps').show();        
+    }
+    
+    
+    $('#slider').change(function() {
+        cur_turn = $(this).val();
+        show_turn(cur_turn);
+    });
+    
+    $('#sback').click(function(){
+        back_f();
+    });
+    $('#sfwd').click(function(){
+        forward_f();
+    });
+    
+    $('#splay').click(function(){
+        play_f();
+    });
+    $('#sps').click(function(){
+        stop_replay();
+    });
+    
+	$("body").keydown(function(e){
+		if ((e.keyCode || e.which) == 37) { // left arrow
+			back_f();
+		}
+		else if ((e.keyCode || e.which) == 39){ // right arrow
+			forward_f();
+		}
+		else if ((e.keyCode || e.which) == 13 && !e.ctrlKey){ // enter
+			if ($('#splay').css('display') != 'none'){
+				play_f();
+			}
+			else {
+				stop_replay();
+			}
+		}
+	});
+    
+	$('.dtc').click(function(e){
+		var turn = $(this).data("t")
+		if (turn != undefined){
+            stop_replay();
+            cur_turn = turn;
+			show_turn(turn);
+		}
+	});
+    
+    
+    show_turn(cur_turn, true);
+    
+    
+});
+</script> 
+     <div id="left_block"> 
+      <div id="hero1"> 
+       <div id="hero1_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Пьяная выхухоль 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/Ais">Ais</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           5 лет 5 месяцев
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>За Мордор!</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">нейтральный</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/орден дырявой чаши" onclick="window.open(this.href);return false;" style="text-decoration:none;">орден дырявой чаши</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero1_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            86
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="11%"> 
+            <div id="pr_l" class="pr_bar" style="width:89%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            17 / 50
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="34%"> 
+            <div id="pr_q" class="pr_bar" style="width:66%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd0"></span>
+            <span id="hp0">1</span> / 
+            <span id="hpm0">440</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="0%"> 
+            <div id="hpp0" class="pr_bar" style="width:100%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            ни одного
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">211</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">198 / 177</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero1_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> доремическую фасоль </span> </li> 
+           <li> <span style=""> четырёхмерный тетрис </span> </li> 
+           <li> <span style=""> бляху с мухой </span> </li> 
+           <li> <span style=""> глыбу необогащённого мифрила-666 </span> </li> 
+           <li> <span style=""> депешмотку </span> </li> 
+           <li> <span style=""> верх ушка </span> </li> 
+           <li> <span style=""> бревесину </span> </li> 
+           <li> <span style=""> картину «Волка семеро козлят» </span> </li> 
+           <li> <span style=""> горшок каши из томагавка </span> </li> 
+           <li> <span style=""> сдобу дня </span> </li> 
+           <li> <span style=""> чашу терпения </span> </li> 
+           <li> <span style=""> справку о негероеспособности </span> </li> 
+           <li> <span style="font-weight:bold;"> хрустальный череп </span> </li> 
+           <li> <span style=""> миллиметр ртутного столба </span> </li> 
+           <li> <span style=""> отравленный кренодж </span> </li> 
+           <li> <span style=""> жвачку для глаз </span> </li> 
+           <li> <span style=""> смертельный номерок </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="c_spacer"></div> 
+      </div> 
+     </div> 
+     <div id="central_block"> 
+      <div class="box" id="last_items_arena"> 
+       <script nonce="cec6f62cfb44b1be110b7bf70c8362d8">
+	function report_godvoice(voice_id, sid, link, t) {
+        var c_text = 'Вы уверены, что этот глас нарушает правила хорошего тона Годвилля? Кстати, чужие гласы в дневнике можно отключить в настройках.';
+		if (typeof Ajax === 'undefined'){
+			var element_id = '#av_c_'+voice_id;
+			var ans =  confirm(c_text);
+			if (ans){
+			    $.post('/hero/report_arena_voice_m', {'id':voice_id, 'text':t, 'sid':sid, 'link':link}, function(data) {
+						if (data && data['status'] == 'success'){
+							$(element_id).addClass('cmplt_status');
+						  $(element_id).html(data['text']);
+							setTimeout(function(){
+								$(element_id).hide();
+							},5000);
+						}
+				});														
+			}
+			return false;
+		}
+		else {
+			if (confirm(c_text)) { new Ajax.Request('/hero/report_arena_voice/'+voice_id+'?'+Object.toQueryString({'text':t, 'link':link, 'sid':sid}), {asynchronous:true, evalScripts:true}); }; return false;
+		}
+	}
+</script> 
+       <div class="afl block"> 
+        <div class="block_h">
+          Вести с арены (шаг 
+         <span id="turn_num">29</span> / 29) 
+         <a href="/duels/log/ytuy8wwjy?sort=desc" title="Обратная сортировка (нажмите, чтобы изменить порядок записей)">▼</a> 
+        </div> 
+        <div class="d_content"> 
+         <div class="new_line dtc t1  " data-t="1" style=""> 
+          <div class="d_capt">
+           12:02 
+           <div class="d_turn">
+            шаг 1
+           </div> 
+          </div> 
+          <div class="text_content ">
+            В красном углу арены — Jeronnimo, в синем — Пьяная выхухоль. Судья бьет в гонг и от греха подальше залезает на дерево. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t1  " data-t="1" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt"> 
+           <div class="d_turn"></div> 
+          </div> 
+          <div class="text_content ">
+            По обоюдному желанию богов поединок пройдет без их вмешательства. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t2  " data-t="2" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:02 
+           <div class="d_turn">
+            шаг 2
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль предлагает сыграть в монетку на удар вне очереди. Jeronnimo соглашается и, крепко сжав монетку в кулаке, что есть сил лупит противника. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t3  " data-t="3" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:03 
+           <div class="d_turn">
+            шаг 3
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль настойчиво стучит в закрытое забрало противника, но ему никто не открывает. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t4  " data-t="4" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:03 
+           <div class="d_turn">
+            шаг 4
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Воодушевлённый поддержкой трибун Jeronnimo чихать хотел на противника. Пьяная выхухоль очень боится заразы и в ужасе бледнеет. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t5  " data-t="5" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:04 
+           <div class="d_turn">
+            шаг 5
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль наносит единственный удар и застывает в исполненной презрения позе спиной к противнику. Шокированный пафосом, Jeronnimo мучительно переживает собственную ничтожность. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t6  " data-t="6" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:04 
+           <div class="d_turn">
+            шаг 6
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Метким ударом Jeronnimo отправляет противника в бреющий полёт. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t7  " data-t="7" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:04 
+           <div class="d_turn">
+            шаг 7
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo встаёт в оппозицию, и Пьяная выхухоль немедленно бьёт его резиновой дубинкой по неправильному фуэте. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t8  " data-t="8" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:05 
+           <div class="d_turn">
+            шаг 8
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo напустил туману. Пьяная выхухоль растерянно бьётся о трибуны. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t9  " data-t="9" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:05 
+           <div class="d_turn">
+            шаг 9
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль прицельно плюнул, надеясь увидеть в противнике дырку от ядовитой слюны. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t10  " data-t="10" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:06 
+           <div class="d_turn">
+            шаг 10
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo настолько сильно боится противника, что дрожью в коленях вызывает у него резонанс. Пьяная выхухоль от тряски роняет и слегка повреждает счётчик здоровья. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t11  " data-t="11" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:06 
+           <div class="d_turn">
+            шаг 11
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль набил пару мелодий племени Пау-Пау на вражеском шлеме. Jeronnimo получил обильное помрачение ума. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t12  " data-t="12" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:07 
+           <div class="d_turn">
+            шаг 12
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo молодецким ударом отправляет противника в полёт. Однако Пьяная выхухоль никуда не летит, а вот судье приходится туго... 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t13  " data-t="13" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:07 
+           <div class="d_turn">
+            шаг 13
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Вспомнив детство, Пьяная выхухоль делает противнику сливку, две крапивки, навешивает фофана и завершает атаку эффектной саечкой за испуг. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t14  " data-t="14" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:08 
+           <div class="d_turn">
+            шаг 14
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo доверительно сообщает противнику, что Деда Мороза не существует. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t15  " data-t="15" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:08 
+           <div class="d_turn">
+            шаг 15
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль производит сканирование противника на наличие уязвимостей, ошибок и неисправностей, но засыпает, не дожидаясь результатов. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t16  " data-t="16" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:09 
+           <div class="d_turn">
+            шаг 16
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Мощным апперкотом Jeronnimo отправляет противника на трибуну для встречи с болельщиками. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t17  " data-t="17" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:09 
+           <div class="d_turn">
+            шаг 17
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль отказывается выпить за здоровье соперника. Jeronnimo чувствует, как силы покидают его. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t18  " data-t="18" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:10 
+           <div class="d_turn">
+            шаг 18
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль угрожающе закатывает рукава. Jeronnimo быстро накладывает жгут и берёт кровь на анализ. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t19  " data-t="19" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:10 
+           <div class="d_turn">
+            шаг 19
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль рассказал противнику десяток бородатых анекдотов. Jeronnimo помирает от скуки. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t20  " data-t="20" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:10 
+           <div class="d_turn">
+            шаг 20
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo бьёт по сопернику компроматом и поливает грязью. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t21  " data-t="21" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:11 
+           <div class="d_turn">
+            шаг 21
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Вместо атаки Пьяная выхухоль фотографирует противника. Вылетевшая птичка глубоко втыкается тому в грудь. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t22  " data-t="22" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:11 
+           <div class="d_turn">
+            шаг 22
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo наносит особо мощный удар, и Пьяная выхухоль больно ловит телом собственную тень. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t23  " data-t="23" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:12 
+           <div class="d_turn">
+            шаг 23
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль, продемонстрировав диплом мабританского биолога, берёт образцы крови и тканей противника. Jeronnimo морщится от боли и вполголоса проклинает современную науку. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t24  " data-t="24" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:12 
+           <div class="d_turn">
+            шаг 24
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo издаёт дикий крик и рвёт на груди рубаху. Пьяная выхухоль получает в глаз отлетевшей пуговицей. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t25  " data-t="25" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:13 
+           <div class="d_turn">
+            шаг 25
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo заявляет, что он сопернику не по зубам. Пьяная выхухоль наглядно демонстрирует — по зубам, по зубам и ещё раз по зубам. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t26  " data-t="26" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:13 
+           <div class="d_turn">
+            шаг 26
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пропустив удар, Пьяная выхухоль подаёт встречный писк. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t27  " data-t="27" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:14 
+           <div class="d_turn">
+            шаг 27
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль выхватывает оружие. Jeronnimo просто выхватывает. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t28  " data-t="28" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           12:14 
+           <div class="d_turn">
+            шаг 28
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Jeronnimo пересчитал звёздочки вокруг своей головы, потом внезапно схватил одну из них и метнул в противника. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t29  " data-t="29" style=""> 
+          <div class="d_capt">
+           12:15 
+           <div class="d_turn">
+            шаг 29
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пьяная выхухоль одерживает поражение. Jeronnimo терпит победу. Победитель стал богаче на 3477 золотых монет и золотой кирпич. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div style="margin-bottom:0.2em;clear:both;"></div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="right_block"> 
+      <div id="hero2"> 
+       <div id="hero2_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Jeronnimo 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/Mikiko">Mikiko</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           3 года 1 месяц
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>🎲Hass und Schme[R]z🎃</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">беззлобный</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/lm" onclick="window.open(this.href);return false;" style="text-decoration:none;">lm</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero2_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            93
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="76%"> 
+            <div id="pr_l" class="pr_bar" style="width:24%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            40 / 50
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="80%"> 
+            <div id="pr_q" class="pr_bar" style="width:20%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd1"></span>
+            <span id="hp1">68</span> / 
+            <span id="hpm1">440</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="15%"> 
+            <div id="hpp1" class="pr_bar" style="width:85%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            около 13 тысяч
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">157</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">513 / 484</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero2_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> пожаренную книгу </span> </li> 
+           <li> <span style=""> талон на самобичевание </span> </li> 
+           <li> <span style=""> генератор случайных ошибок </span> </li> 
+           <li> <span style=""> трактат «О тщетности мытия» </span> </li> 
+           <li> <span style=""> изводительские права </span> </li> 
+           <li> <span style="font-weight:bold;"> призму жизненного опыта </span> </li> 
+           <li> <span style=""> книгу «Приступ лени и наказание» </span> </li> 
+           <li> <span style=""> радиолюбительскую колбасу </span> </li> 
+           <li> <span style="font-weight:bold;"> приказ долго жить </span> </li> 
+           <li> <span style=""> исчерпалку </span> </li> 
+           <li> <span style=""> подлинник наскального рисунка </span> </li> 
+           <li> <span style="font-weight:bold;"> отбеливатель магов </span> </li> 
+           <li> <span style=""> гайку на верёвочке </span> </li> 
+           <li> <span style=""> варвариску </span> </li> 
+           <li> <span style=""> вентиль от газопровода </span> </li> 
+           <li> <span style=""> монстро-геройский словарь </span> </li> 
+           <li> <span style=""> хрустальный горб </span> </li> 
+           <li> <span style=""> запал в душу </span> </li> 
+           <li> <span style=""> противозаначечные таблетки </span> </li> 
+           <li> <span style=""> зелёного змия </span> </li> 
+           <li> <span style=""> таблетку инвалидола </span> </li> 
+           <li> <span style="font-weight:bold;"> свалочный аппарат </span> </li> 
+           <li> <span style=""> злак злодиака </span> </li> 
+           <li> <span style=""> зелье полной бесполезности </span> </li> 
+           <li> <span style=""> план чуйской долины </span> </li> 
+           <li> <span style="font-weight:bold;"> великую географическую открытку </span> </li> 
+           <li> <span style=""> кружку Эсмарха </span> </li> 
+           <li> <span style=""> центнер тяжести </span> </li> 
+           <li> <span style=""> сумму чёрных квадратов </span> </li> 
+           <li> <span style=""> огнеупорные спички </span> </li> 
+           <li> <span style=""> значок общества трезвости </span> </li> 
+           <li> <span style=""> четырёхмерный пространственный вектор Минковского </span> </li> 
+           <li> <span style=""> бритву для бровей </span> </li> 
+           <li> <span style=""> пособие кладоискателя «7000 под землей» </span> </li> 
+           <li> <span style=""> дорожный знак «Осторожно, йети!» </span> </li> 
+           <li> <span style=""> винный пух </span> </li> 
+           <li> <span style=""> мастерок единоборца </span> </li> 
+           <li> <span style=""> королевские подвязки </span> </li> 
+           <li> <span style="font-weight:bold;"> золотой кирпич (2 шт) </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="c_spacer"></div> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="lastduelpl_f"> 
+    <div>
+     Дата: 28.03.2018 12:02 +03:00
+    </div> 
+    <div>
+     Хроники хранятся по мере возможности.
+    </div> 
+   </div> 
+  </div>  
+  <!--
+     CHRONICLE ARCHIVED FROM GODVILLE.NET ON Wed, 28 Mar 2018 17:14:11 +0300 BY ERINOME GUI+ BROWSER EXTENSION
+     AND SLIGHTLY MODIFIED BY ERINOME.NET PROCESSING SOFTWARE TO COMPLY WITH CHRONICLE ARCHIVE REQUIREMENTS
+
+     ORIGINAL CHRONICLE CONTENT MIGHT BE PROTECTED BY COPYRIGHT
+--> 
+  <div class="lastduelpl_f">
+   Архив хроник Годвилля
+   <br>gv.erinome.net
+  </div>
+ </body>
+</html>

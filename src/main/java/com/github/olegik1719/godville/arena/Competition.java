@@ -1,5 +1,6 @@
 package com.github.olegik1719.godville.arena;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,8 +16,14 @@ public class Competition {
     public Competition addDuel(String id){
         logs.add(id);
         Parser fight = new Parser(id);
-        players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
-        players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
+        try {
+            fight.getTime();
+            players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
+            players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
+
+        }catch (IOException e){
+            System.out.println(id + " isn't log?");
+        }
         return this;
     }
 

@@ -24,7 +24,7 @@ public class Common {
         exchange.put("золотой",1);
         exchange.put("золотую монету",1);
         exchange.put("золотых червонца",10);
-        exchange.put("золотых червонца",10);
+        exchange.put("золотых червонцев",10);
     }
 
     public static String getID(String url){

@@ -2,6 +2,7 @@ package com.github.olegik1719.godville.arena;
 
 import lombok.Getter;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Player {
@@ -21,7 +22,7 @@ public class Player {
         duels = new HashSet<>();
     }
 
-    public Player addLog(Parser parser){
+    public Player addLog(Parser parser) throws IOException {
         duels.add(new Duel(parser));
         return this;
     }
@@ -59,7 +60,7 @@ public class Player {
             return id.hashCode();
         }
 
-        private Duel(Parser parser){
+        private Duel(Parser parser) throws IOException {
             this.id = parser.getId();
             isZPG = parser.isZPG();
             duelTime = parser.getTime();
