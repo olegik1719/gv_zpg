@@ -34,7 +34,6 @@ public class Parser {
 
     private String id;
     private Hero[] heroes = new Hero[2];
-    //private int turns;
     private int winner;
     private boolean young;
     private Document fight;
@@ -55,7 +54,6 @@ public class Parser {
             } else {
                 fight = Jsoup.parse(logfile, "UTF-8", "/");
             }
-
             for (int i = 0; i < 2; i++)
                 heroes[i] = new Hero(fight, i);
             winner = heroes[0].isWinner() ? 0 : 1;
@@ -108,13 +106,13 @@ public class Parser {
         return money;
     }
 
-    public Date getTime() throws IOException {
+    public Date getTime() {
         try {
             String date = fight.select("div.lastduelpl_f>div").first().text().substring(5);
             return ERINOME_DATE_FORMATTER.parse(date);
         } catch (ParseException exception) {
             System.out.println(id);
-            throw new IOException("It's not log");
+            throw new RuntimeException("It's not log");
         }
     }
 
@@ -146,12 +144,7 @@ public class Parser {
 
     class Hero {
         private String godName;
-        private String godLink;
-        private boolean isWinner;
         private int heroID;
-        private int wins;
-        private int loses;
-        private boolean young;
 
         @Override
         public int hashCode() {
@@ -165,34 +158,15 @@ public class Parser {
 
         private Hero(Element fight, int ID) {
             heroID = ID;
-            Element hero = fight.getElementById("hero" + (heroID + 1));
-            Element info = hero.getElementById("hero" + (heroID + 1) + "_info");
+            Element info = fight.getElementById("hero" + (heroID + 1) + "_info");
             Element god = info.select("a").first();
-            godLink = god.attr("href");
             godName = god.text();
-            Element stats = hero.getElementById("hero" + (heroID + 1) + "_stats");
-            Element health = stats.getElementById("hp0");
-            isWinner = !(health != null ? health.html().equals("1") : hero.getElementById("hp1").html().equals("1"));
-            Elements new_lines = stats.select("div.new_line");
-            for (Element el : new_lines) {//
-                if ((el.select("span.l_capt") != null)
-                        && (el.select("span.l_capt").text().contains("Побед / Поражений"))) {
-                    String winsLoses = el.select("span.field_content").text();
-                    Matcher matcher = PATTERN_WINSLOSES.matcher(winsLoses);
-                    if (matcher.find()) {
-                        wins = Integer.parseInt(matcher.group(1));
-                        loses = Integer.parseInt(matcher.group(2));
-                    }
-                } else {
-                    if ((el.select("span.l_capt") != null)
-                            && (el.select("span.l_capt").text().contains("Кирпичей для храма"))) {
-                        young = true;
-                    }
-                }
-            }
         }
 
         public boolean isWinner() {
+            Element stats = fight.getElementById("hero" + (heroID + 1) + "_stats");
+            Element health = stats.getElementById("hp0");
+            Boolean isWinner = !(health != null ? health.html().equals("1") : stats.getElementById("hp1").html().equals("1"));
             return isWinner;
         }
 
@@ -200,20 +174,55 @@ public class Parser {
             return godName;
         }
 
-        public String getGodLink() {
-            return godLink;
-        }
-
         public int getLoses() {
+            Element stats = fight.getElementById("hero" + (heroID + 1) + "_stats");
+            //Element health = stats.getElementById("hp0");
+            //isWinner = !(health != null ? health.html().equals("1") : stats.getElementById("hp1").html().equals("1"));
+            Elements new_lines = stats.select("div.new_line");
+            int loses = -1;
+            for (Element el : new_lines) {//
+                if ((el.select("span.l_capt") != null)
+                        && (el.select("span.l_capt").text().contains("Побед / Поражений"))) {
+                    String winsLoses = el.select("span.field_content").text();
+                    Matcher matcher = PATTERN_WINSLOSES.matcher(winsLoses);
+                    if (matcher.find()) {
+                        //wins = Integer.parseInt(matcher.group(1));
+                        loses = Integer.parseInt(matcher.group(2));
+                    }
+                }
+            }
             return loses;
         }
 
         public int getWins() {
-            return wins;
+            //int wins = -1;
+            Element stats = fight.getElementById("hero" + (heroID + 1) + "_stats");
+            Elements new_lines = stats.select("div.new_line");
+            for (Element el : new_lines) {//
+                if ((el.select("span.l_capt") != null)
+                        && (el.select("span.l_capt").text().contains("Побед / Поражений"))) {
+                    String winsLoses = el.select("span.field_content").text();
+                    Matcher matcher = PATTERN_WINSLOSES.matcher(winsLoses);
+                    if (matcher.find()) {
+                        int wins = Integer.parseInt(matcher.group(1));
+                        return wins;
+                        //loses = Integer.parseInt(matcher.group(2));
+                    }
+                }
+            }
+            throw  new RuntimeException(id + " isn't log?");
         }
 
         public boolean isYoung() {
-            return young;
+            Element stats = fight.getElementById("hero" + (heroID + 1) + "_stats");
+            Elements new_lines = stats.select("div.new_line");
+            for (Element el : new_lines) {//
+                if ((el.select("span.l_capt") != null)
+                        && (el.select("span.l_capt").text().contains("Кирпичей для храма"))) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

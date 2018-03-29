@@ -22,7 +22,7 @@ public class Player {
         duels = new HashSet<>();
     }
 
-    public Player addLog(Parser parser) throws IOException {
+    public Player addLog(Parser parser) {
         duels.add(new Duel(parser));
         return this;
     }
@@ -60,7 +60,7 @@ public class Player {
             return id.hashCode();
         }
 
-        private Duel(Parser parser) throws IOException {
+        private Duel(Parser parser) {
             this.id = parser.getId();
             isZPG = parser.isZPG();
             duelTime = parser.getTime();

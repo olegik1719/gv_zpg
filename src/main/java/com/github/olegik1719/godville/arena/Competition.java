@@ -1,12 +1,28 @@
 package com.github.olegik1719.godville.arena;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Competition {
     private Map<String,Player> players; // <nikname;players>
     private Set<String> logs;
+    private static final String BEGIN_TIME ="26.03.2018 00:00 +03:00";
+    private static final String END_TIME ="31.03.2018 00:59 +03:00";
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
+    private static Date beginTime;
+    private static Date endTime;
+
+    static {
+        try {
+            beginTime = DATE_FORMATTER.parse(BEGIN_TIME);
+            endTime = DATE_FORMATTER.parse(END_TIME);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Competition(){
         players = new HashMap<>();
@@ -17,11 +33,15 @@ public class Competition {
         logs.add(id);
         Parser fight = new Parser(id);
         try {
-            fight.getTime();
-            players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
-            players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
+            Date fightTime = fight.getTime();
+            if (fightTime.after(beginTime)&&fightTime.before(endTime)) {
+                players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
+                players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
+            }else {
+                System.out.println(Common.getID(id) + " -- bad log");
+            }
 
-        }catch (IOException e){
+        }catch (RuntimeException e){
             System.out.println(id + " isn't log?");
         }
         return this;
@@ -73,8 +93,8 @@ public class Competition {
         result += getYoungCount() + "\n";
         result += "* Приняло участие богов:\t";
         result += getGodsCount() + "\n";
-        getGods_lose();
-        getGods_Wins();
+        //getGods_lose();
+        //getGods_Wins();
         return result;
     }
 }
