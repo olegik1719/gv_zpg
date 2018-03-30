@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Competition {
     private Map<String,Player> players; // <nikname;players>
-    private Set<String> logs;
+    //private Set<String> logs;
     private static final String BEGIN_TIME ="26.03.2018 00:00 +03:00";
     private static final String END_TIME ="31.03.2018 00:59 +03:00";
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
@@ -26,11 +26,11 @@ public class Competition {
 
     public Competition(){
         players = new HashMap<>();
-        logs = new HashSet<>();
+        //logs = new HashSet<>();
     }
 
     public Competition addDuel(String id){
-        logs.add(id);
+        //logs.add(id);
         Parser fight = new Parser(id);
         try {
             Date fightTime = fight.getTime();
@@ -55,7 +55,11 @@ public class Competition {
     }
 
     public Collection<String> getGood(){
-        return logs.stream().sorted().collect(Collectors.toList());
+        //return logs.stream().sorted().collect(Collectors.toList());
+        return players.values().stream()
+                .flatMap(player -> player.getDuels().stream())
+                .distinct().map(Player.Duel::getId).sorted()
+                .collect(Collectors.toList());
     }
 
     private int getZPGCount(){
@@ -82,7 +86,7 @@ public class Competition {
     }
 
     private void getGods_lose(){
-        players.keySet().forEach(key->System.out.println("* " + key + ":пс -- " + players.get(key).getMaxWin() + "\n"));
+        players.keySet().forEach(key->System.out.println("* " + key + ":пс -- " + players.get(key).getMaxLose() + "\n"));
     }
 
     public String getResult(){

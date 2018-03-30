@@ -36,12 +36,12 @@ public class Player {
     }
 
     public int getMaxWin(){
+
         return duels.stream().filter(d->d.isWinner).map(duel -> duel.sum).max(Integer::compareTo).orElse(0);
     }
-
-
     @Getter
     public class Duel{
+        //Fight fight;
         private String id;
         private int sum;
         private boolean isWinner;
@@ -70,6 +70,22 @@ public class Player {
             ownLoses = hero.getLoses();
             ownWins = hero.getWins();
 
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public boolean isZPG() {
+            return isZPG;
+        }
+
+        public boolean isYoung() {
+            return young;
+        }
+
+        public Date getDuelTime() {
+            return duelTime;
         }
 
         public int getOwnFights(){
