@@ -1,0 +1,1148 @@
+<!doctype html>
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <title>Хроника Годвилля</title> 
+  <script type="text/javascript" src="/javascripts/jquery-1.12.4.min.js"></script> 
+  <script src="/javascripts/awardj.js" type="text/javascript"></script> 
+  <link href="/stylesheets/common.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/common-mini.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/progress_bar.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/hero_log.css" media="screen" rel="stylesheet" type="text/css"> 
+  <meta NAME="gvdt" CONTENT="hero_log_n">
+  <script src="/javascripts/nt.js" type="text/javascript"></script> 
+  <script src="/javascripts/st.js" type="text/javascript"></script>
+  <script src="/javascripts/stjq.js" type="text/javascript"></script> 
+  <script src="/javascripts/ga.js" type="text/javascript"></script> 
+  <script src="/javascripts/garu.js" type="text/javascript"></script> 
+  <meta name="keywords" content="Годвилль, Godville, Zero Player Game, ZPG, ZRPG, самоиграйка, тамагочи, браузерная игра, божественная комедия">
+  <meta name="description" content="Божественная комедия-самоиграйка объявляет набор богов: в штат требуются целители и громовержцы."> 
+  <link rel="shortcut icon" href="/images/favicon.ico"> 
+  <script nonce="40b5f25a228570053bc64a043c3f1833">
+function to_mobile(){
+	$.post('/hero/to_mobile', {}, function(data) {
+		location.reload();
+	});
+}
+$(document).ready(function() {
+    $('.to_mobile').click(function(){
+        to_mobile();
+        return false;
+    });
+    $('.to_top').click(function(e){
+        $(window).scrollTop(0);
+        return false;
+    })
+    $('#reload').click(function(e){
+        location.reload(true)
+        return false;
+    });
+    $('a[data-rv]').click(function(e){
+        var v = $(this).data('rv');
+        report_godvoice(v[0],v[1],v[2],v[3]);
+        return false;
+    })
+    $('.n_wn').click(function(e){
+        window.open(this.href);
+        return false;
+    })
+	if (typeof(jq_mfp_init) != 'undefined'){
+		jq_mfp_init();
+	}    
+});
+</script> 
+ </head> 
+ <body> 
+  <div id="wrap"> 
+   <div id="page_wrapper"> 
+    <div class="lastduelpl"> 
+     <span><a href="/duels/log/75uxwqwkp">Арена</a></span> 
+    </div> 
+    <div class="ft" style="display:none;">
+     30.03.2018 08:01 
+    </div> 
+    <div class="lastduelpl"> 
+    </div> 
+    <div id="arena_block" style="float: left; width: 100%;"> 
+     <div id="p_status" style="text-align:center;"></div> 
+     <div style="text-align:center;display: none;" id="app_bar"> 
+      <span id="app_status">Подключаемся к сервису быстрых обновлений...</span> 
+      <span title="Скрыть"><a href="#" onclick="Effect.toggle(&quot;app_bar&quot;,'blind',{});; return false;">[X]</a></span> 
+     </div> 
+     <div class="rpl"> 
+      <input id="slider" type="range" min="1" max="31" value="31" data-role="none"> 
+      <span id="sback" title="Предыдущий ход (стрелка влево)">⏪︎</span> 
+      <span id="splay" title="Проигрывание/пауза (Enter)">▶︎</span> 
+      <span id="sps" title="Проигрывание/пауза (Enter)" style="display:none;">⏸︎</span> 
+      <span id="sfwd" title="Следующий ход (стрелка вправо)">⏩︎</span> 
+     </div> 
+     <script nonce="40b5f25a228570053bc64a043c3f1833">
+
+$(document).ready(function() {
+    var hp = {"-1":{"0":372,"1":372},"0":{"0":372,"1":372},"1":{"0":372,"1":372},"2":{"0":334,"1":372},"3":{"0":334,"1":349},"4":{"0":300,"1":349},"5":{"0":300,"1":325},"6":{"0":263,"1":325},"7":{"0":263,"1":282},"8":{"0":239,"1":282},"9":{"0":239,"1":282},"10":{"0":201,"1":282},"11":{"0":201,"1":248},"12":{"0":180,"1":248},"13":{"0":180,"1":248},"14":{"0":180,"1":228},"15":{"0":151,"1":228},"16":{"0":151,"1":228},"17":{"0":151,"1":194},"18":{"0":151,"1":194},"19":{"0":151,"1":170},"20":{"0":124,"1":170},"21":{"0":124,"1":125},"22":{"0":92,"1":125},"23":{"0":92,"1":102},"24":{"0":92,"1":102},"25":{"0":92,"1":65},"26":{"0":60,"1":65},"27":{"0":60,"1":45},"28":{"0":31,"1":45},"29":{"0":31,"1":18},"30":{"0":1,"1":18},"31":{"0":1,"1":18}};    
+    var moves = [];
+    
+    var last= parseInt($('#turn_num').text());
+    
+    
+    var play_timer = undefined;
+    
+    var cur_turn=last;
+    
+        
+	var scroll_to = function(element){
+        if (element.length == 0){
+            return;
+        }
+
+		var elHeight = 0;
+		element.each(function() {
+		  elHeight += $(this).height();
+		});        
+        
+        var offset = element.offset().top + elHeight;
+            if(!element.is(":visible")) {
+                element.css({"visibility":"hidden"}).show();
+                var offset = element.offset().top;
+                element.css({"visibility":"", "display":""});
+            }
+
+            var visible_area_start = $(window).scrollTop();
+            var visible_area_end = visible_area_start + window.innerHeight;
+
+            if(offset < visible_area_start || offset > visible_area_end){
+                 // Not in view so scroll to it
+                 $('html,body').animate({scrollTop: offset - window.innerHeight/3}, 300);
+                 return false;
+            }
+            return true;
+	}        
+    
+    var map_scroll = function(){
+        
+        if ($('.dmh').length == 0){
+            return;
+        }
+        
+        var m_width = $('.dmh').width();
+        var m_left = $('.dmh').position().left;
+        
+        var map_width = $('#dmap').width();
+        
+        var s_left = $('#dmap').scrollLeft();
+        if ( s_left < m_left || 
+            s_left > m_left
+        ) {
+            $('#dmap').scrollLeft( m_left - map_width / 2);
+//            console.log('dungeon map scrolled ' + s_left + ' ' + m_left);
+        }
+    }
+
+    
+    var is_out_of_view = function(element){
+        if (element.length == 0){
+            return;
+        }
+        var elementTop = element.offset().top;
+        var elementBottom = element.outerHeight();
+
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+
+        if (viewportTop > elementTop) {
+//        if (elementBottom < viewportBottom ){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+        
+    var add_on_scroll = function(el_id){
+        if ($(el_id).length > 0){
+            ($(el_id).parent().parent()).addClass('bldn');
+        }
+    }
+
+    var on_scroll = function(el_id){
+        var fixed_mode = undefined;
+        var dmap = $($('.bldn')[0]);
+        var covered = is_out_of_view($(dmap.parent()));
+        if (!dmap.hasClass('block_fixed')){
+            if (covered && $('.d_content').innerHeight() > window.innerHeight){
+                fixed_mode = true;
+            }
+        }
+        else if (!covered) {
+            fixed_mode = false
+        }
+        if (fixed_mode){
+            $('.bldn').each(function(index){
+                $(this).addClass('block_fixed');
+                $(this).offset({'left':$(this).parent().offset().left});
+            });
+            $('.hide_on_scroll').hide();
+        }
+        else if (fixed_mode == false) {
+            $('.bldn').each(function(index){
+                $(this).removeClass('block_fixed');
+                $(this).removeAttr('style');
+            });
+            $('.hide_on_scroll').show();
+        }
+    }
+    
+    add_on_scroll('#dmap');
+    add_on_scroll('#alls');
+    add_on_scroll('#opps');
+    add_on_scroll($('#hpp1').parent().parent().parent());
+    add_on_scroll($('#hpp0').parent().parent().parent());
+
+    $(window).on('resize scroll', function() {
+        on_scroll();
+    });        
+    
+    
+    var show_turn = function(turn_num, no_scroll){
+        
+        if (no_scroll == undefined){
+            scroll_to($('.t'+turn_num));
+        }        
+        
+        
+        $('.ct').removeClass('ct ctbg');
+        $('.t'+turn_num).addClass('ct ctbg');
+        
+
+
+        var thp = hp[turn_num];
+        var thpp = hp[turn_num-1];
+        
+        if (thp){
+            for (var key in thp) {
+                var hpd = undefined;
+                var h = $('#hp'+key);
+                if (h.length > 0){
+                    h.text(thp[key]);
+                }
+                if (thpp[key] != undefined){
+                    hpd = thp[key] - thpp[key];
+                }
+                
+                var h_p = $('#hpd'+key).text('');
+                if (hpd){
+                    var h_p = $('#hpd'+key);
+                    if (h_p.length > 0){
+                        h_p.removeClass('hpd_green');
+                        h_p.removeClass('hpd_red');
+                        if (hpd > 0){
+                            h_p.text('+'+(hpd));
+                            h_p.addClass('hpd_green');
+                        }
+                        else {
+                            h_p.text((hpd));
+                            h_p.addClass('hpd_red');
+                        }
+                    }
+                }
+                
+                
+                if (h_p.length > 0){
+                    if (thp[key] == undefined) {
+                        h_p.parent().parent().hide();
+                    }
+                    else {
+                        h_p.parent().parent().show();
+                    }
+                }
+
+                var hpp = $('#hpp'+key);
+                if (hpp.length > 0){
+                    var hpm = $('#hpm'+key).text();
+                    var prct = (thp[key]/hpm*100).toFixed();
+                    hpp.css('width', (100 - prct)+'%');
+                    
+                    var p = hpp.parent();
+                    
+                    var pc_color = 'green';
+                    if (prct < 30 ){
+                       pc_color = 'red'
+                    }
+                    else if (prct < 70){
+                      pc_color = 'yellow'
+                    }
+                    p.css('background-color', pc_color);
+                    p.attr('title', prct+'%')
+                }
+            }
+        }
+        
+        $('#turn_num').text(turn_num);
+        $('#slider').val(turn_num);
+        map_scroll();
+        $('.dmh').removeClass('dmh');
+        if (moves.length > 0){
+            $('#'+moves[turn_num-1]).addClass('dmh');
+        }
+        if (turn_num == last){
+//            $('#sfwd').addClass('rpld');
+            $('.dt').show();
+        }
+        else {
+            // $('#sfwd').removeClass('rpld');
+            $('.dt').hide();
+        }
+        if (turn_num == 1){
+            // $('#sback').addClass('rpld');
+        }
+        else {
+            // $('#sback').removeClass('rpld');
+        }
+    }
+        
+	var stop_replay = function(){
+		if (play_timer != undefined){
+			clearInterval(play_timer);
+			play_timer = undefined;
+		}
+        $('#sps').hide();
+        $('#splay').show();        
+	}
+    
+	var play_step_func = function(){
+		show_turn(cur_turn);
+		
+		if (cur_turn == last){
+            stop_replay();
+            cur_turn = 1;
+			return;
+		}
+        cur_turn++;
+	}
+    
+    var back_f = function(){
+        if (cur_turn== 1){
+            cur_turn = last+1;
+        }
+        stop_replay();
+        if (cur_turn > 1){
+            cur_turn--;
+            show_turn(cur_turn);
+        }        
+    }
+    
+	var forward_f = function(){
+        if (cur_turn==last){
+            cur_turn = 0;
+        }				        
+		stop_replay();
+        if (cur_turn < last){
+            cur_turn++;
+            show_turn(cur_turn);
+        }        
+    }
+    
+    var play_f = function(){
+        stop_replay();
+        if (cur_turn==last){
+            cur_turn = 1;
+        }
+        play_timer = setInterval(play_step_func, 1000);
+        play_step_func();
+        $('#splay').hide();
+        $('#sps').show();        
+    }
+    
+    
+    $('#slider').change(function() {
+        cur_turn = $(this).val();
+        show_turn(cur_turn);
+    });
+    
+    $('#sback').click(function(){
+        back_f();
+    });
+    $('#sfwd').click(function(){
+        forward_f();
+    });
+    
+    $('#splay').click(function(){
+        play_f();
+    });
+    $('#sps').click(function(){
+        stop_replay();
+    });
+    
+	$("body").keydown(function(e){
+		if ((e.keyCode || e.which) == 37) { // left arrow
+			back_f();
+		}
+		else if ((e.keyCode || e.which) == 39){ // right arrow
+			forward_f();
+		}
+		else if ((e.keyCode || e.which) == 13 && !e.ctrlKey){ // enter
+			if ($('#splay').css('display') != 'none'){
+				play_f();
+			}
+			else {
+				stop_replay();
+			}
+		}
+	});
+    
+	$('.dtc').click(function(e){
+		var turn = $(this).data("t")
+		if (turn != undefined){
+            stop_replay();
+            cur_turn = turn;
+			show_turn(turn);
+		}
+	});
+    
+    
+    show_turn(cur_turn, true);
+    
+    
+});
+</script> 
+     <div id="left_block"> 
+      <div id="hero1"> 
+       <div id="hero1_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Курро 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/%D0%A4%D1%80%D0%B0%D0%BD%D1%81%D0%B8%D1%81%D0%BA%D0%BE">Франсиско</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           4 года 5 месяцев
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>[Я] быстрее!</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">беззлобный</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/дом семи ветров" onclick="window.open(this.href);return false;" style="text-decoration:none;">дом семи ветров</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero1_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            117
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="66%"> 
+            <div id="pr_l" class="pr_bar" style="width:34%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            19 / 50
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="38%"> 
+            <div id="pr_q" class="pr_bar" style="width:62%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd0"></span>
+            <span id="hp0">1</span> / 
+            <span id="hpm0">372</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="0%"> 
+            <div id="hpp0" class="pr_bar" style="width:100%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            ни одного
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">139</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">1217 / 1419</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero1_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> посылку к чертям </span> </li> 
+           <li> <span style=""> средство от мытья посуды </span> </li> 
+           <li> <span style=""> значок «Почётному инквизитору» </span> </li> 
+           <li> <span style=""> волшебную полочку </span> </li> 
+           <li> <span style=""> клетчатую тельняшку </span> </li> 
+           <li> <span style=""> стональный крем </span> </li> 
+           <li> <span style=""> недогранённый стакан </span> </li> 
+           <li> <span style=""> тили-тили-тестер </span> </li> 
+           <li> <span style=""> попугаечный ключ </span> </li> 
+           <li> <span style=""> очешуевшую рыбу </span> </li> 
+           <li> <span style="font-weight:bold;"> рога босса Танатоходец </span> </li> 
+           <li> <span style=""> моль идеального газа </span> </li> 
+           <li> <span style=""> киянку ифрита-ремонтника </span> </li> 
+           <li> <span style=""> хэппиэндоскоп </span> </li> 
+           <li> <span style="font-weight:bold;"> драгоценник </span> </li> 
+           <li> <span style=""> тюбик текущего момента </span> </li> 
+           <li> <span style=""> восточные слабости </span> </li> 
+           <li> <span style=""> хитро свитую пару </span> </li> 
+           <li> <span style="font-weight:bold;"> золотой кирпич </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="c_spacer"></div> 
+      </div> 
+     </div> 
+     <div id="central_block"> 
+      <div class="box" id="last_items_arena"> 
+       <script nonce="40b5f25a228570053bc64a043c3f1833">
+	function report_godvoice(voice_id, sid, link, t) {
+        var c_text = 'Вы уверены, что этот глас нарушает правила хорошего тона Годвилля? Кстати, чужие гласы в дневнике можно отключить в настройках.';
+		if (typeof Ajax === 'undefined'){
+			var element_id = '#av_c_'+voice_id;
+			var ans =  confirm(c_text);
+			if (ans){
+			    $.post('/hero/report_arena_voice_m', {'id':voice_id, 'text':t, 'sid':sid, 'link':link}, function(data) {
+						if (data && data['status'] == 'success'){
+							$(element_id).addClass('cmplt_status');
+						  $(element_id).html(data['text']);
+							setTimeout(function(){
+								$(element_id).hide();
+							},5000);
+						}
+				});														
+			}
+			return false;
+		}
+		else {
+			if (confirm(c_text)) { new Ajax.Request('/hero/report_arena_voice/'+voice_id+'?'+Object.toQueryString({'text':t, 'link':link, 'sid':sid}), {asynchronous:true, evalScripts:true}); }; return false;
+		}
+	}
+</script> 
+       <div class="afl block"> 
+        <div class="block_h">
+          Вести с арены (шаг 
+         <span id="turn_num">31</span> / 31) 
+         <a href="/duels/log/75uxwqwkp?sort=desc" title="Обратная сортировка (нажмите, чтобы изменить порядок записей)">▼</a> 
+        </div> 
+        <div class="d_content"> 
+         <div class="new_line dtc t1  " data-t="1" style=""> 
+          <div class="d_capt">
+           08:01 
+           <div class="d_turn">
+            шаг 1
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер и Курро обмениваются рукопожатиями, вымпелами гильдий, автографами и шутками. Наконец заскучавший судья нарушает идиллию, напомнив героям о том, зачем они, собственно, собрались. Дуэль начинается! Отдел злопамятности и мстительности напоминает, что Курро и Делли Хаултер уже встречались ранее, и их счёт 1:0. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t1  " data-t="1" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt"> 
+           <div class="d_turn"></div> 
+          </div> 
+          <div class="text_content ">
+            По обоюдному желанию богов поединок пройдет без их вмешательства. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t2  " data-t="2" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:01 
+           <div class="d_turn">
+            шаг 2
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер предлагает противнику красиво поломать кости. Курро кокетливо ломается. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t3  " data-t="3" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:02 
+           <div class="d_turn">
+            шаг 3
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пока Делли Хаултер строит коварные планы, Курро выбивает из него налог на строительство. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t4  " data-t="4" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:02 
+           <div class="d_turn">
+            шаг 4
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро предлагает драться на кулачках, а Делли Хаултер, недолго думая, огорошивает его ударом ноги с разворота. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t5  " data-t="5" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:03 
+           <div class="d_turn">
+            шаг 5
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер предлагает перейти к сражению по переписке и получает пачкой писем в челюсть. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t6  " data-t="6" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:03 
+           <div class="d_turn">
+            шаг 6
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро делает вид, что он пустое место. Делли Хаултер тут же заполняет его своим кулаком. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t7  " data-t="7" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:04 
+           <div class="d_turn">
+            шаг 7
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Мощным ударом Курро заваливает противнику горизонт. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t8  " data-t="8" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:04 
+           <div class="d_turn">
+            шаг 8
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер проводит серию разоблачений. Курро страдает от холода и стыда. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t9  " data-t="9" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:05 
+           <div class="d_turn">
+            шаг 9
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро пытается нанести противнику травму тяжелым тупым вопросом, но, получив в ответ «[Я] быстрее!», понимает, что замысел разгадан. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t10  " data-t="10" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:05 
+           <div class="d_turn">
+            шаг 10
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер играет драм соло на барабанных перепонках противника. Зрители свистят и трясут хаерами. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t11  " data-t="11" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:06 
+           <div class="d_turn">
+            шаг 11
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро пристально вглядывается в соперника, прячет очки в футляр и бьёт по памяти. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t12  " data-t="12" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:06 
+           <div class="d_turn">
+            шаг 12
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер лупит в дыню, но попадает в яблочко. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t13  " data-t="13" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:07 
+           <div class="d_turn">
+            шаг 13
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Какие выпады, прыжки и кувырки, какая техника, какое исполнение! Герои заворожённо смотрят на споткнувшегося судью. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t14  " data-t="14" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:07 
+           <div class="d_turn">
+            шаг 14
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро вскружил противнику голову, дал от ворот поворот и вывел из себя. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t15  " data-t="15" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:07 
+           <div class="d_turn">
+            шаг 15
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро предлагает драться на кулачках, а Делли Хаултер, недолго думая, огорошивает его ударом ноги с разворота. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t16  " data-t="16" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:08 
+           <div class="d_turn">
+            шаг 16
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Какое блистательное комбо! Хук слева, хук справа, апперкот и удар коленом в пах! Даже Курро и Делли Хаултер замерли и заворожённо наблюдают за дракой на трибунах. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t17  " data-t="17" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:08 
+           <div class="d_turn">
+            шаг 17
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер предлагает сыграть в монетку на удар вне очереди. Курро соглашается и, крепко сжав монетку в кулаке, что есть сил лупит противника. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t18  " data-t="18" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:09 
+           <div class="d_turn">
+            шаг 18
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер машет, улыбается и раздаёт автографы. Курро багровеет от зависти. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t19  " data-t="19" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:09 
+           <div class="d_turn">
+            шаг 19
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро интересуется, не хотел бы Делли Хаултер полюбоваться звёздами средь бела дня, и, не дожидаясь ответа соперника, бьет ему прямо в глаз. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t20  " data-t="20" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:10 
+           <div class="d_turn">
+            шаг 20
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер рассказывает о своих любовных похождениях. Курро, развесив уши, умирает от зависти. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t21  " data-t="21" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:10 
+           <div class="d_turn">
+            шаг 21
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро проводит блестящее комбо: давит противнику на психику, затем на совесть и, сразу же — на больную мозоль. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t22  " data-t="22" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:11 
+           <div class="d_turn">
+            шаг 22
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер предлагает противнику на выбор две шкатулки, но, не дождавшись ответа, лупит обеими. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t23  " data-t="23" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:11 
+           <div class="d_turn">
+            шаг 23
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро долбанул, целясь в уязвимое место. Делли Хаултер подставил под удар филейную часть и почти не пострадал. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t24  " data-t="24" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:12 
+           <div class="d_turn">
+            шаг 24
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер пытается изящно нанести тщательно отрепетированный удар. Курро с ехидной ухмылкой уклоняется: он явно подглядывал за репетицией. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t25  " data-t="25" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:12 
+           <div class="d_turn">
+            шаг 25
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Метким ударом Курро отправляет противника в бреющий полёт. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t26  " data-t="26" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:13 
+           <div class="d_turn">
+            шаг 26
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер выхватывает у уборщицы швабру и кидает её в противника. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t27  " data-t="27" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:13 
+           <div class="d_turn">
+            шаг 27
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро обвиняет противника в использовании допинга. Тот теряет здоровье от возмущения. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t28  " data-t="28" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:13 
+           <div class="d_turn">
+            шаг 28
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер исполняет танец живота, лихо отплясывая на брюхе соперника. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t29  " data-t="29" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:14 
+           <div class="d_turn">
+            шаг 29
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Несколько раз оббежав противника, Курро добился у того головной боли. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t30  " data-t="30" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           08:14 
+           <div class="d_turn">
+            шаг 30
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Делли Хаултер вдруг куснул противника за ушко, чуть не оторвав ему при этом голову. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t31  " data-t="31" style=""> 
+          <div class="d_capt">
+           08:15 
+           <div class="d_turn">
+            шаг 31
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Курро одерживает поражение. Делли Хаултер терпит победу. Победитель получает золотой кирпич и 4698 монет. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div style="margin-bottom:0.2em;clear:both;"></div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="right_block"> 
+      <div id="hero2"> 
+       <div id="hero2_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Делли Хаултер 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/%D0%9B%D0%B5%D0%B2%D0%B8%D0%BB%D0%BB%D1%8C">Левилль</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           1 год 6 месяцев
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>Всегда! Везде! Вообще!</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">абсолютное добро</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/Лепрозорий" onclick="window.open(this.href);return false;" style="text-decoration:none;">Лепрозорий</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero2_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            69
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="54%"> 
+            <div id="pr_l" class="pr_bar" style="width:46%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            33 / 41
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="80%"> 
+            <div id="pr_q" class="pr_bar" style="width:20%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd1"></span>
+            <span id="hp1">18</span> / 
+            <span id="hpm1">372</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="4%"> 
+            <div id="hpp1" class="pr_bar" style="width:96%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            около 6 тысяч
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">87</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">1172 / 1119</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero2_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> петлю Нестерова </span> </li> 
+           <li> <span style=""> мешочек манки небесной </span> </li> 
+           <li> <span style=""> брошюру «Мастер-класс по сеппуку» </span> </li> 
+           <li> <span style=""> набор некротехника «Гайки из склепа» </span> </li> 
+           <li> <span style=""> чреслокачалку </span> </li> 
+           <li> <span style=""> права на вождение за нос </span> </li> 
+           <li> <span style=""> чпокуня </span> </li> 
+           <li> <span style=""> рыбий глаз </span> </li> 
+           <li> <span style="font-weight:bold;"> копыта босса Страшник </span> </li> 
+           <li> <span style=""> гайку неприличной формы </span> </li> 
+           <li> <span style=""> бутылку нюка-колы </span> </li> 
+           <li> <span style=""> кость ископаемого бобра </span> </li> 
+           <li> <span style=""> точку росы </span> </li> 
+           <li> <span style=""> флешку-рояльку </span> </li> 
+           <li> <span style=""> красную кнопку </span> </li> 
+           <li> <span style=""> пустую пороховницу (2 шт) </span> </li> 
+           <li> <span style=""> изгиб гитары жёлтой </span> </li> 
+           <li> <span style=""> взбешённые деньги </span> </li> 
+           <li> <span style="font-weight:bold;"> машину убийства времени </span> </li> 
+           <li> <span style=""> телобрейку </span> </li> 
+           <li> <span style=""> талон на усиленное питание </span> </li> 
+           <li> <span style=""> молотобойку </span> </li> 
+           <li> <span style=""> годовой словарный запас </span> </li> 
+           <li> <span style=""> подкову громкого стука </span> </li> 
+           <li> <span style="font-weight:bold;"> фенечку нежданной дружбы </span> </li> 
+           <li> <span style=""> промытые мозги </span> </li> 
+           <li> <span style=""> бутыль эфира </span> </li> 
+           <li> <span style=""> корм для офисного планктона </span> </li> 
+           <li> <span style=""> искривитель рук </span> </li> 
+           <li> <span style=""> стейк из отсебятины </span> </li> 
+           <li> <span style=""> книгу «Лучший подарок» </span> </li> 
+           <li> <span style="font-weight:bold;"> золотой кирпич </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="c_spacer"></div> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="lastduelpl_f"> 
+    <div>
+     Дата: 30.03.2018 08:01 +03:00
+    </div> 
+    <div>
+     Хроники хранятся по мере возможности.
+    </div> 
+   </div> 
+  </div>  
+  <!--
+     CHRONICLE ARCHIVED FROM GODVILLE.NET ON Fri, 30 Mar 2018 13:54:42 +0300 BY ERINOME GUI+ BROWSER EXTENSION
+     AND SLIGHTLY MODIFIED BY ERINOME.NET PROCESSING SOFTWARE TO COMPLY WITH CHRONICLE ARCHIVE REQUIREMENTS
+
+     ORIGINAL CHRONICLE CONTENT MIGHT BE PROTECTED BY COPYRIGHT
+--> 
+  <div class="lastduelpl_f">
+   Архив хроник Годвилля
+   <br>gv.erinome.net
+  </div>
+ </body>
+</html>

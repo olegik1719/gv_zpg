@@ -32,17 +32,16 @@ public class Player {
     }
 
     public int getMaxLose(){
-        //duels.stream().filter(d->!d.isWinner).distinct().map(duel -> duel.sum).max(Integer::compareTo);
         return duels.stream().filter(d->!d.isWinner).map(duel -> duel.sum).max(Integer::compareTo).orElse(0);
     }
 
     public int getMaxWin(){
-
         return duels.stream().filter(d->d.isWinner).map(duel -> duel.sum).max(Integer::compareTo).orElse(0);
     }
+
+
     @Getter
     public class Duel{
-        //Fight fight;
         private String id;
         private int sum;
         private boolean isWinner;
