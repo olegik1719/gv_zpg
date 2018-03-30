@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class Competition {
     private Map<String,Player> players; // <nikname;players>
+    //private Set<Player> players;
     //private Set<String> logs;
     private static final String BEGIN_TIME ="26.03.2018 00:00 +03:00";
     private static final String END_TIME ="31.03.2018 00:59 +03:00";
@@ -55,24 +56,27 @@ public class Competition {
     }
 
     public Collection<String> getGood(){
-        //return logs.stream().sorted().collect(Collectors.toList());
         return players.values().stream()
-                .flatMap(player -> player.getDuels().stream())
+                .map(Player::getDuels)
+                .flatMap(Collection::stream)
                 .distinct().map(Player.Duel::getId).sorted()
                 .collect(Collectors.toList());
     }
 
     private int getZPGCount(){
-        //players.keySet().stream().flatMap(key->players.get(key).getDuels().stream()).filter(Player.Duel::isZPG).count() / 2;
-        return (int)players.keySet().stream()
-                .flatMap(key->players.get(key).getDuels().stream())
+        return (int)players.values().stream()
+                //.flatMap(key->players.get(key).getDuels().stream())
+                .map(Player::getDuels)
+                .flatMap(Collection::stream)
                 .distinct()
                 .filter(Player.Duel::isZPG).count();
     }
 
     private int getYoungCount(){
-        return (int)players.keySet().stream()
-                .flatMap(key->players.get(key).getDuels().stream())
+        return (int)players.values().stream()
+                //.flatMap(key->players.get(key).getDuels().stream())
+                .map(Player::getDuels)
+                .flatMap(Collection::stream)
                 .distinct()
                 .filter(Player.Duel::isYoung).count();
     }
@@ -82,11 +86,18 @@ public class Competition {
     }
 
     private void getGods_Wins(){
-        players.keySet().forEach(key->System.out.println("* " + key + ":пс -- " + players.get(key).getMaxWin() + "\n"));
+        System.out.println("Max wins:");
+        players.values().stream().sorted((o2, o1) -> (Integer.compare(o1.getMaxWin(),o2.getMaxWin())))
+                .forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxWin()));
+        //players.keySet().forEach(key->System.out.println("* " + key + ":пс -- " + players.get(key).getMaxWin()));
+        System.out.println();
     }
 
     private void getGods_lose(){
-        players.keySet().forEach(key->System.out.println("* " + key + ":пс -- " + players.get(key).getMaxLose() + "\n"));
+        System.out.println("Max loses:");
+        players.values().stream().sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(),o2.getMaxLose())))
+                .forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxLose()));
+        System.out.println();
     }
 
     public String getResult(){
@@ -97,8 +108,8 @@ public class Competition {
         result += getYoungCount() + "\n";
         result += "* Приняло участие богов:\t";
         result += getGodsCount() + "\n";
-        //getGods_lose();
-        //getGods_Wins();
+        getGods_lose();
+        getGods_Wins();
         return result;
     }
 }

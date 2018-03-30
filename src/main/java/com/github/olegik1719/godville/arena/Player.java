@@ -35,6 +35,10 @@ public class Player {
         return duels.stream().filter(d->!d.isWinner).map(duel -> duel.sum).max(Integer::compareTo).orElse(0);
     }
 
+    public String getNikName() {
+        return nikName;
+    }
+
     public int getMaxWin(){
 
         return duels.stream().filter(d->d.isWinner).map(duel -> duel.sum).max(Integer::compareTo).orElse(0);
