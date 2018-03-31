@@ -85,21 +85,28 @@ public class Competition {
         return players.size();
     }
 
-    private void getGods_Wins(){
-        System.out.println("Max wins:");
-        players.values().stream().filter(player -> player.getMaxWin() > 0)
+    private String getGods_Wins(){
+
+        return  "Max wins:"
+            + players.values().stream().filter(player -> player.getMaxWin() > 0)
                 .sorted((o2, o1) -> (Integer.compare(o1.getMaxWin(),o2.getMaxWin())))
-                .forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxWin()));
+                //.forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxWin()));
+                .limit(10)
+                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxWin() + "\n")
+                .collect(Collectors.joining());
         //players.keySet().forEach(key->System.out.println("* " + key + ":пс -- " + players.get(key).getMaxWin()));
-        System.out.println();
+        //System.out.println();
     }
 
-    private void getGods_lose(){
-        System.out.println("Max loses:");
-        players.values().stream().filter(player -> player.getMaxLose() > 0)
+    private String getGods_lose(){
+        return "Max loses:"
+            + players.values().stream().filter(player -> player.getMaxLose() > 0)
                 .sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(),o2.getMaxLose())))
-                .forEach(player->System.out.println("* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose()));
-        System.out.println();
+                .limit(10)
+                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose() + "\n")
+                .collect(Collectors.joining());
+        //forEach(player->System.out.println("* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose()));
+        //System.out.println();
     }
 
     public String getResult(){
@@ -109,9 +116,9 @@ public class Competition {
         result += "* Из них на дохраме:\t";
         result += getYoungCount() + "\n";
         result += "* Приняло участие богов:\t";
-        result += getGodsCount() + "\n";
-        //getGods_lose();
-        //getGods_Wins();
+        result += getGodsCount() + "\n\n";
+        result += getGods_lose() + "\n";
+        result += getGods_Wins() + "\n";
         return result;
     }
 }

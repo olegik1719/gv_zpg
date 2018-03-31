@@ -2,7 +2,6 @@ package com.github.olegik1719.godville.arena;
 
 import lombok.Getter;
 
-import java.io.IOException;
 import java.util.*;
 
 public class Player {
