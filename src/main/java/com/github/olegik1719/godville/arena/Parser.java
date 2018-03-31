@@ -161,6 +161,7 @@ public class Parser {
             Element info = fight.getElementById("hero" + (heroID + 1) + "_info");
             Element god = info.select("a").first();
             godName = god.text();
+            //System.out.println(id + " " + godName);
         }
 
         public boolean isWinner() {

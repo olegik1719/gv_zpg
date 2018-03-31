@@ -37,7 +37,7 @@ public class Competition {
             Date fightTime = fight.getTime();
             if (fightTime.after(beginTime)&&fightTime.before(endTime)) {
                 players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
-                players.computeIfAbsent(fight.getWinner().getGodName(), Player::new).addLog(fight);
+                players.computeIfAbsent(fight.getLoser().getGodName(), Player::new).addLog(fight);
             }else {
                 System.out.println(Common.getID(id) + " -- bad log");
             }
@@ -87,7 +87,8 @@ public class Competition {
 
     private void getGods_Wins(){
         System.out.println("Max wins:");
-        players.values().stream().sorted((o2, o1) -> (Integer.compare(o1.getMaxWin(),o2.getMaxWin())))
+        players.values().stream().filter(player -> player.getMaxWin() > 0)
+                .sorted((o2, o1) -> (Integer.compare(o1.getMaxWin(),o2.getMaxWin())))
                 .forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxWin()));
         //players.keySet().forEach(key->System.out.println("* " + key + ":пс -- " + players.get(key).getMaxWin()));
         System.out.println();
@@ -95,8 +96,9 @@ public class Competition {
 
     private void getGods_lose(){
         System.out.println("Max loses:");
-        players.values().stream().sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(),o2.getMaxLose())))
-                .forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxLose()));
+        players.values().stream().filter(player -> player.getMaxLose() > 0)
+                .sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(),o2.getMaxLose())))
+                .forEach(player->System.out.println("* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose()));
         System.out.println();
     }
 
@@ -108,8 +110,8 @@ public class Competition {
         result += getYoungCount() + "\n";
         result += "* Приняло участие богов:\t";
         result += getGodsCount() + "\n";
-        getGods_lose();
-        getGods_Wins();
+        //getGods_lose();
+        //getGods_Wins();
         return result;
     }
 }

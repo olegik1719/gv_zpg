@@ -32,7 +32,7 @@ public class Player {
     }
 
     public int getMaxLose(){
-        return duels.stream().filter(d->!d.isWinner).map(duel -> duel.sum).max(Integer::compareTo).orElse(0);
+        return duels.stream().filter(d->!d.isWinner).mapToInt(Duel::getSum).max().orElse(0);
     }
 
     public String getNikName() {
@@ -41,7 +41,7 @@ public class Player {
 
     public int getMaxWin(){
 
-        return duels.stream().filter(d->d.isWinner).map(duel -> duel.sum).max(Integer::compareTo).orElse(0);
+        return duels.stream().filter(d->d.isWinner).mapToInt(Duel::getSum).max().orElse(0);
     }
     @Getter
     public class Duel{
@@ -73,6 +73,7 @@ public class Player {
             Parser.Hero hero = isWinner ? parser.getWinner() : parser.getLoser();
             ownLoses = hero.getLoses();
             ownWins = hero.getWins();
+            //System.out.println("" + isWinner + " " + sum + " " + nikName);
 
         }
 
