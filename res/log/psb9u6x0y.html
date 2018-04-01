@@ -1,0 +1,1109 @@
+<!doctype html>
+<html>
+ <head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+  <title>Хроника Годвилля</title> 
+  <script type="text/javascript" src="/javascripts/jquery-1.12.4.min.js"></script> 
+  <script src="/javascripts/awardj.js" type="text/javascript"></script> 
+  <link href="/stylesheets/common.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/common-mini.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/progress_bar.css" media="screen" rel="stylesheet" type="text/css"> 
+  <link href="/stylesheets/hero_log.css" media="screen" rel="stylesheet" type="text/css"> 
+  <meta NAME="gvdt" CONTENT="hero_log_n">
+  <script src="/javascripts/nt.js" type="text/javascript"></script> 
+  <script src="/javascripts/st.js" type="text/javascript"></script>
+  <script src="/javascripts/stjq.js" type="text/javascript"></script> 
+  <script src="/javascripts/ga.js" type="text/javascript"></script> 
+  <script src="/javascripts/garu.js" type="text/javascript"></script> 
+  <meta name="keywords" content="Годвилль, Godville, Zero Player Game, ZPG, ZRPG, самоиграйка, тамагочи, браузерная игра, божественная комедия">
+  <meta name="description" content="Божественная комедия-самоиграйка с участием бога и, кхм, героя. А еще MMO и ZPG, если вы знаете эти слова."> 
+  <link rel="shortcut icon" href="/images/favicon.ico"> 
+  <script nonce="139f0874f2ded2e41b0393c4ac5644f7">
+function to_mobile(){
+	$.post('/hero/to_mobile', {}, function(data) {
+		location.reload();
+	});
+}
+$(document).ready(function() {
+    $('.to_mobile').click(function(){
+        to_mobile();
+        return false;
+    });
+    $('.to_top').click(function(e){
+        $(window).scrollTop(0);
+        return false;
+    })
+    $('#reload').click(function(e){
+        location.reload(true)
+        return false;
+    });
+    $('a[data-rv]').click(function(e){
+        var v = $(this).data('rv');
+        report_godvoice(v[0],v[1],v[2],v[3]);
+        return false;
+    })
+    $('.n_wn').click(function(e){
+        window.open(this.href);
+        return false;
+    })
+	if (typeof(jq_mfp_init) != 'undefined'){
+		jq_mfp_init();
+	}    
+});
+</script> 
+ </head> 
+ <body> 
+  <div id="wrap"> 
+   <div id="page_wrapper"> 
+    <div class="lastduelpl"> 
+     <span><a href="/duels/log/psb9u6x0y">Арена</a></span> 
+    </div> 
+    <div class="ft" style="display:none;">
+     29.03.2018 06:02 
+    </div> 
+    <div class="lastduelpl"> 
+    </div> 
+    <div id="arena_block" style="float: left; width: 100%;"> 
+     <div id="p_status" style="text-align:center;"></div> 
+     <div style="text-align:center;display: none;" id="app_bar"> 
+      <span id="app_status">Подключаемся к сервису быстрых обновлений...</span> 
+      <span title="Скрыть"><a href="#" onclick="Effect.toggle(&quot;app_bar&quot;,'blind',{});; return false;">[X]</a></span> 
+     </div> 
+     <div class="rpl"> 
+      <input id="slider" type="range" min="1" max="29" value="29" data-role="none"> 
+      <span id="sback" title="Предыдущий ход (стрелка влево)">⏪︎</span> 
+      <span id="splay" title="Проигрывание/пауза (Enter)">▶︎</span> 
+      <span id="sps" title="Проигрывание/пауза (Enter)" style="display:none;">⏸︎</span> 
+      <span id="sfwd" title="Следующий ход (стрелка вправо)">⏩︎</span> 
+     </div> 
+     <script nonce="139f0874f2ded2e41b0393c4ac5644f7">
+
+$(document).ready(function() {
+    var hp = {"-1":{"0":276,"1":276},"0":{"0":276,"1":276},"1":{"0":276,"1":276},"2":{"0":276,"1":246},"3":{"0":254,"1":246},"4":{"0":254,"1":246},"5":{"0":254,"1":219},"6":{"0":226,"1":219},"7":{"0":226,"1":199},"8":{"0":213,"1":199},"9":{"0":213,"1":169},"10":{"0":206,"1":169},"11":{"0":206,"1":141},"12":{"0":186,"1":141},"13":{"0":186,"1":141},"14":{"0":186,"1":124},"15":{"0":186,"1":124},"16":{"0":186,"1":111},"17":{"0":167,"1":111},"18":{"0":167,"1":87},"19":{"0":139,"1":87},"20":{"0":139,"1":58},"21":{"0":120,"1":58},"22":{"0":120,"1":29},"23":{"0":99,"1":29},"24":{"0":99,"1":29},"25":{"0":76,"1":29},"26":{"0":76,"1":14},"27":{"0":63,"1":14},"28":{"0":63,"1":1},"29":{"0":63,"1":1}};    
+    var moves = [];
+    
+    var last= parseInt($('#turn_num').text());
+    
+    
+    var play_timer = undefined;
+    
+    var cur_turn=last;
+    
+        
+	var scroll_to = function(element){
+        if (element.length == 0){
+            return;
+        }
+
+		var elHeight = 0;
+		element.each(function() {
+		  elHeight += $(this).height();
+		});        
+        
+        var offset = element.offset().top + elHeight;
+            if(!element.is(":visible")) {
+                element.css({"visibility":"hidden"}).show();
+                var offset = element.offset().top;
+                element.css({"visibility":"", "display":""});
+            }
+
+            var visible_area_start = $(window).scrollTop();
+            var visible_area_end = visible_area_start + window.innerHeight;
+
+            if(offset < visible_area_start || offset > visible_area_end){
+                 // Not in view so scroll to it
+                 $('html,body').animate({scrollTop: offset - window.innerHeight/3}, 300);
+                 return false;
+            }
+            return true;
+	}        
+    
+    var map_scroll = function(){
+        
+        if ($('.dmh').length == 0){
+            return;
+        }
+        
+        var m_width = $('.dmh').width();
+        var m_left = $('.dmh').position().left;
+        
+        var map_width = $('#dmap').width();
+        
+        var s_left = $('#dmap').scrollLeft();
+        if ( s_left < m_left || 
+            s_left > m_left
+        ) {
+            $('#dmap').scrollLeft( m_left - map_width / 2);
+//            console.log('dungeon map scrolled ' + s_left + ' ' + m_left);
+        }
+    }
+
+    
+    var is_out_of_view = function(element){
+        if (element.length == 0){
+            return;
+        }
+        var elementTop = element.offset().top;
+        var elementBottom = element.outerHeight();
+
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+
+        if (viewportTop > elementTop) {
+//        if (elementBottom < viewportBottom ){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+        
+    var add_on_scroll = function(el_id){
+        if ($(el_id).length > 0){
+            ($(el_id).parent().parent()).addClass('bldn');
+        }
+    }
+
+    var on_scroll = function(el_id){
+        var fixed_mode = undefined;
+        var dmap = $($('.bldn')[0]);
+        var covered = is_out_of_view($(dmap.parent()));
+        if (!dmap.hasClass('block_fixed')){
+            if (covered && $('.d_content').innerHeight() > window.innerHeight){
+                fixed_mode = true;
+            }
+        }
+        else if (!covered) {
+            fixed_mode = false
+        }
+        if (fixed_mode){
+            $('.bldn').each(function(index){
+                $(this).addClass('block_fixed');
+                $(this).offset({'left':$(this).parent().offset().left});
+            });
+            $('.hide_on_scroll').hide();
+        }
+        else if (fixed_mode == false) {
+            $('.bldn').each(function(index){
+                $(this).removeClass('block_fixed');
+                $(this).removeAttr('style');
+            });
+            $('.hide_on_scroll').show();
+        }
+    }
+    
+    add_on_scroll('#dmap');
+    add_on_scroll('#alls');
+    add_on_scroll('#opps');
+    add_on_scroll($('#hpp1').parent().parent().parent());
+    add_on_scroll($('#hpp0').parent().parent().parent());
+
+    $(window).on('resize scroll', function() {
+        on_scroll();
+    });        
+    
+    
+    var show_turn = function(turn_num, no_scroll){
+        
+        if (no_scroll == undefined){
+            scroll_to($('.t'+turn_num));
+        }        
+        
+        
+        $('.ct').removeClass('ct ctbg');
+        $('.t'+turn_num).addClass('ct ctbg');
+        
+
+
+        var thp = hp[turn_num];
+        var thpp = hp[turn_num-1];
+        
+        if (thp){
+            for (var key in thp) {
+                var hpd = undefined;
+                var h = $('#hp'+key);
+                if (h.length > 0){
+                    h.text(thp[key]);
+                }
+                if (thpp[key] != undefined){
+                    hpd = thp[key] - thpp[key];
+                }
+                
+                var h_p = $('#hpd'+key).text('');
+                if (hpd){
+                    var h_p = $('#hpd'+key);
+                    if (h_p.length > 0){
+                        h_p.removeClass('hpd_green');
+                        h_p.removeClass('hpd_red');
+                        if (hpd > 0){
+                            h_p.text('+'+(hpd));
+                            h_p.addClass('hpd_green');
+                        }
+                        else {
+                            h_p.text((hpd));
+                            h_p.addClass('hpd_red');
+                        }
+                    }
+                }
+                
+                
+                if (h_p.length > 0){
+                    if (thp[key] == undefined) {
+                        h_p.parent().parent().hide();
+                    }
+                    else {
+                        h_p.parent().parent().show();
+                    }
+                }
+
+                var hpp = $('#hpp'+key);
+                if (hpp.length > 0){
+                    var hpm = $('#hpm'+key).text();
+                    var prct = (thp[key]/hpm*100).toFixed();
+                    hpp.css('width', (100 - prct)+'%');
+                    
+                    var p = hpp.parent();
+                    
+                    var pc_color = 'green';
+                    if (prct < 30 ){
+                       pc_color = 'red'
+                    }
+                    else if (prct < 70){
+                      pc_color = 'yellow'
+                    }
+                    p.css('background-color', pc_color);
+                    p.attr('title', prct+'%')
+                }
+            }
+        }
+        
+        $('#turn_num').text(turn_num);
+        $('#slider').val(turn_num);
+        map_scroll();
+        $('.dmh').removeClass('dmh');
+        if (moves.length > 0){
+            $('#'+moves[turn_num-1]).addClass('dmh');
+        }
+        if (turn_num == last){
+//            $('#sfwd').addClass('rpld');
+            $('.dt').show();
+        }
+        else {
+            // $('#sfwd').removeClass('rpld');
+            $('.dt').hide();
+        }
+        if (turn_num == 1){
+            // $('#sback').addClass('rpld');
+        }
+        else {
+            // $('#sback').removeClass('rpld');
+        }
+    }
+        
+	var stop_replay = function(){
+		if (play_timer != undefined){
+			clearInterval(play_timer);
+			play_timer = undefined;
+		}
+        $('#sps').hide();
+        $('#splay').show();        
+	}
+    
+	var play_step_func = function(){
+		show_turn(cur_turn);
+		
+		if (cur_turn == last){
+            stop_replay();
+            cur_turn = 1;
+			return;
+		}
+        cur_turn++;
+	}
+    
+    var back_f = function(){
+        if (cur_turn== 1){
+            cur_turn = last+1;
+        }
+        stop_replay();
+        if (cur_turn > 1){
+            cur_turn--;
+            show_turn(cur_turn);
+        }        
+    }
+    
+	var forward_f = function(){
+        if (cur_turn==last){
+            cur_turn = 0;
+        }				        
+		stop_replay();
+        if (cur_turn < last){
+            cur_turn++;
+            show_turn(cur_turn);
+        }        
+    }
+    
+    var play_f = function(){
+        stop_replay();
+        if (cur_turn==last){
+            cur_turn = 1;
+        }
+        play_timer = setInterval(play_step_func, 1000);
+        play_step_func();
+        $('#splay').hide();
+        $('#sps').show();        
+    }
+    
+    
+    $('#slider').change(function() {
+        cur_turn = $(this).val();
+        show_turn(cur_turn);
+    });
+    
+    $('#sback').click(function(){
+        back_f();
+    });
+    $('#sfwd').click(function(){
+        forward_f();
+    });
+    
+    $('#splay').click(function(){
+        play_f();
+    });
+    $('#sps').click(function(){
+        stop_replay();
+    });
+    
+	$("body").keydown(function(e){
+		if ((e.keyCode || e.which) == 37) { // left arrow
+			back_f();
+		}
+		else if ((e.keyCode || e.which) == 39){ // right arrow
+			forward_f();
+		}
+		else if ((e.keyCode || e.which) == 13 && !e.ctrlKey){ // enter
+			if ($('#splay').css('display') != 'none'){
+				play_f();
+			}
+			else {
+				stop_replay();
+			}
+		}
+	});
+    
+	$('.dtc').click(function(e){
+		var turn = $(this).data("t")
+		if (turn != undefined){
+            stop_replay();
+            cur_turn = turn;
+			show_turn(turn);
+		}
+	});
+    
+    
+    show_turn(cur_turn, true);
+    
+    
+});
+</script> 
+     <div id="left_block"> 
+      <div id="hero1"> 
+       <div id="hero1_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            ЗиЗимус 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/DIWN">DIWN</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           8 месяцев 24 дня
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>Где мой бифштекс?!</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">абсолютное добро</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/Гильдия Геев" onclick="window.open(this.href);return false;" style="text-decoration:none;">Гильдия Геев</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero1_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            45
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="52%"> 
+            <div id="pr_l" class="pr_bar" style="width:48%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            15 / 29
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="51%"> 
+            <div id="pr_q" class="pr_bar" style="width:49%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd0"></span>
+            <span id="hp0">63</span> / 
+            <span id="hpm0">276</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="22%"> 
+            <div id="hpp0" class="pr_bar" style="width:78%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            около 14 тысяч
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">50</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">114 / 111</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero1_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> брусок пластырина </span> </li> 
+           <li> <span style=""> настойку травки-забавки </span> </li> 
+           <li> <span style=""> срастительное масло </span> </li> 
+           <li> <span style=""> набросок мусора </span> </li> 
+           <li> <span style=""> брошюру «Я и диод» </span> </li> 
+           <li> <span style=""> перетерпин </span> </li> 
+           <li> <span style="font-weight:bold;"> антикварево </span> </li> 
+           <li> <span style=""> знамя сексуальной революции </span> </li> 
+           <li> <span style=""> кости из будущего </span> </li> 
+           <li> <span style=""> духовно обогащённый уран </span> </li> 
+           <li> <span style=""> стартер топиков </span> </li> 
+           <li> <span style=""> свинью в апельсинах </span> </li> 
+           <li> <span style=""> тетрадь в горошек </span> </li> 
+           <li> <span style="font-weight:bold;"> полиграф «Пиноккио» </span> </li> 
+           <li> <span style="font-weight:bold;"> золотой кирпич </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+       <div class="c_spacer"></div> 
+      </div> 
+     </div> 
+     <div id="central_block"> 
+      <div class="box" id="last_items_arena"> 
+       <script nonce="139f0874f2ded2e41b0393c4ac5644f7">
+	function report_godvoice(voice_id, sid, link, t) {
+        var c_text = 'Вы уверены, что этот глас нарушает правила хорошего тона Годвилля? Кстати, чужие гласы в дневнике можно отключить в настройках.';
+		if (typeof Ajax === 'undefined'){
+			var element_id = '#av_c_'+voice_id;
+			var ans =  confirm(c_text);
+			if (ans){
+			    $.post('/hero/report_arena_voice_m', {'id':voice_id, 'text':t, 'sid':sid, 'link':link}, function(data) {
+						if (data && data['status'] == 'success'){
+							$(element_id).addClass('cmplt_status');
+						  $(element_id).html(data['text']);
+							setTimeout(function(){
+								$(element_id).hide();
+							},5000);
+						}
+				});														
+			}
+			return false;
+		}
+		else {
+			if (confirm(c_text)) { new Ajax.Request('/hero/report_arena_voice/'+voice_id+'?'+Object.toQueryString({'text':t, 'link':link, 'sid':sid}), {asynchronous:true, evalScripts:true}); }; return false;
+		}
+	}
+</script> 
+       <div class="afl block"> 
+        <div class="block_h">
+          Вести с арены (шаг 
+         <span id="turn_num">29</span> / 29) 
+         <a href="/duels/log/psb9u6x0y?sort=desc" title="Обратная сортировка (нажмите, чтобы изменить порядок записей)">▼</a> 
+        </div> 
+        <div class="d_content"> 
+         <div class="new_line dtc t1  " data-t="1" style=""> 
+          <div class="d_capt">
+           06:02 
+           <div class="d_turn">
+            шаг 1
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус и Igoor обнажают оружие. Бой обещает быть остросюжетным. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t1  " data-t="1" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt"> 
+           <div class="d_turn"></div> 
+          </div> 
+          <div class="text_content ">
+            По обоюдному желанию богов поединок пройдет без их вмешательства. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t2  " data-t="2" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:02 
+           <div class="d_turn">
+            шаг 2
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Получив удар по правой щеке, ЗиЗимус подставляет левую, подныривает и наносит противнику мощный хук в печень. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t3  " data-t="3" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:03 
+           <div class="d_turn">
+            шаг 3
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Честно предупредив противника, что сегодня будет честным, Igoor честно бьёт ниже пояса. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t4  " data-t="4" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:03 
+           <div class="d_turn">
+            шаг 4
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Букмекеры начинают принимать ставки на драку, развязавшуюся на трибунах между командами геройских фанатов. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t5  " data-t="5" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:04 
+           <div class="d_turn">
+            шаг 5
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус проводит сложный удар ухом в коленную чашечку противника. Igoor прыгает на одной ноге, вытрясая из себя единицы здоровья. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t6  " data-t="6" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:04 
+           <div class="d_turn">
+            шаг 6
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус пропускает мощный удар противника и получает от него полиграф «Пиноккио» в качестве моральной компенсации. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t7  " data-t="7" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:05 
+           <div class="d_turn">
+            шаг 7
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус пытается достучаться до совести противника кулаками по лицу. Igoor бессовестно отмахивается. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t8  " data-t="8" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:05 
+           <div class="d_turn">
+            шаг 8
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor столь качественно подрисовал противнику фингал, что тот болит совсем как настоящий. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t9  " data-t="9" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:05 
+           <div class="d_turn">
+            шаг 9
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пока Igoor закатывает рукава, ЗиЗимус успевает нанести серию критических ударов. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t10  " data-t="10" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:06 
+           <div class="d_turn">
+            шаг 10
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor давит на противника авторитетом, слегка проминая его броню. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t11  " data-t="11" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:06 
+           <div class="d_turn">
+            шаг 11
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус наносит сокрушительный удар по личной жизни соперника. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t12  " data-t="12" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:07 
+           <div class="d_turn">
+            шаг 12
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Хитрый Igoor делает подсечку, и ЗиЗимус кубарем летит в овраг. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t13  " data-t="13" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:07 
+           <div class="d_turn">
+            шаг 13
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Букмекеры начинают принимать ставки на драку, развязавшуюся на трибунах между командами геройских фанатов. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t14  " data-t="14" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:08 
+           <div class="d_turn">
+            шаг 14
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус рассказал противнику десяток бородатых анекдотов. Igoor помирает от скуки. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t15  " data-t="15" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:08 
+           <div class="d_turn">
+            шаг 15
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor хотел было пойти в штыковую, но не нашёл у себя штыка и потерял инициативу. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t16  " data-t="16" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:09 
+           <div class="d_turn">
+            шаг 16
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor считает, что жить хорошо. ЗиЗимус настаивает, что хорошего понемногу. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t17  " data-t="17" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:09 
+           <div class="d_turn">
+            шаг 17
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Пока ЗиЗимус считал ворон, Igoor подполз с тыла и сделал своё чёрное дело, убавив здоровья сопернику. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t18  " data-t="18" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:10 
+           <div class="d_turn">
+            шаг 18
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус дружески подкалывает противника. Igoor мужественно страдает от аллергии на всё острое. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t19  " data-t="19" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:10 
+           <div class="d_turn">
+            шаг 19
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Шатаясь и кривясь от града сыплющихся на него ударов, ЗиЗимус умудряется время от времени пребольно щипать себя за руку. Но нет, всё-таки это не кошмарный сон. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t20  " data-t="20" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:11 
+           <div class="d_turn">
+            шаг 20
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус проводит блестящее комбо: давит противнику на психику, затем на совесть и, сразу же — на больную мозоль. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t21  " data-t="21" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:11 
+           <div class="d_turn">
+            шаг 21
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor наносит противнику серию колото-резано-рваных ушибов. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t22  " data-t="22" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:11 
+           <div class="d_turn">
+            шаг 22
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус ставит сопернику речь, походку и огромный фингал. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t23  " data-t="23" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:12 
+           <div class="d_turn">
+            шаг 23
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor кусает противника за палец и высасывает оттуда вот эту запись. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t24  " data-t="24" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:12 
+           <div class="d_turn">
+            шаг 24
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor принимает таблетки от головы. ЗиЗимус, потеряв цель, в недоумении пропускает свой ход. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t25  " data-t="25" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:13 
+           <div class="d_turn">
+            шаг 25
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Уворачиваясь от удара противника, ЗиЗимус грузно садится на шпагат. Слышен треск рвущейся полоски здоровья. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t26  " data-t="26" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:13 
+           <div class="d_turn">
+            шаг 26
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor профессионально просчитывает наперёд действия противника и, ловко уворачиваясь, попадает под удар, который по-дилетантски наносит ЗиЗимус. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t27  " data-t="27" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:14 
+           <div class="d_turn">
+            шаг 27
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Igoor показывает противнику фокус с отрыванием большого пальца. ЗиЗимус в ужасе пытается прикрутить палец на место. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t28  " data-t="28" style="border-bottom: 1px dashed #888888;"> 
+          <div class="d_capt">
+           06:14 
+           <div class="d_turn">
+            шаг 28
+           </div> 
+          </div> 
+          <div class="text_content ">
+            Интеллигентный ЗиЗимус шлёпает соперника по лицу — воспитание не позволяет дать в морду. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div class="new_line dtc t29  " data-t="29" style=""> 
+          <div class="d_capt">
+           06:15 
+           <div class="d_turn">
+            шаг 29
+           </div> 
+          </div> 
+          <div class="text_content ">
+            ЗиЗимус победно поднимает над головой щит, на котором покоится Igoor. Победитель получает золотой кирпич и 8638 золотых. 
+          </div> 
+          <div class="d_clear"></div> 
+         </div> 
+         <div style="margin-bottom:0.2em;clear:both;"></div> 
+        </div> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="right_block"> 
+      <div id="hero2"> 
+       <div id="hero2_info" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+           Герой 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Имя</label> 
+          <div class="field_content">
+            Igoor 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Бог-хранитель</label> 
+          <div class="field_content"> 
+           <a href="http://godville.net/gods/Goosha">Goosha</a> 
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Пол</label> 
+          <div class="field_content">
+           мужской
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Возраст</label> 
+          <div class="field_content">
+           7 лет 9 месяцев
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Девиз</label> 
+          <div class="field_content">
+           <i>беда...</i>
+          </div> 
+         </div> 
+         <div class="new_line"> 
+          <span class="l_capt">Характер</span> 
+          <span class="field_content">злобный</span> 
+         </div> 
+         <div class="new_line"> 
+          <label class="l_capt">Гильдия</label> 
+          <div class="field_content"> 
+           <i> <a href="https://wiki.godville.net/Орден Водяной Вороны" onclick="window.open(this.href);return false;" style="text-decoration:none;">Орден Водяной Вороны</a> </i>
+          </div> 
+         </div> 
+         <div class="new_line"></div> 
+        </div> 
+       </div> 
+       <div id="hero2_stats" class="box"> 
+        <div class="block"> 
+         <div class="block_h">
+           Данные героя 
+         </div> 
+         <div> 
+          <div class="new_line"> 
+           <label class="l_capt">Уровень</label> 
+           <div class="field_content">
+            91
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:#F9B436;" title="86%"> 
+            <div id="pr_l" class="pr_bar" style="width:14%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Инвентарь</label> 
+           <div class="field_content">
+            21 / 50
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:sienna;" title="42%"> 
+            <div id="pr_q" class="pr_bar" style="width:58%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Здоровье</label> 
+           <div class="field_content">
+            <span class="hpd" id="hpd1"></span>
+            <span id="hp1">1</span> / 
+            <span id="hpm1">276</span>
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <div class="pr_bg" style="width:100%; background-color:red;" title="0%"> 
+            <div id="hpp1" class="pr_bar" style="width:100%; margin-bottom: -12px;"></div> 
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <label class="l_capt">Золота</label> 
+           <div class="field_content">
+            ни одного
+           </div> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Смертей</span> 
+           <span class="field_content">269</span> 
+          </div> 
+          <div class="new_line"> 
+           <span class="l_capt">Побед / Поражений</span> 
+           <span class="field_content">31 / 69</span> 
+          </div> 
+          <div class="new_line"></div> 
+         </div> 
+        </div> 
+       </div> 
+       <div id="hero2_inventory" class="box hide_on_scroll"> 
+        <div class="block"> 
+         <div class="block_h">
+          Инвентарь 
+         </div> 
+         <div id="inv_capt"> 
+          <span> В карманах героя можно найти: </span> 
+          <ul> 
+           <li> <span style=""> живую воду на киселе </span> </li> 
+           <li> <span style=""> жизненные соки </span> </li> 
+           <li> <span style=""> договор о продлении жизни </span> </li> 
+           <li> <span style=""> чертежи воздушного замка </span> </li> 
+           <li> <span style=""> журнал морд </span> </li> 
+           <li> <span style=""> баночку смущёнки </span> </li> 
+           <li> <span style=""> слёзодавилку </span> </li> 
+           <li> <span style=""> интеграл Хеллсинга </span> </li> 
+           <li> <span style=""> полукружку </span> </li> 
+           <li> <span style=""> поваренную книгу каннибала «Кто ест кто» </span> </li> 
+           <li> <span style=""> кучку пикселей </span> </li> 
+           <li> <span style=""> икру царевны-лягушки </span> </li> 
+           <li> <span style=""> базу белиберданных </span> </li> 
+           <li> <span style=""> печень печенега </span> </li> 
+           <li> <span style=""> клёвую рыбу </span> </li> 
+           <li> <span style=""> позолоченную рыбку </span> </li> 
+           <li> <span style=""> плакат навзрыд </span> </li> 
+           <li> <span style=""> мешочек сахарной пудры </span> </li> 
+           <li> <span style=""> воспряник </span> </li> 
+           <li> <span style=""> камень преткновения </span> </li> 
+           <li> <span style=""> паузу пятилетней выдержки </span> </li> 
+          </ul> 
+         </div> 
+        </div> 
+       </div> 
+      </div> 
+      <div class="c_spacer"></div> 
+     </div> 
+    </div> 
+   </div> 
+   <div class="lastduelpl_f"> 
+    <div>
+     Дата: 29.03.2018 06:02 +03:00
+    </div> 
+    <div>
+     Хроники хранятся по мере возможности.
+    </div> 
+   </div> 
+  </div>  
+  <!--
+     CHRONICLE ARCHIVED FROM GODVILLE.NET ON Fri, 30 Mar 2018 23:51:53 +0300 BY ERINOME GUI+ BROWSER EXTENSION
+     AND SLIGHTLY MODIFIED BY ERINOME.NET PROCESSING SOFTWARE TO COMPLY WITH CHRONICLE ARCHIVE REQUIREMENTS
+
+     ORIGINAL CHRONICLE CONTENT MIGHT BE PROTECTED BY COPYRIGHT
+--> 
+  <div class="lastduelpl_f">
+   Архив хроник Годвилля
+   <br>gv.erinome.net
+  </div>
+ </body>
+</html>
