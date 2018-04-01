@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Competition {
@@ -78,6 +79,7 @@ public class Competition {
                 .map(Player::getDuels)
                 .flatMap(Collection::stream)
                 .distinct()
+                .filter(Player.Duel::isZPG)
                 .filter(Player.Duel::isYoung).count();
     }
 
@@ -85,28 +87,94 @@ public class Competition {
         return players.size();
     }
 
-    private String getGods_Wins(){
 
-        return  "Max wins:\n"
-            + players.values().stream().filter(player -> player.getMaxWin() > 0)
-                .sorted((o2, o1) -> (Integer.compare(o1.getMaxWin(),o2.getMaxWin())))
-                //.forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxWin()));
+    private String getGods_old_lose(){
+        return "Max loses Old:\n"
+                + players.values().stream()
+                .sorted((o1, o2) -> (Integer.compare(
+                        o2.getDuels().stream()
+                                .filter(Player.Duel::isZPG)
+                                .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
+                                .filter(((Predicate<Player.Duel>) Player.Duel::isWinner).negate())
+                                .map(Player.Duel::getSum)
+                                .max(Integer::compareTo)
+                                .orElse(0),
+                        o1.getDuels().stream()
+                                .filter(Player.Duel::isZPG)
+                                .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
+                                .filter(((Predicate<Player.Duel>) Player.Duel::isWinner).negate())
+                                .map(Player.Duel::getSum)
+                                .max(Integer::compareTo)
+                                .orElse(0))))
                 .limit(10)
-                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxWin() + "\n")
+                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getDuels().stream()
+                        .filter(Player.Duel::isZPG)
+                        .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
+                        .filter(((Predicate<Player.Duel>) Player.Duel::isWinner).negate())
+                        .map(Player.Duel::getSum)
+                        .max(Integer::compareTo)
+                        .orElse(0) + "\n")
                 .collect(Collectors.joining());
-        //players.keySet().forEach(key->System.out.println("* " + key + ":пс -- " + players.get(key).getMaxWin()));
-        //System.out.println();
     }
 
-    private String getGods_lose(){
-        return "Max loses:\n"
-            + players.values().stream().filter(player -> player.getMaxLose() > 0)
-                .sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(),o2.getMaxLose())))
+    private String getGods_old_win(){
+        return "Max wins Old:\n"
+                + players.values().stream()
+                .sorted((o1, o2) -> (Integer.compare(
+                        o2.getDuels().stream()
+                                .filter(Player.Duel::isZPG)
+                                .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
+                                .filter(Player.Duel::isWinner)
+                                .map(Player.Duel::getSum)
+                                .max(Integer::compareTo)
+                                .orElse(0),
+                        o1.getDuels().stream()
+                                .filter(Player.Duel::isZPG)
+                                .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
+                                .filter(Player.Duel::isWinner)
+                                .map(Player.Duel::getSum)
+                                .max(Integer::compareTo)
+                                .orElse(0))))
                 .limit(10)
-                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose() + "\n")
+                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getDuels().stream()
+                        .filter(Player.Duel::isZPG)
+                        .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
+                        .filter(Player.Duel::isWinner)
+                        .map(Player.Duel::getSum)
+                        .max(Integer::compareTo)
+                        .orElse(0)
+                        + "\n")
                 .collect(Collectors.joining());
-        //forEach(player->System.out.println("* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose()));
-        //System.out.println();
+    }
+
+    private String getGods_young_win(){
+        return "Max wins Old:\n"
+                + players.values().stream()
+                .sorted((o1, o2) -> (Integer.compare(
+                        o2.getDuels().stream()
+                                .filter(Player.Duel::isZPG)
+                                .filter(Player.Duel::isYoung)
+                                .filter(Player.Duel::isWinner)
+                                .map(Player.Duel::getSum)
+                                .max(Integer::compareTo)
+                                .orElse(0),
+                        o1.getDuels().stream()
+                                .filter(Player.Duel::isZPG)
+                                .filter(Player.Duel::isYoung)
+                                .filter(Player.Duel::isWinner)
+                                .map(Player.Duel::getSum)
+                                .max(Integer::compareTo)
+                                .orElse(0))))
+                .limit(10)
+                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getDuels().stream()
+                        .filter(Player.Duel::isZPG)
+                        .filter(Player.Duel::isYoung)
+                        .filter(Player.Duel::isWinner)
+                        .map(Player.Duel::getSum)
+                        .max(Integer::compareTo)
+                        .orElse(0)
+                        + "\n")
+                .collect(Collectors.joining());
     }
 
     private String getGods_lose_young(){
@@ -117,8 +185,6 @@ public class Competition {
                 .limit(10)
                 .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose() + "\n")
                 .collect(Collectors.joining());
-        //forEach(player->System.out.println("* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose()));
-        //System.out.println();
     }
 
     public String getResult(){
@@ -129,8 +195,30 @@ public class Competition {
         result += getYoungCount() + "\n";
         result += "* Приняло участие богов:\t";
         result += getGodsCount() + "\n\n";
-        result += getGods_lose() + "\n";
-        result += getGods_Wins() + "\n";
+        result += getGods_old_lose() + "\n";
+        result += getGods_old_win() + "\n";
+        result += getGods_young_win() + "\n";
         return result;
     }
+
+    //    private String getGods_Wins(){
+//        return  "Max wins:\n"
+//            + players.values().stream().filter(player -> player.getMaxWin() > 0)
+//                .sorted((o2, o1) -> (Integer.compare(o1.getMaxWin(),o2.getMaxWin())))
+//                //.forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxWin()));
+//                .limit(10)
+//                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxWin() + "\n")
+//                .collect(Collectors.joining());
+//    }
+//
+//    private String getGods_lose(){
+//        return "Max loses:\n"
+//            + players.values().stream().filter(player -> player.getMaxLose() > 0)
+//                .sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(),o2.getMaxLose())))
+//                .limit(10)
+//                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose() + "\n")
+//                .collect(Collectors.joining());
+//        //forEach(player->System.out.println("* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose()));
+//        //System.out.println();
+//    }
 }
