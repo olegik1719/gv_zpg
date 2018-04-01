@@ -87,7 +87,7 @@ public class Competition {
 
     private String getGods_Wins(){
 
-        return  "Max wins:"
+        return  "Max wins:\n"
             + players.values().stream().filter(player -> player.getMaxWin() > 0)
                 .sorted((o2, o1) -> (Integer.compare(o1.getMaxWin(),o2.getMaxWin())))
                 //.forEach(player->System.out.println("* " + player.getNikName() + ":пс -- " + player.getMaxWin()));
@@ -99,8 +99,20 @@ public class Competition {
     }
 
     private String getGods_lose(){
-        return "Max loses:"
+        return "Max loses:\n"
             + players.values().stream().filter(player -> player.getMaxLose() > 0)
+                .sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(),o2.getMaxLose())))
+                .limit(10)
+                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose() + "\n")
+                .collect(Collectors.joining());
+        //forEach(player->System.out.println("* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose()));
+        //System.out.println();
+    }
+
+    private String getGods_lose_young(){
+        return "Max loses:"
+                + players.values().stream()
+                .filter(player -> player.getMaxLose() > 0)
                 .sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(),o2.getMaxLose())))
                 .limit(10)
                 .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose() + "\n")
