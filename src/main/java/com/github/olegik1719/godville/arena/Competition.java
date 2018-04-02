@@ -187,6 +187,14 @@ public class Competition {
                 .collect(Collectors.joining());
     }
 
+    private String getGods_Duels_count(){
+        return "Count duels: \n"
+                + players.values().stream()
+                .sorted(((o2, o1) -> (Integer.compare(o1.getDuels().size(),o2.getDuels().size()))))
+                .map(player->"* \"" + player.getNikName() + "\":пс -- " + player.getDuels().size() + " боев;\n")
+                .collect(Collectors.joining());
+    }
+
     public String getResult(){
         String result = "bq. Немного статистики:\n\n* Всего логов получено:\t";
         //result += getSize() +"\n";
@@ -195,9 +203,10 @@ public class Competition {
         result += getYoungCount() + "\n";
         result += "* Приняло участие богов:\t";
         result += getGodsCount() + "\n\n";
-        result += getGods_old_lose() + "\n";
-        result += getGods_old_win() + "\n";
-        result += getGods_young_win() + "\n";
+        result += getGods_Duels_count() + "\n\n";
+//        result += getGods_old_lose() + "\n";
+//        result += getGods_old_win() + "\n";
+//        result += getGods_young_win() + "\n";
         return result;
     }
 

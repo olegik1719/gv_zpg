@@ -3,6 +3,7 @@ package com.github.olegik1719.godville.arena;
 import lombok.Getter;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class Player {
     private final String nikName;
@@ -31,7 +32,7 @@ public class Player {
     }
 
     public int getMaxLose(){
-        return duels.stream().filter(d->!d.isWinner).mapToInt(Duel::getSum).max().orElse(0);
+        return duels.stream().filter(((Predicate<Duel>)Duel::isWinner).negate()).mapToInt(Duel::getSum).max().orElse(0);
     }
 
     public String getNikName() {
@@ -40,7 +41,7 @@ public class Player {
 
     public int getMaxWin(){
 
-        return duels.stream().filter(d->d.isWinner).mapToInt(Duel::getSum).max().orElse(0);
+        return duels.stream().filter(Duel::isWinner).mapToInt(Duel::getSum).max().orElse(0);
     }
     @Getter
     public class Duel{
