@@ -77,7 +77,8 @@ public class Common {
                 }
                 //Fights fights = new Fights(ids);
                 Competition fights = new Competition();
-                fights.addDuels(ids);
+                System.out.println(fights.addDuels(ids).getResult());
+                //fights.addDuels(ids);
                 if (args.length > 2){
                     try(FileWriter writer = new FileWriter(args[2],false))
                     {
@@ -89,7 +90,6 @@ public class Common {
                         System.out.println(ex.getMessage());
                     }
                 }
-                System.out.println(fights.getResult());
 //                fights.getYoung();
             }catch (IOException e){
                 System.out.println("Ошибка");
