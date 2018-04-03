@@ -177,8 +177,6 @@ public class Parser {
 
         public int getLoses() {
             Element stats = fight.getElementById("hero" + (heroID + 1) + "_stats");
-            //Element health = stats.getElementById("hp0");
-            //isWinner = !(health != null ? health.html().equals("1") : stats.getElementById("hp1").html().equals("1"));
             Elements new_lines = stats.select("div.new_line");
             int loses = -1;
             for (Element el : new_lines) {//
@@ -187,7 +185,6 @@ public class Parser {
                     String winsLoses = el.select("span.field_content").text();
                     Matcher matcher = PATTERN_WINSLOSES.matcher(winsLoses);
                     if (matcher.find()) {
-                        //wins = Integer.parseInt(matcher.group(1));
                         loses = Integer.parseInt(matcher.group(2));
                     }
                 }

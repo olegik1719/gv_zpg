@@ -76,8 +76,10 @@ public class Common {
                     for (String error : error_logs) System.out.println(error);
                 }
                 //Fights fights = new Fights(ids);
-                Competition fights = new Competition();
-                System.out.println(fights.addDuels(ids).getResult());
+                //Competition fights = new Competition();
+                Contest fights = new Contest();
+                System.out.println(fights.addLog(ids).getResult());
+                //System.out.println(fights.addDuels(ids).getResult());
                 //fights.addDuels(ids);
                 if (args.length > 2){
                     try(FileWriter writer = new FileWriter(args[2],false))

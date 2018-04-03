@@ -5,6 +5,7 @@ import lombok.Getter;
 import java.util.*;
 import java.util.function.Predicate;
 
+@Deprecated
 public class Player {
     private final String nikName;
     private Collection<Duel> duels;
