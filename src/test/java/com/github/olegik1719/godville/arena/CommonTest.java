@@ -5,11 +5,6 @@ import org.junit.Test;
 public class CommonTest {
 
     @Test
-    public void getMoney() {
-        //System.out.println(Common.getMoney(12,""));
-    }
-
-    @Test
     public void main() {
         Common.main("res/links_list.lst","res/bad_links.lst","res/good_links.lst");
     }

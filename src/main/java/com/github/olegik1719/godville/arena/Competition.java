@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Deprecated
 public class Competition {
     private Map<String, Player> players; // <nikname;players>
     //private ArrayList<Player> players;

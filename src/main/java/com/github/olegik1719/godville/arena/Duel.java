@@ -15,7 +15,7 @@ import java.util.Date;
  */
 
 @Getter
-public class Duel {
+public class Duel implements Comparable<Duel>{
 
     private final String ID;
     private Date startTime;
@@ -26,8 +26,15 @@ public class Duel {
     private Player loser;
 
     @Override
-    public boolean equals(Object o){
-        return o instanceof Duel && ID.equals(((Duel) o).ID);
+    public int compareTo(Duel o) {
+        if (o == null) return 1;
+        return equals(o)? 0: startTime.compareTo(o.startTime);
+        //return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o || o instanceof Duel && ID.equals(((Duel) o).ID);
     }
 
     @Override
@@ -44,6 +51,8 @@ public class Duel {
         winner = new Player(parser.getWinner());
         loser = new Player(parser.getLoser());
     }
+
+
 
     @Getter
     class Player{
