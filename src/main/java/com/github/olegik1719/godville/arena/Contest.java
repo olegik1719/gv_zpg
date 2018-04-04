@@ -3,7 +3,6 @@ package com.github.olegik1719.godville.arena;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Contest {
@@ -81,7 +80,6 @@ public class Contest {
 
     private int getGodsCount() {
         return  contest.size();
-        //players.size();
     }
 
 
@@ -157,69 +155,11 @@ public class Contest {
     private String getGods_old_win() {
         return "bq. Самые большие выигрыши у храмовладельцев:\n\n"
                 + getGods_max_win(false);
-//        "Max wins Old:\n"
-//                +
-//                //players.stream.
-//                players.values().stream()
-//                        .sorted((o1, o2) -> (Integer.compare(
-//                                o2.getDuels().stream()
-//                                        .filter(Player.Duel::isZPG)
-//                                        .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
-//                                        .filter(Player.Duel::isWinner)
-//                                        .map(Player.Duel::getSum)
-//                                        .max(Integer::compareTo)
-//                                        .orElse(0),
-//                                o1.getDuels().stream()
-//                                        .filter(Player.Duel::isZPG)
-//                                        .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
-//                                        .filter(Player.Duel::isWinner)
-//                                        .map(Player.Duel::getSum)
-//                                        .max(Integer::compareTo)
-//                                        .orElse(0))))
-//                        .limit(10)
-//                        .map(player -> "* \"" + player.getNikName() + "\":пс -- " + player.getDuels().stream()
-//                                .filter(Player.Duel::isZPG)
-//                                .filter(((Predicate<Player.Duel>) Player.Duel::isYoung).negate())
-//                                .filter(Player.Duel::isWinner)
-//                                .map(Player.Duel::getSum)
-//                                .max(Integer::compareTo)
-//                                .orElse(0)
-//                                + "\n")
-//                        .collect(Collectors.joining())+ "\n";
     }
 
     private String getGods_young_win() {
         return "bq. Самые большие выигрыши у храмостроителей:\n\n"
                 + getGods_max_win(true);
-//        "Max wins Old:\n"
-//                +
-//                //Stream.iterate(0,n->n+1).limit(players.size()-1).map(i->players.get(i))
-//                players.values().stream()
-//                        .sorted((o1, o2) -> (Integer.compare(
-//                                o2.getDuels().stream()
-//                                        .filter(Player.Duel::isZPG)
-//                                        .filter(Player.Duel::isYoung)
-//                                        .filter(Player.Duel::isWinner)
-//                                        .map(Player.Duel::getSum)
-//                                        .max(Integer::compareTo)
-//                                        .orElse(0),
-//                                o1.getDuels().stream()
-//                                        .filter(Player.Duel::isZPG)
-//                                        .filter(Player.Duel::isYoung)
-//                                        .filter(Player.Duel::isWinner)
-//                                        .map(Player.Duel::getSum)
-//                                        .max(Integer::compareTo)
-//                                        .orElse(0))))
-//                        .limit(10)
-//                        .map(player -> "* \"" + player.getNikName() + "\":пс -- " + player.getDuels().stream()
-//                                .filter(Player.Duel::isZPG)
-//                                .filter(Player.Duel::isYoung)
-//                                .filter(Player.Duel::isWinner)
-//                                .map(Player.Duel::getSum)
-//                                .max(Integer::compareTo)
-//                                .orElse(0)
-//                                + "\n")
-//                        .collect(Collectors.joining())+ "\n";
     }
 
     private String getGods_old_lose(){
@@ -230,23 +170,83 @@ public class Contest {
     private String getGods_young_lose() {
         return "bq. Самые большие проигрыши у храмостроителей:\n\n"
                 + getGods_max_lose(true);
-//        "Max loses:"
-//                + //Stream.iterate(0,n->n+1).limit(players.size()-1).map(i->players.get(i))
-//                players.values().stream()
-//                        .filter(player -> player.getMaxLose() > 0)
-//                        .sorted((o2, o1) -> (Integer.compare(o1.getMaxLose(), o2.getMaxLose())))
-//                        .limit(10)
-//                        .map(player -> "* \"" + player.getNikName() + "\":пс -- " + player.getMaxLose() + "\n")
-//                        .collect(Collectors.joining())+ "\n";
     }
 
     private String getGods_Duels_count() {
-        return null;
-                //"Список богов упорядоченный по количеству дуэлей: \n"
-//                + players.values().stream()
-//                .sorted(((o2, o1) -> (Integer.compare(o1.getDuels().size(), o2.getDuels().size()))))
-//                .map(player -> "* \"" + player.getNikName() + "\":пс -- " + player.getDuels().size() + " боев;\n")
-//                .collect(Collectors.joining()) + "\n";
+        return "bq. Лидеры по количеству боев:\n\n"
+                + contest.keySet().stream()
+                .sorted((o1, o2) -> Integer.compare(contest.get(o2).size(),contest.get(o1).size()))
+                .limit(10).map(player -> "* \"" + player + "\":пс " + contest.get(player).size() + ";\n")
+                .collect(Collectors.joining()) + "\n";
+    }
+
+    private int getGod_results_count(String player, boolean isWin){
+        return (int) (isWin
+                ? contest.get(player).stream().filter(duel -> duel.getWinner().getGodName().equals(player)).count()
+                : contest.get(player).stream().filter(duel -> duel.getLoser().getGodName().equals(player)).count()
+        );
+    }
+
+    private String getGods_Wins_count() {
+        return "bq. Лидеры по количеству побед:\n\n"
+                + contest.keySet().stream()
+                .sorted((o1, o2) -> Integer.compare(getGod_results_count(o2,true),getGod_results_count(o1,true)))
+                .limit(10).map(player -> "* \"" + player + "\":пс " + getGod_results_count(player,true) + ";\n")
+                .collect(Collectors.joining()) + "\n";
+    }
+
+    private String getGods_Loses_count() {
+        return "bq. Лидеры по количеству поражений:\n\n"
+                + contest.keySet().stream()
+                .sorted((o1, o2) -> Integer.compare(getGod_results_count(o2,false),getGod_results_count(o1,false)))
+                .limit(10).map(player -> "* \"" + player + "\":пс " + getGod_results_count(player,false) + ";\n")
+                .collect(Collectors.joining()) + "\n";
+    }
+
+    private int getGod_sum_play (String player, boolean isWin, boolean isYoung){
+        return contest.get(player).stream()
+                .filter(duel -> isWin
+                        ?duel.getWinner().getGodName().equals(player)
+                        :duel.getLoser().getGodName().equals(player))
+                .filter(duel -> isYoung == duel.isYoung())
+                .mapToInt(Duel::getSum)
+                .sum();
+    }
+
+    private String getGods_Sum_win_old (){
+        return "bq. Наибольшие сумманые выигрыши на взрослой ZPG-арене:\n\n"
+                + contest.keySet().stream()
+                .sorted((o1, o2) -> Integer.compare(getGod_sum_play(o2,true,false),getGod_sum_play(o1,true,false)))
+                .limit(10).map(player -> "* \"" + player + "\":пс " + getGod_sum_play(player,true,false) + ";\n")
+                .collect(Collectors.joining()) + "\n";
+
+    }
+
+    private String getGods_Sum_win_young (){
+        return "bq. Наибольшие сумманые выигрыши на дохрамовой ZPG-арене:\n\n"
+                + contest.keySet().stream()
+                .sorted((o1, o2) -> Integer.compare(getGod_sum_play(o2,true,true),getGod_sum_play(o1,true,true)))
+                .limit(10).map(player -> "* \"" + player + "\":пс " + getGod_sum_play(player,true,true) + ";\n")
+                .collect(Collectors.joining()) + "\n";
+
+    }
+
+    private String getGods_Sum_lose_old (){
+        return "bq. Наибольшие сумманые проигрыши на взрослой ZPG-арене:\n\n"
+                + contest.keySet().stream()
+                .sorted((o1, o2) -> Integer.compare(getGod_sum_play(o2,false,false),getGod_sum_play(o1,false,false)))
+                .limit(10).map(player -> "* \"" + player + "\":пс " + getGod_sum_play(player,false,false) + ";\n")
+                .collect(Collectors.joining()) + "\n";
+
+    }
+
+    private String getGods_Sum_lose_young (){
+        return "bq. Наибольшие сумманые проигрыши на дохрамовой ZPG-арене:\n\n"
+                + contest.keySet().stream()
+                .sorted((o1, o2) -> Integer.compare(getGod_sum_play(o2,false,true),getGod_sum_play(o1,false,true)))
+                .limit(10).map(player -> "* \"" + player + "\":пс " + getGod_sum_play(player,false,true) + ";\n")
+                .collect(Collectors.joining()) + "\n";
+
     }
 
     public String getResult() {
@@ -258,10 +258,17 @@ public class Contest {
                         + "* Приняло участие богов:\t"
                         + getGodsCount() + "\n\n"
                         // + getGods_Duels_count() + "\n\n"
-                        + getGods_young_lose()
-                        + getGods_young_win()
                         + getGods_old_lose()
                         + getGods_old_win()
+                        + getGods_young_lose()
+                        + getGods_young_win()
+                        + getGods_Duels_count()
+                        + getGods_Loses_count()
+                        + getGods_Wins_count()
+                        + getGods_Sum_lose_old()
+                        + getGods_Sum_win_old()
+                        + getGods_Sum_lose_young()
+                        + getGods_Sum_win_young()
                         + "?????"
                 ;
     }
