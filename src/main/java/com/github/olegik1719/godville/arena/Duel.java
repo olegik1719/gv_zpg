@@ -22,4 +22,17 @@ public class Duel {
     private Map<String,String> leftBlock;
     private List<String> turns;
     private Map<String,String> rightBlock;
+
+    public Result getResult(){
+        boolean ZPG = true;
+        boolean young = false;
+        String winner = "";
+        String loser = "";
+        int winsWinner = 0;
+        int winsLoser = 0;
+        int losesWinner = 0;
+        int losesLoser = 0;
+        int sum = 0;
+        return new Result(chronicleID,dateFight,ZPG,young,winner,loser,winsWinner,winsLoser,losesWinner,losesLoser,sum);
+    }
 }
