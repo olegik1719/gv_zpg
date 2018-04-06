@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.arena;
+package com.github.olegik1719.godville.arena.oldversion;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -81,7 +81,6 @@ public class Contest {
     private int getGodsCount() {
         return  contest.size();
     }
-
 
     private int max_lose(String player,boolean isYoung){
 

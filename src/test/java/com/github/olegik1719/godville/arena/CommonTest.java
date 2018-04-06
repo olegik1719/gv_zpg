@@ -1,5 +1,6 @@
 package com.github.olegik1719.godville.arena;
 
+import com.github.olegik1719.godville.arena.oldversion.Common;
 import org.junit.Test;
 
 public class CommonTest {

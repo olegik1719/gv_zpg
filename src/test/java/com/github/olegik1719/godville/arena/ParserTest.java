@@ -1,5 +1,6 @@
 package com.github.olegik1719.godville.arena;
 
+import com.github.olegik1719.godville.arena.oldversion.Parser;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,12 +1,10 @@
-package com.github.olegik1719.godville.arena;
+package com.github.olegik1719.godville.arena.oldversion;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Deprecated
 public class Competition {

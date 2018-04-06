@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.arena;
+package com.github.olegik1719.godville.arena.oldversion;
 
 import java.io.*;
 import java.util.*;
