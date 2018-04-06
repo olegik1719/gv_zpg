@@ -22,7 +22,7 @@ public class FileChronicGetter implements ChronicGetter{
 
     @Override
     public String getHtml(String chronicleID) {
-        //String chronicleFile = pathToChronicles + chronicleID + extension;
+        if (chronicleID.length() == 0) return "";
         Path chroniclePath = FileSystems.getDefault().getPath(pathToChronicles
                 , chronicleID
                 , extension);
@@ -33,8 +33,6 @@ public class FileChronicGetter implements ChronicGetter{
                 return "";
             }
         }
-        //if (chroniclePath)
-        //File chronicleFile = new File(filePath);
         return "";
     }
 }
