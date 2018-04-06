@@ -18,8 +18,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class Duel {
     private Date dateFight;
-    //private final String chronicleID;
+    private final String chronicleID;
     private Map<String,String> leftBlock;
-    private Map<String,String> rightBlock;
     private List<String> turns;
+    private Map<String,String> rightBlock;
 }
