@@ -1,37 +1,26 @@
 package com.github.olegik1719.godville.arena;
 
-import com.github.olegik1719.godville.arena.oldversion.Parser;
-import org.junit.Before;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Test;
 
-import java.text.ParseException;
-
+import java.util.Map;
 
 public class ParserTest {
 
-    Parser current;
-
-    @Before
-    public void setUp() throws ParseException {
-        //current = new Fight("2aqwf8sgd");//e183mbz38;n85c5rqbl;ehd2kuls6
-        current = new Parser("ehd2kuls6");
-    }
-
-
-
-
     @Test
-    public void getTurns() {
-        System.out.println(current.getTurns());
+    public void getLeft() {
+        ChronicGetter acg = new AnyChronicGetter();
+        String chronicle = acg.getHtml("0amta10sp");
+        Document fight = Jsoup.parse(chronicle);
+//        Map<String, String> left = Parser.getLeft(fight);
+//        for (String key: left.keySet()) {
+//            System.out.printf("%s: %s%n", key, left.get(key));
+//        }
+//        Map<String, String> right = Parser.getRight(fight);
+//        for (String key: right.keySet()) {
+//            System.out.printf("%s: %s%n", key, right.get(key));
+//        }
     }
 
-    @Test
-    public void getTime() {
-        //System.out.println(current.getTime());
-    }
-
-    @Test
-    public void isZPG() {
-        System.out.println(current.isZPG());
-    }
 }

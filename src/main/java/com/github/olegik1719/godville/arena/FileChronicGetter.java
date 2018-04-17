@@ -20,12 +20,17 @@ public class FileChronicGetter implements ChronicGetter{
         this(path, ".html");
     }
 
+    public FileChronicGetter(){
+        this("res/log/");
+    }
+
     @Override
     public String getHtml(String chronicleID) {
         if (chronicleID.length() == 0) return "";
-        Path chroniclePath = FileSystems.getDefault().getPath(pathToChronicles
-                , chronicleID
-                , extension);
+        Path chroniclePath = FileSystems.getDefault().getPath(
+                pathToChronicles
+                + chronicleID
+                + extension);
         if (Files.exists(chroniclePath)) {
             try {
                 return Files.lines(chroniclePath).collect(Collectors.joining());

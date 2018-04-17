@@ -1,7 +1,5 @@
 package com.github.olegik1719.godville.arena;
 
-import java.io.IOException;
-
 public interface ChronicGetter {
 
     /** Возвращает хронику в виде HTML-страницы
@@ -11,5 +9,5 @@ public interface ChronicGetter {
      * @param chronicleID -- ИД хроники;
      * @return HTML страницы или пустую строку
      */
-    String getHtml(String chronicleID) throws IOException;
+    String getHtml(String chronicleID);
 }
