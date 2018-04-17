@@ -13,6 +13,7 @@ public class ParserTest {
         ChronicGetter acg = new AnyChronicGetter();
         String chronicle = acg.getHtml("0amta10sp");
         Document fight = Jsoup.parse(chronicle);
+        System.out.printf("%s%n", ArenaParser.getID(fight));
 //        Map<String, String> left = Parser.getLeft(fight);
 //        for (String key: left.keySet()) {
 //            System.out.printf("%s: %s%n", key, left.get(key));

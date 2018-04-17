@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Parser {
+public class ArenaParser {
 
     private static final SimpleDateFormat LOG_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
 
@@ -21,11 +21,6 @@ public class Parser {
         Map<String,String> rightBlock = getRight(fight);
         String ID = getID(fight);
         return new Duel(fightTime,ID,leftBlock,turns,rightBlock);
-    }
-
-    private static List<String> getTurns(Document fight){
-        //TODO Make normal getter for central block
-        return new ArrayList<>();
     }
 
     private static Map<String,String> getHeroStats(Element hero){
@@ -41,13 +36,11 @@ public class Parser {
     }
 
     private static Map<String,String> getLeft(Document fight){
-        //TODO Make normal getter for blocks
         Element leftBlock = fight.getElementById("left_block");
         return getHeroStats(leftBlock);
     }
 
     private static Map<String,String> getRight(Document fight){
-        //TODO Make normal getter for blocks
         Element rightBlock = fight.getElementById("right_block");
         return getHeroStats(rightBlock);
     }
@@ -61,9 +54,32 @@ public class Parser {
         }
     }
 
-    private static String getID(Document fight){
-        //TODO Make normal getter for ID
+    public static String getID(Document fight){
+        Elements lastDuel = fight.select(".lastduelpl");
+        for (Element ld: lastDuel){
+            String url = ld.select("a").first().attr("href");
+            if (url.length()>0) return url.substring(url.lastIndexOf('/')+1);
+        }
         return "";
     }
 
+    private static List<String> getTurns(Document fight){
+        //TODO Make normal getter for central
+        List<String> turnsList = new ArrayList<>();
+        Element duelContent = fight.selectFirst(".d_content");
+
+        return turnsList;
+    }
+
+    private class Turn{
+        private int number;
+        private List<String> phrases;
+
+        private Turn (int number, String first_phrase){
+            this.number = number;
+            phrases = new ArrayList<>();
+            phrases.add(first_phrase);
+        }
+
+    }
 }
