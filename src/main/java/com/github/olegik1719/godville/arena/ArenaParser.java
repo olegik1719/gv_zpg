@@ -1,5 +1,6 @@
 package com.github.olegik1719.godville.arena;
 
+import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,6 +9,7 @@ import org.jsoup.select.Elements;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ArenaParser {
 
@@ -16,7 +18,7 @@ public class ArenaParser {
     public static Duel parseLog(String HTMLLog){
         Document fight = Jsoup.parse(HTMLLog);
         Date fightTime = getTime(fight);
-        List<String>  turns = getTurns(fight);
+        List<Turn>  turns = getTurns(fight);
         Map<String,String> leftBlock = getLeft(fight);
         Map<String,String> rightBlock = getRight(fight);
         String ID = getID(fight);
@@ -54,7 +56,7 @@ public class ArenaParser {
         }
     }
 
-    public static String getID(Document fight){
+    private static String getID(Document fight){
         Elements lastDuel = fight.select(".lastduelpl");
         for (Element ld: lastDuel){
             String url = ld.select("a").first().attr("href");
@@ -63,23 +65,23 @@ public class ArenaParser {
         return "";
     }
 
-    private static List<String> getTurns(Document fight){
+    public static List<Turn> getTurns(Document fight){
         //TODO Make normal getter for central
-        List<String> turnsList = new ArrayList<>();
+        List<Turn> turnsList = new ArrayList<>();
         Element duelContent = fight.selectFirst(".d_content");
-
+        Elements turns = duelContent.select("[data-t]");
+        for (Element turn:turns){
+            String turnNumber = turn.attr("data-t");
+            int num = Integer.parseInt(turnNumber);
+            Turn currentTurn;// = turnsList.get(num-1);
+            if (turnsList.size() < num || (currentTurn = turnsList.get(num-1) ) == null) {
+                currentTurn = new Turn(num, turn.selectFirst(".text_content").text());
+                turnsList.add(num-1,currentTurn);
+            }else {
+                currentTurn.add(turn.selectFirst(".text_content").text());
+            }
+        }
         return turnsList;
     }
 
-    private class Turn{
-        private int number;
-        private List<String> phrases;
-
-        private Turn (int number, String first_phrase){
-            this.number = number;
-            phrases = new ArrayList<>();
-            phrases.add(first_phrase);
-        }
-
-    }
 }

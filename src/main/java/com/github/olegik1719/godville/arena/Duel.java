@@ -20,19 +20,43 @@ public class Duel {
     private Date dateFight;
     private final String chronicleID;
     private Map<String,String> leftBlock;
-    private List<String> turns;
+    private List<Turn> turns;
     private Map<String,String> rightBlock;
 
     public Result getResult(){
-        boolean ZPG = true;
-        boolean young = false;
-        String winner = "";
-        String loser = "";
-        int winsWinner = 0;
-        int winsLoser = 0;
-        int losesWinner = 0;
-        int losesLoser = 0;
+        boolean ZPG = isZPG();
+        boolean young = isYoung();
+        String winner = getPartiant(true);
+        String loser = getPartiant(false);
+        int winsWinner = getWinsPartiant(true);
+        int winsLoser = getLosesPartiant(true);
+        int losesWinner = getWinsPartiant(false);
+        int losesLoser = getLosesPartiant(false);
         int sum = 0;
         return new Result(chronicleID,dateFight,ZPG,young,winner,loser,winsWinner,winsLoser,losesWinner,losesLoser,sum);
+    }
+
+    private boolean isZPG(){
+        return false;
+    }
+
+    private boolean isYoung(){
+        return false;
+    }
+
+    private String getPartiant(boolean winner){
+        return null;
+    }
+
+    private int getWinsPartiant(boolean winner){
+        return 0;
+    }
+
+    private int getLosesPartiant(boolean winner){
+        return 0;
+    }
+
+    private int getSum(){
+        return 0;
     }
 }
