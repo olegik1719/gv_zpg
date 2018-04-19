@@ -12,9 +12,9 @@ public class Common {
     private static final Pattern PATTERN_LOG = Pattern.compile(LOG_ID_REGEXP);
     private static Set<String> error_logs = new TreeSet<>();
 
-    private static HashMap<String, Integer> exchange;
+    private static Map<String, Integer> exchange;
     static {
-        exchange = new HashMap<>();
+        exchange = new LinkedHashMap<>();
         exchange.put("монет",1);//золотые монеты
         exchange.put("монеты",1);
         exchange.put("монету",1);

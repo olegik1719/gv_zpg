@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**Хранение хроники:
  * Дата;
@@ -15,48 +14,46 @@ import java.util.Map;
  * Правый блок -- map<Имя, параметр>
  * Центральный блок -- List<Turn>
  */
+
 @AllArgsConstructor
 public class Duel {
     private Date dateFight;
     private final String chronicleID;
-    private Map<String,String> leftBlock;
+    private Participant leftHero;
     private List<Turn> turns;
-    private Map<String,String> rightBlock;
+    private Participant rightHero;
 
     public Result getResult(){
         boolean ZPG = isZPG();
         boolean young = isYoung();
-        String winner = getPartiant(true);
-        String loser = getPartiant(false);
-        int winsWinner = getWinsPartiant(true);
-        int winsLoser = getLosesPartiant(true);
-        int losesWinner = getWinsPartiant(false);
-        int losesLoser = getLosesPartiant(false);
+        Participant winner = getWinner();
+        Participant loser = getLoser();
         int sum = 0;
-        return new Result(chronicleID,dateFight,ZPG,young,winner,loser,winsWinner,winsLoser,losesWinner,losesLoser,sum);
+        return new Result(chronicleID, dateFight, ZPG, young
+                , winner
+                , loser
+                , sum);
     }
 
     private boolean isZPG(){
-        return false;
+        return turns.get(0).isZPG();
     }
 
     private boolean isYoung(){
-        return false;
+        //return false//leftBlock.containsKey("Кирпичей для храма");
+        return leftHero.getBricks()>0;
     }
 
-    private String getPartiant(boolean winner){
-        return null;
+    private Participant getWinner(){
+        return getParticipant(true);
     }
 
-    private int getWinsPartiant(boolean winner){
-        return 0;
+    private Participant getLoser(){
+        return getParticipant(false);
     }
 
-    private int getLosesPartiant(boolean winner){
-        return 0;
-    }
-
-    private int getSum(){
-        return 0;
+    private Participant getParticipant(boolean isWinner){
+        if (leftHero.isWinner() == isWinner) return leftHero;
+        return rightHero;
     }
 }

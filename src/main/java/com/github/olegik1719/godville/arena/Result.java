@@ -1,6 +1,7 @@
 package com.github.olegik1719.godville.arena;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Date;
 
@@ -13,18 +14,15 @@ import java.util.Date;
  • Наличие храма;
  */
 @AllArgsConstructor
+@Getter
 public class Result {
 
     private final String idFight;
     private Date dateFight;
     private boolean ZPG;
     private boolean young;
-    private String winner;
-    private String loser;
-    private int winsWinner;
-    private int winsLoser;
-    private int losesWinner;
-    private int losesLoser;
+    private Participant winner;
+    private Participant loser;
     private int sumInWin;
 
 }

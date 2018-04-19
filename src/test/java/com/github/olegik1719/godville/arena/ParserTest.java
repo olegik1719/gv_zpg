@@ -6,23 +6,20 @@ import org.junit.Test;
 
 import java.util.Map;
 
+import org.junit.Assert;
+
 public class ParserTest {
 
     @Test
     public void getLeft() {
         ChronicGetter acg = new AnyChronicGetter();
-        String chronicle = acg.getHtml("jdqrqmmgf");
+        //String chronicle = acg.getHtml("jdqrqmmgf");
+        String chronicle = acg.getHtml("rdxmuwrmq");
         Document fight = Jsoup.parse(chronicle);
-        //System.out.printf("%s%n", ArenaParser.getID(fight));
-        System.out.printf("%s%n", ArenaParser.getTurns(fight));
-//        Map<String, String> left = Parser.getLeft(fight);
-//        for (String key: left.keySet()) {
-//            System.out.printf("%s: %s%n", key, left.get(key));
-//        }
-//        Map<String, String> right = Parser.getRight(fight);
-//        for (String key: right.keySet()) {
-//            System.out.printf("%s: %s%n", key, right.get(key));
-//        }
+        Map<String, String> left = ArenaParser.getLeft(fight);
+        Participant test = new Participant(left);
+        Assert.assertEquals(841,test.getBricks());
+
     }
 
 }

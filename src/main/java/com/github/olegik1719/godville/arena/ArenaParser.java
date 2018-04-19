@@ -20,13 +20,15 @@ public class ArenaParser {
         Date fightTime = getTime(fight);
         List<Turn>  turns = getTurns(fight);
         Map<String,String> leftBlock = getLeft(fight);
+        Participant leftHero = new Participant(leftBlock);
         Map<String,String> rightBlock = getRight(fight);
+        Participant rightHero = new Participant(rightBlock);
         String ID = getID(fight);
-        return new Duel(fightTime,ID,leftBlock,turns,rightBlock);
+        return new Duel(fightTime,ID,leftHero,turns,rightHero);
     }
 
     private static Map<String,String> getHeroStats(Element hero){
-        Map<String, String> heroStats = new HashMap<>();
+        Map<String, String> heroStats = new LinkedHashMap<>();
         Elements heroInfo = hero.select("div.new_line");
         for (Element el : heroInfo) {
             if ((el.select(".l_capt") != null)
@@ -37,7 +39,7 @@ public class ArenaParser {
         return heroStats;
     }
 
-    private static Map<String,String> getLeft(Document fight){
+    public static Map<String,String> getLeft(Document fight){
         Element leftBlock = fight.getElementById("left_block");
         return getHeroStats(leftBlock);
     }
