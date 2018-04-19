@@ -44,7 +44,7 @@ public class Participant {
     private String personality;
     private String guild;
 
-    //private int[] level; //Level[0] and percents[1];
+    //private int[] fullLevel; //Level[0] and percents[1];
     private int level;
     @Getter(AccessLevel.PRIVATE) private int[] inventory; //Now[0] and Full[1];
     @Getter(AccessLevel.PRIVATE) private int[] health; //Now[0] and Full[1];

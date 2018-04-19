@@ -1,6 +1,5 @@
 package com.github.olegik1719.godville.arena;
 
-import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,7 +8,6 @@ import org.jsoup.select.Elements;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ArenaParser {
 
@@ -28,7 +26,7 @@ public class ArenaParser {
     }
 
     private static Map<String,String> getHeroStats(Element hero){
-        Map<String, String> heroStats = new LinkedHashMap<>();
+        Map<String, String> heroStats = new HashMap<>();
         Elements heroInfo = hero.select("div.new_line");
         for (Element el : heroInfo) {
             if ((el.select(".l_capt") != null)
@@ -60,18 +58,21 @@ public class ArenaParser {
 
     private static String getID(Document fight){
         Elements lastDuel = fight.select(".lastduelpl");
+
         for (Element ld: lastDuel){
             String url = ld.select("a").first().attr("href");
             if (url.length()>0) return url.substring(url.lastIndexOf('/')+1);
         }
+
         return "";
     }
 
-    public static List<Turn> getTurns(Document fight){
-        //TODO Make normal getter for central
+    private static List<Turn> getTurns(Document fight){
+
         List<Turn> turnsList = new ArrayList<>();
         Element duelContent = fight.selectFirst(".d_content");
         Elements turns = duelContent.select("[data-t]");
+
         for (Element turn:turns){
             String turnNumber = turn.attr("data-t");
             int num = Integer.parseInt(turnNumber);
@@ -83,6 +84,7 @@ public class ArenaParser {
                 currentTurn.add(turn.selectFirst(".text_content").text());
             }
         }
+
         return turnsList;
     }
 

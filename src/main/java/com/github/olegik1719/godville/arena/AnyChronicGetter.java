@@ -1,7 +1,5 @@
 package com.github.olegik1719.godville.arena;
 
-import java.io.IOException;
-
 public class AnyChronicGetter implements ChronicGetter {
 
     private WebChronicGetter webGetter;
