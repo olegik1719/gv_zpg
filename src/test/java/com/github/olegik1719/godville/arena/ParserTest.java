@@ -1,5 +1,9 @@
 package com.github.olegik1719.godville.arena;
 
+import com.github.olegik1719.godville.arena.arena.Participant;
+import com.github.olegik1719.godville.arena.chronicgetters.AnyChronicGetter;
+import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
+import com.github.olegik1719.godville.arena.common.ArenaParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;

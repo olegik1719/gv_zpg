@@ -1,11 +1,9 @@
-package com.github.olegik1719.godville.arena;
+package com.github.olegik1719.godville.arena.chronicgetters;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class WebChronicGetter implements ChronicGetter {

@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.arena;
+package com.github.olegik1719.godville.arena.arena;
 
 /*
 Общие:

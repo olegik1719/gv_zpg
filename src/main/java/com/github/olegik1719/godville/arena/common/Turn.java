@@ -1,6 +1,4 @@
-package com.github.olegik1719.godville.arena;
-
-import com.github.olegik1719.godville.arena.oldversion.Common;
+package com.github.olegik1719.godville.arena.common;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
