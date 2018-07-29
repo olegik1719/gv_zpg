@@ -16,25 +16,28 @@ import java.util.regex.Pattern;
 public class SailParser {
     private static final SimpleDateFormat LOG_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
 
+    public static String[] smallFishGet =
+            {"послана на дно морское. %hero% находит сундучок. \uD83D\uDCE6$"};
+
     private String ID = "";            // ИД похода
     private Date sailDate;        // Дата похода
-    private Integer influence;    // Количество Влияний
-    private Integer escape;       // Количество побегов
-    private Integer smallFish;    // Количество сундуков с рыб
-    private Integer smallIceland; // Количество сундуков с островов
-    private Integer bigFish;      // Количество кладов с рыб
-    private Integer bigIceland;   // Количество кладов с островов
-    private Integer smallOut;     // Сундуков вывезено
-    private Integer bigOut;       // Кладов вывезено
+    private int influence;    // Количество Влияний
+    private int escape;       // Количество побегов
+    private int smallGetFish;    // Количество сундуков с рыб
+    private int smallGetIceland; // Количество сундуков с островов
+    private int bigGetFish;      // Количество кладов с рыб
+    private int bigGetIceland;   // Количество кладов с островов
+    private int smallOut;     // Сундуков вывезено
+    private int bigOut;       // Кладов вывезено
 
-    private Integer partNumber;   // Номер участника в походе
+    private int partNumber;   // Номер участника в походе
     private String  partHero;     // Герой участника в походе
     private String  partGod;      // Имя участника в походе
 
-    private Integer drown;        // Количество утонувших
-    private Integer tugs;         // Количестов отбуксированных
+    private int drown;        // Количество утонувших
+    private int tugs;         // Количестов отбуксированных
 
-    private Integer AllBig;       // Всего вывезено кладов
+    private int allBig;       // Всего вывезено кладов
     private Document marine;      // Документ Jsoup с хроникой
 
     public SailParser(String HTMLLog, String god){
@@ -53,27 +56,52 @@ public class SailParser {
         partGod = god;
         String godHeroText = "(\\d)\\. (.+) / (.+)";
         Pattern godHeroPattern = Pattern.compile(godHeroText);
+        Pattern outputPattern  = Pattern.compile("\\[(.)]\\[(.+)]");
         for (int i = 1; i < 5 ; i++) {
             Elements Part = marine.select("div[id$=h_tbl] > div[class$=\"t_line saild_"+ i +"\"] > div[class$=c1]");
             Matcher matcher = godHeroPattern.matcher(Part.text());
-            String result = marine.select("div[id$=h_tbl] > div[class$=\"t_line saild_"+ i +"\"] > div[class$=c2] > span[class$=ple]").text();
+            boolean isPart = false;
+
             if (matcher.find()) {
-                if (god.equalsIgnoreCase(matcher.group(3))){
+                isPart = god.equalsIgnoreCase(matcher.group(3));
+                if (isPart){
                     partNumber = Integer.parseInt(matcher.group(1));
                     partHero   = matcher.group(2);
                 }
             }
 
-
+            //Drowned & Tugs
+            String result = marine.select("div[id$=h_tbl] > div[class$=\"t_line saild_"+ i +"\"] > div[class$=c2] > span[class$=ple]").text();
             if (result.equalsIgnoreCase("утонул")){
                 drown++;
             }
-
             if (result.equalsIgnoreCase("отбуксирован")){
                 tugs++;
             }
 
-
+            String output = marine.select("div[id$=h_tbl] > div[class$=\"t_line saild_"+ i +"\"] > div[class$=c2] > div > span[id$=pl_"+i+"_c]").text();
+            Matcher outputMatcher = outputPattern.matcher(output);
+            if (outputMatcher.find()){
+                for (int j = 1; j < 3; j++) {
+                    switch (outputMatcher.group(j)) {
+                        case "\uD83D\uDCE6":
+                            if (isPart) smallOut++;
+                            break;
+                        case "♂":
+                            if (isPart) bigOut++;
+                            allBig++;
+                            break;
+                        case "♀":
+                            if (isPart) bigOut++;
+                            allBig++;
+                            break;
+                        case "\uD83D\uDCB0":
+                            if (isPart) bigOut++;
+                            allBig++;
+                            break;
+                    }
+                }
+            }
         }
     }
 

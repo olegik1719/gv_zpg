@@ -34,12 +34,38 @@ public class SailParserTest {
     @Test
     public void getMarine() {
         Document marine = chronic.getMarine();
-        for (int i = 1; i < 5 ; i++) {
-            Elements result = marine.select("div[id$=h_tbl] > div[class$=\"t_line saild_"+ i +"\"] > div[class$=c2] > span[class$=ple]");
+        Pattern small   = Pattern.compile("\uD83D\uDCE6$");
+        Pattern bag     = Pattern.compile("\uD83D\uDCB0$");
+        Pattern male    = Pattern.compile("♂$");
+        Pattern female  = Pattern.compile("♀$");
+        for (int i = 0; i <= 100; i++) {
 
-            System.out.println(result.text());
 
-            //System.out.println("---------------------------");
+            Elements turns = marine.select("div[id$=fight_chronicle]>div[class$=\"afl block\"]>div[class$=\"d_content\"]>div[class$=\"new_line dtc t"+i+"  saild_1\"]");
+            for (Element turn : turns) {
+                //System.out.println(turn.text());
+                //System.out.println("--------------------------------------------------");
+                Matcher smMatch  = small.matcher(turn.text());
+                Matcher smBag    = bag.matcher(turn.text());
+                Matcher smMale   = male.matcher(turn.text());
+                Matcher smFemale = female.matcher(turn.text());
+                if (smMatch.find()){
+                    System.out.println(turn.text());
+                    System.out.println("--------------------------------------------------");
+                }
+                if (smBag.find()){
+                    System.out.println(turn.text());
+                    System.out.println("--------------------------------------------------");
+                }
+                if (smMale.find()){
+                    System.out.println(turn.text());
+                    System.out.println("--------------------------------------------------");
+                }
+                if (smFemale.find()){
+                    System.out.println(turn.text());
+                    System.out.println("--------------------------------------------------");
+                }
+            }
         }
     }
 
@@ -74,15 +100,17 @@ public class SailParserTest {
 
     @Test
     public void getSmallOut() {
+        assertEquals(0,chronic.getSmallOut());
     }
 
     @Test
     public void getBigOut() {
+        assertEquals(2,chronic.getBigOut());
     }
 
     @Test
     public void getPartNumber() {
-        assertEquals((long)1,(long)chronic.getPartNumber());
+        assertEquals(1,chronic.getPartNumber());
     }
 
     @Test
