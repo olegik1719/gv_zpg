@@ -156,7 +156,6 @@ public class SailParser {
                     for (String pat:bigFishGet){
                         if (found == 0) {
                             Pattern pattern = Pattern.compile(pat.replace("%hero%", partHero));
-                            System.out.println(pat.replace("%hero%", partHero));
                             Matcher match   = pattern.matcher(turnText);
                             if (match.find()){
                                 found++;
@@ -178,7 +177,6 @@ public class SailParser {
                 }
             }
         }
-
     }
 
     private static Date getTime(Document fight) {
