@@ -24,8 +24,8 @@ public class SailParser {
 
     public static String[] bigFishGet =
             {"С последним ударом тварь обернулась прекрасной самкой, поблагодарила за спасение от колдовских чар и попросила её приютить. %hero% не прочь. ♀$",
-             ".+ захлебнулась. %hero% выхватывает из морской пучины клад. \uD83D\uDCB0",
-             ".+ идёт на дно, а %hero% — получать клад. \uD83D\uDCB0 "};
+             "захлебнулась. %hero% выхватывает из морской пучины клад. \uD83D\uDCB0$",
+             "идёт на дно, а %hero% — получать клад. \uD83D\uDCB0$"};
 
     public static String[] bigIcelandGet =
             {"Хотя надпись на камне гласит, что именно здесь зарыта собака, %hero% выкапывает только самца. ♂$",
@@ -156,6 +156,7 @@ public class SailParser {
                     for (String pat:bigFishGet){
                         if (found == 0) {
                             Pattern pattern = Pattern.compile(pat.replace("%hero%", partHero));
+                            System.out.println(pat.replace("%hero%", partHero));
                             Matcher match   = pattern.matcher(turnText);
                             if (match.find()){
                                 found++;
