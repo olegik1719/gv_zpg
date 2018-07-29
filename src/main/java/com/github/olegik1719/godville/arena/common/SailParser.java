@@ -19,6 +19,16 @@ public class SailParser {
     public static String[] smallFishGet =
             {"послана на дно морское. %hero% находит сундучок. \uD83D\uDCE6$"};
 
+    public static String[] smallIcelandGet =
+            {"Не желая плавать с пустым трюмом, %hero% отбирает у туземцев сундучок с чем-то ценным. \uD83D\uDCE6$"};
+
+    public static String[] bigFishGet =
+            {"С последним ударом тварь обернулась прекрасной самкой, поблагодарила за спасение от колдовских чар и попросила её приютить. %hero% не прочь. ♀$",
+             "Рыба Мечт захлебнулась. %hero% выхватывает из морской пучины клад. \uD83D\uDCB0"};
+
+    public static String[] bigIcelandGet =
+            {"Хотя надпись на камне гласит, что именно здесь зарыта собака, %hero% выкапывает только самца. ♂$"};
+
     private String ID = "";            // ИД похода
     private Date sailDate;        // Дата похода
     private int influence;    // Количество Влияний
@@ -103,6 +113,36 @@ public class SailParser {
                 }
             }
         }
+        Pattern small   = Pattern.compile("\uD83D\uDCE6$");
+        Pattern bag     = Pattern.compile("\uD83D\uDCB0$");
+        Pattern male    = Pattern.compile("♂$");
+        Pattern female  = Pattern.compile("♀$");
+        for (int i = 0; i <= 100; i++) {
+            Elements turns = marine.select("div[id$=fight_chronicle]>div[class$=\"afl block\"]>div[class$=\"d_content\"]>div[class$=\"new_line dtc t" + i + "  saild_1\"]");
+            for (Element turn : turns) {
+                Matcher smMatch = small.matcher(turn.text());
+                Matcher smBag = bag.matcher(turn.text());
+                Matcher smMale = male.matcher(turn.text());
+                Matcher smFemale = female.matcher(turn.text());
+                if (smMatch.find()) {
+                    System.out.println(turn.text());
+                    System.out.println("--------------------------------------------------");
+                }
+                if (smBag.find()) {
+                    System.out.println(turn.text());
+                    System.out.println("--------------------------------------------------");
+                }
+                if (smMale.find()) {
+                    System.out.println(turn.text());
+                    System.out.println("--------------------------------------------------");
+                }
+                if (smFemale.find()) {
+                    System.out.println(turn.text());
+                    System.out.println("--------------------------------------------------");
+                }
+            }
+        }
+
     }
 
     private static Date getTime(Document fight) {
