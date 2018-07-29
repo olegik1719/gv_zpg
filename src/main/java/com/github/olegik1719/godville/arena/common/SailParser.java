@@ -24,10 +24,12 @@ public class SailParser {
 
     public static String[] bigFishGet =
             {"С последним ударом тварь обернулась прекрасной самкой, поблагодарила за спасение от колдовских чар и попросила её приютить. %hero% не прочь. ♀$",
-             "Рыба Мечт захлебнулась. %hero% выхватывает из морской пучины клад. \uD83D\uDCB0"};
+             ".+ захлебнулась. %hero% выхватывает из морской пучины клад. \uD83D\uDCB0",
+             ".+ идёт на дно, а %hero% — получать клад. \uD83D\uDCB0 "};
 
     public static String[] bigIcelandGet =
-            {"Хотя надпись на камне гласит, что именно здесь зарыта собака, %hero% выкапывает только самца. ♂$"};
+            {"Хотя надпись на камне гласит, что именно здесь зарыта собака, %hero% выкапывает только самца. ♂$",
+             "Выкопав сундук и закопав свидетелей, %hero% уносит клад на ковчег. \uD83D\uDCB0$"};
 
     private String ID = "";            // ИД похода
     private Date sailDate;        // Дата похода
@@ -118,27 +120,60 @@ public class SailParser {
         Pattern male    = Pattern.compile("♂$");
         Pattern female  = Pattern.compile("♀$");
         for (int i = 0; i <= 100; i++) {
-            Elements turns = marine.select("div[id$=fight_chronicle]>div[class$=\"afl block\"]>div[class$=\"d_content\"]>div[class$=\"new_line dtc t" + i + "  saild_1\"]");
+            Elements turns = marine.select("div[id$=fight_chronicle]>div[class$=\"afl block\"]>div[class$=\"d_content\"]>div[class$=\"new_line dtc t" + i + "  saild_"+ partNumber +"\"]");
             for (Element turn : turns) {
-                Matcher smMatch = small.matcher(turn.text());
-                Matcher smBag = bag.matcher(turn.text());
-                Matcher smMale = male.matcher(turn.text());
-                Matcher smFemale = female.matcher(turn.text());
+                String turnText = turn.text();
+                //System.out.println(turnText);
+                Matcher smMatch = small.matcher(turnText);
+                Matcher smBag = bag.matcher(turnText);
+                Matcher smMale = male.matcher(turnText);
+                Matcher smFemale = female.matcher(turnText);
+                int found = 0;
                 if (smMatch.find()) {
-                    System.out.println(turn.text());
-                    System.out.println("--------------------------------------------------");
+                    for (String pat:smallFishGet){
+                        if (found == 0) {
+                            Pattern pattern = Pattern.compile(pat.replace("%hero%", partHero));
+                            Matcher match   = pattern.matcher(turnText);
+                            if (match.find()){
+                                found++;
+                                smallGetFish++;
+                            }
+                        }
+                    }
+                    if (found == 0) for (String pat:smallIcelandGet){
+                        if (found == 0) {
+                            Pattern pattern = Pattern.compile(pat.replace("%hero%", partHero));
+                            Matcher match   = pattern.matcher(turnText);
+                            if (match.find()){
+                                found++;
+                                smallGetIceland++;
+                            }
+                        }
+                    }
+                    if (found == 0) System.out.println(turnText);
                 }
-                if (smBag.find()) {
-                    System.out.println(turn.text());
-                    System.out.println("--------------------------------------------------");
-                }
-                if (smMale.find()) {
-                    System.out.println(turn.text());
-                    System.out.println("--------------------------------------------------");
-                }
-                if (smFemale.find()) {
-                    System.out.println(turn.text());
-                    System.out.println("--------------------------------------------------");
+                if (smBag.find() || smMale.find() ||smFemale.find()) {
+                    for (String pat:bigFishGet){
+                        if (found == 0) {
+                            Pattern pattern = Pattern.compile(pat.replace("%hero%", partHero));
+                            Matcher match   = pattern.matcher(turnText);
+                            if (match.find()){
+                                found++;
+                                bigGetFish++;
+                            }
+                        }
+                    }
+                    if (found == 0) for (String pat:bigIcelandGet){
+                        if (found == 0) {
+                            Pattern pattern = Pattern.compile(pat.replace("%hero%", partHero));
+                            Matcher match   = pattern.matcher(turnText);
+                            if (match.find()){
+                                found++;
+                                bigGetIceland++;
+                            }
+                        }
+                    }
+                    if (found == 0) System.out.println(turnText);
                 }
             }
         }
@@ -161,12 +196,6 @@ public class SailParser {
             String url = ld.select("a").first().attr("href");
             if (url.length()>0) return url.substring(url.lastIndexOf('/')+1);
         }
-        return "";
-    }
-
-    public String getPart(){
-        Elements lastDuel = marine.select(".t_line saild_1");
-        System.out.println(lastDuel.text());
         return "";
     }
 

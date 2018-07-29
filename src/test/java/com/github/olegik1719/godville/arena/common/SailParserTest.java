@@ -21,8 +21,10 @@ public class SailParserTest {
     @Before
     public void setUp() throws Exception {
         WebChronicGetter logs = new WebChronicGetter("https://gv.erinome.net/duels/log/");
-        String log = logs.getHtml("468zw77");
-        chronic = new SailParser(log, "Гигантская Флюктуация");
+        //String log = logs.getHtml("468zw77");
+        String log = logs.getHtml("jqssxzx");
+        //chronic = new SailParser(log, "Гигантская Флюктуация");
+        chronic = new SailParser(log, "SirReindeer");
 
     }
 
@@ -33,40 +35,18 @@ public class SailParserTest {
 
     @Test
     public void getMarine() {
-        Document marine = chronic.getMarine();
-        Pattern small   = Pattern.compile("\uD83D\uDCE6$");
-        Pattern bag     = Pattern.compile("\uD83D\uDCB0$");
-        Pattern male    = Pattern.compile("♂$");
-        Pattern female  = Pattern.compile("♀$");
-        for (int i = 0; i <= 100; i++) {
-
-
-            Elements turns = marine.select("div[id$=fight_chronicle]>div[class$=\"afl block\"]>div[class$=\"d_content\"]>div[class$=\"new_line dtc t"+i+"  saild_1\"]");
-            for (Element turn : turns) {
-                //System.out.println(turn.text());
-                //System.out.println("--------------------------------------------------");
-                Matcher smMatch  = small.matcher(turn.text());
-                Matcher smBag    = bag.matcher(turn.text());
-                Matcher smMale   = male.matcher(turn.text());
-                Matcher smFemale = female.matcher(turn.text());
-                if (smMatch.find()){
-                    System.out.println(turn.text());
-                    System.out.println("--------------------------------------------------");
-                }
-                if (smBag.find()){
-                    System.out.println(turn.text());
-                    System.out.println("--------------------------------------------------");
-                }
-                if (smMale.find()){
-                    System.out.println(turn.text());
-                    System.out.println("--------------------------------------------------");
-                }
-                if (smFemale.find()){
-                    System.out.println(turn.text());
-                    System.out.println("--------------------------------------------------");
-                }
-            }
-        }
+        System.out.println("Date: " + chronic.getSailDate());
+        System.out.println("ID:   " + chronic.getID());
+        System.out.println("God:  " + chronic.getPartGod());
+        System.out.println("Num:  " + chronic.getPartNumber());
+        System.out.println("Hero: " + chronic.getPartHero());
+        System.out.println("BOut: " + chronic.getBigOut());
+        System.out.println("SOut: " + chronic.getSmallOut());
+        System.out.println("AOut: " + chronic.getAllBig());
+        System.out.println("sFis: " + chronic.getSmallGetFish());
+        System.out.println("sIce: " + chronic.getSmallGetIceland());
+        System.out.println("bFis: " + chronic.getBigGetFish());
+        System.out.println("bIce: " + chronic.getBigGetIceland());
     }
 
     @Test
