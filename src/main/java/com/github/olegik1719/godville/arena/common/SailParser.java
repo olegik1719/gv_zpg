@@ -69,7 +69,7 @@ public class SailParser {
                 drown++;
             }
 
-            if (result.text().equalsIgnoreCase("отбуксирован")){
+            if (result.equalsIgnoreCase("отбуксирован")){
                 tugs++;
             }
 
