@@ -21,8 +21,8 @@ public class SailParserTest {
     @Before
     public void setUp() throws Exception {
         WebChronicGetter logs = new WebChronicGetter("https://gv.erinome.net/duels/log/");
-        String idLog  = "468zw77";//"0e6s1wt";//"d0gheyk";//"468zw77";"jqssxzx"
-        String idPart = "Гигантская Флюктуация";//"Umbabarauma";//"Coyolxauhqui";//"Гигантская Флюктуация";"SirReindeer"
+        String idLog  = "0e6s1wt";//"468zw77";//"0e6s1wt";//"d0gheyk";//"468zw77";"jqssxzx"
+        String idPart = "Umbabarauma";//"Гигантская Флюктуация";//"Umbabarauma";//"Coyolxauhqui";//"Гигантская Флюктуация";"SirReindeer"
         String log = logs.getHtml(idLog);
         chronic = new SailParser(log, idPart);
 
