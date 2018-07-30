@@ -17,7 +17,8 @@ public class SailParser {
     private static final SimpleDateFormat LOG_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
 
     public static String[] smallFishGet =
-            {"послана на дно морское. %hero% находит сундучок. \uD83D\uDCE6$"};
+            {"послана на дно морское. %hero% находит сундучок. \uD83D\uDCE6$",
+             "Освобождённая от груза .+ камнем падает на дно. %hero% находит ларец. \uD83D\uDCE6$"};
 
     public static String[] smallIcelandGet =
             {"Не желая плавать с пустым трюмом, %hero% отбирает у туземцев сундучок с чем-то ценным. \uD83D\uDCE6$"};
@@ -25,11 +26,15 @@ public class SailParser {
     public static String[] bigFishGet =
             {"С последним ударом тварь обернулась прекрасной самкой, поблагодарила за спасение от колдовских чар и попросила её приютить. %hero% не прочь. ♀$",
              "захлебнулась. %hero% выхватывает из морской пучины клад. \uD83D\uDCB0$",
-             "идёт на дно, а %hero% — получать клад. \uD83D\uDCB0$"};
+             "идёт на дно, а %hero% — получать клад. \uD83D\uDCB0$",
+             "%hero% аккуратно вытаскивает самку, стараясь не повредить ценный мех ржавым багром. ♀$",
+             "%hero% помогает обнаруженной самке взобраться на ковчег, но .+. ♀$"};
 
     public static String[] bigIcelandGet =
             {"Хотя надпись на камне гласит, что именно здесь зарыта собака, %hero% выкапывает только самца. ♂$",
-             "Выкопав сундук и закопав свидетелей, %hero% уносит клад на ковчег. \uD83D\uDCB0$"};
+             "Выкопав сундук и закопав свидетелей, %hero% уносит клад на ковчег. \uD83D\uDCB0$",
+             "%hero% радостно заталкивает орущего что-то про дискриминацию самца в ковчег. ♂$",
+             "Настрадавшийся от царящего на острове матриархата самец стремглав несётся на ковчег и запирается в трюме. %hero% не возражает. ♂$"};
 
     private String ID = "";            // ИД похода
     private Date sailDate;        // Дата похода
@@ -54,7 +59,14 @@ public class SailParser {
 
     public SailParser(String HTMLLog, String god){
         marine = Jsoup.parse(HTMLLog);
-        sailDate = getTime(marine);
+
+        // set Date
+        try {
+            String date = marine.select("div.lastduelpl_f>div").first().text().substring(5);
+            sailDate = LOG_DATE_FORMATTER.parse(date);
+        } catch (ParseException exception) {
+            throw new RuntimeException("It's not log");
+        }
 
         // set ID
         Elements lastDuel = marine.select(".lastduelpl");
@@ -91,6 +103,7 @@ public class SailParser {
                 tugs++;
             }
 
+            //Set output
             String output = marine.select("div[id$=h_tbl] > div[class$=\"t_line saild_"+ i +"\"] > div[class$=c2] > div > span[id$=pl_"+i+"_c]").text();
             Matcher outputMatcher = outputPattern.matcher(output);
             if (outputMatcher.find()){
@@ -187,17 +200,4 @@ public class SailParser {
             throw new RuntimeException("It's not log");
         }
     }
-
-    private static String getID(Document fight){
-        Elements lastDuel = fight.select(".lastduelpl");
-
-        for (Element ld: lastDuel){
-            String url = ld.select("a").first().attr("href");
-            if (url.length()>0) return url.substring(url.lastIndexOf('/')+1);
-        }
-        return "";
-    }
-
-
-
 }

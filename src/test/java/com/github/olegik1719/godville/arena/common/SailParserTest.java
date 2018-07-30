@@ -16,15 +16,15 @@ import static org.junit.Assert.*;
 public class SailParserTest {
 
 
-    SailParser chronic;
+    private SailParser chronic;
 
     @Before
     public void setUp() throws Exception {
         WebChronicGetter logs = new WebChronicGetter("https://gv.erinome.net/duels/log/");
-        //String log = logs.getHtml("468zw77");
-        String log = logs.getHtml("jqssxzx");
-        //chronic = new SailParser(log, "Гигантская Флюктуация");
-        chronic = new SailParser(log, "SirReindeer");
+        String idLog  = "6l8lm4j";//"d0gheyk";//"468zw77";"jqssxzx"
+        String idPart = "Навья Страхолюдная";//"Coyolxauhqui";//"Гигантская Флюктуация";"SirReindeer"
+        String log = logs.getHtml(idLog);
+        chronic = new SailParser(log, idPart);
 
     }
 
