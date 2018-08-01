@@ -19,8 +19,12 @@ public class ForumParser {
         page = Jsoup.parse(getter.getHtml(saved));
         posts = page.select("tr[class$=\"post hentry\"]");
         for (Element post:posts){
-            System.out.println(post.text());
+            //System.out.println(post.toString());
+            String dateParse = "tr>td[class$=\"author vcard\"]>div[class$=\"post_info\"]>div[class$=\"date\"]";
+            System.out.println(post.select(dateParse).text());
+            //System.out.println(post.select(testParse).toString());
             System.out.println("================");
+            //return;
         }
     }
 }
