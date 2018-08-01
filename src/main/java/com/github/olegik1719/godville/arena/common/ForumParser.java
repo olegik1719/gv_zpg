@@ -21,9 +21,21 @@ public class ForumParser {
         for (Element post:posts){
             //System.out.println(post.toString());
             String dateParse = "tr>td[class$=\"author vcard\"]>div[class$=\"post_info\"]>div[class$=\"date\"]";
-            System.out.println(post.select(dateParse).text());
-            //System.out.println(post.select(testParse).toString());
+            System.out.println("Date: " + post.select(dateParse).text());
+            String postParse = "tr>td[class$=\"body entry-content p_content\"]";
+            Element postText =  post.select(postParse).first();
+            System.out.println(postText.text());
+            System.out.println(postText.toString());
+            Elements links = postText.select("*>a.href");
+            System.out.println(links.size());
+
+            for (Element link : links){
+                System.out.println(link.text());
+                System.out.println(link.toString());
+
+            }
             System.out.println("================");
+            return;
             //return;
         }
     }
