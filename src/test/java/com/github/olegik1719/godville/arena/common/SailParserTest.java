@@ -82,7 +82,7 @@ public class SailParserTest {
 
     @Test
     public void getSmallOut() {
-        assertEquals(0,chronic.getSmallOut());
+        assertEquals(1,chronic.getSmallOut());
     }
 
     @Test

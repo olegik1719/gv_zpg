@@ -9,6 +9,6 @@ public class ForumParserTest {
     @Test
     public void getHtmdoc() {
         //System.out.println(new ForumParser("112").getHtmdoc());
-        new ForumParser("112");
+        ForumParser.parsePosts("112");
     }
 }
