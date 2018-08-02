@@ -62,22 +62,19 @@ public class ForumParser {
         String nomination = null;
         boolean searchResult = false;
         boolean existResult  = false;
-        if (idPost.equalsIgnoreCase("1564071") /*|| true*/) {
+        try {
             for (Element child : children) {
                 //System.out.println(child.children().size());
 
                 if (searchResult) {
                     Elements grandСhildren = child.children();
-//                    for (Element grandChild : grandСhildren){
-//                        System.out.println(grandChild.toString());
-//                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!");
-//                    }
                     if (godPattern.matcher(grandСhildren.get(0).selectFirst("a[href]").attr("href")).find()){
                         idGog = grandСhildren.get(0).selectFirst("a[href]").text();
                         nomination = grandСhildren.get(1).text();
                         Elements logLinks = grandСhildren.get(2).select("a[href]");
                         for(Element logLink:logLinks){
-                            System.out.println(idGog + ": " + nomination + "; " + DefaultIDCalculator.getID(logLink.attr("href") )+ "; " + datePost);
+                            String id = DefaultIDCalculator.getID(logLink.attr("href") );
+                            System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
                         }
                         searchResult = false;
                         existResult  = true;
@@ -90,10 +87,13 @@ public class ForumParser {
                     searchResult = true;
                 }
             }
+        } catch (Exception e){
+            System.out.println("Какая-то ошибка:");
+            existResult = false;
         }
-//        if (!existResult){
-//            System.out.println(linkToPost);
-//        }
+        if (!existResult){
+            System.out.println(linkToPost);
+        }
     }
 
 //    String text  = link.text();

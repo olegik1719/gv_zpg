@@ -1,5 +1,7 @@
 package com.github.olegik1719.godville.arena.common;
 
+import com.github.olegik1719.godville.arena.chronicgetters.AnyChronicGetter;
+import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
 import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -52,7 +54,7 @@ public class SailParser {
 
     private static String[] empties =
             {"Среди текучих вод .+ белая плывёт\\.$",
-            "Внутрия обменивает свою жизнь на провизию\\.$",
+            ".+ обменивает свою жизнь на провизию\\.$",
             "Ровную линию горизонта ломают .+\\.$",
             ".+ не смогла защитить подсказку. %hero% радуется наживе\\.$",
             "Депрессивная .+ тонет в собственной печали\\.$",
@@ -92,7 +94,23 @@ public class SailParser {
             "Миновав грозовой перевал, появляется .+\\.$",
             "Вылезший из прибрежной заводи священник в ряске принимает молитву капитана %hero%\\.$",
             "Из простирающегося дыма над водой высовывается .+\\.$",
-            "Ничего не сказала .+, лишь хвостом по воде плеснула и ушла в глубокое море\\.$",};
+            "Ничего не сказала .+, лишь хвостом по воде плеснула и ушла в глубокое море\\.$",
+            "В песнях островных сирен %hero% слышит что-то важное\\.$",
+            ".+ выступает в тресковый поход\\.$",
+            "%hero% топит чудище\\. .+ протестует, но в процессе захлёбывается\\.$",
+            "Повстречав на острове рака-отшельника, %hero% молится вместе с ним\\.$",
+            "%hero% доверяется рассказам аборигенов, что на их острове ничего интересного нет, и вообще он необитаем\\.$",
+            "Несмотря на то, что это не маяк, а так — проблесковый маячок, видно отсюда на удивление много\\.$",
+            "%hero% находит скудные запасы провизии и пополняет ими не менее скудный рацион\\.$",
+            "%hero% констатирует, что этот бессмысленный клочок суши можно было и не посещать\\.$",
+            "Волн почти нет, так что .+ появляется на ровном месте\\.$",
+            "Увидев на острове знакомого пенсионного агента, %hero% в ужасе отчаливает\\.$",
+            "Шипастая .+ ёжится в волнах\\.$",
+            "Из морской глубины показалась .+ с глазами на мокром месте\\.$",
+            ".+ идёт на дно, а %hero% — получать подсказку\\.$",
+            ".+ захлебнулась\\. %hero% выхватывает из морской пучины провизию\\.$",
+            "%hero% предполагает, что именно на этом острове зимуют и съедают все бонусы раки\\.$",
+            ".+ протянута через киль\\. %hero% вылавливает из воды провизию\\.$"};
 
     private String ID = "";            // ИД похода
     private Date sailDate;        // Дата похода
@@ -114,6 +132,7 @@ public class SailParser {
 
     private int allBig;       // Всего вывезено кладов
     private Document marine;      // Документ Jsoup с хроникой
+    private static ChronicGetter logGetter = new AnyChronicGetter();
 
     public SailParser(String HTMLLog, String god){
         marine = Jsoup.parse(HTMLLog);
@@ -278,5 +297,31 @@ public class SailParser {
                 }
             }
         }
+    }
+
+    public String toString(String delim) {
+        return ID + delim
+                + sailDate + delim
+                + influence + delim
+                + escape + delim
+                + smallGetFish + delim
+                + smallGetIceland + delim
+                + bigGetFish + delim
+                + bigGetIceland + delim
+                + smallOut + delim
+                + bigOut + delim
+                + drown + delim
+                + tugs  + delim
+                + allBig + delim;
+    }
+
+    @Override
+    public String toString() {
+        return this.toString("; ");
+    }
+
+    public static String justCalculateLog(String ID, String Particiant){
+        SailParser sailParser = new SailParser(logGetter.getHtml(ID),Particiant);
+        return sailParser.toString();
     }
 }
