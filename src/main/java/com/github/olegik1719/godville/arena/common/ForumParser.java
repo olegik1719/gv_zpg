@@ -17,7 +17,7 @@ public class ForumParser {
 
 //    private Elements posts;
 //    private Document page;
-    private int count =5;
+    private int count = 9;
     private static Pattern godPattern = Pattern.compile("http.?://godville\\.net/gods/");
     private static Pattern logPattern = Pattern.compile("http.?://(?:godville|gv\\.erinome)\\.net/duels/log/");
     private static Pattern idPostPtrn = Pattern.compile("post_(\\d*)-row");
@@ -36,9 +36,9 @@ public class ForumParser {
         Elements posts = page.select("tr[class$=\"post hentry\"]");
         int cnt = 0;
         for (Element post:posts){
-            if (cnt++ < count ) {
+            if (cnt++ <= count ) {
                 parsePost(post, pageNum);
-            }else  {return;}
+            }//else  {return;}
         }
     }
 
