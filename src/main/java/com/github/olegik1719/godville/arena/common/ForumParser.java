@@ -17,7 +17,8 @@ public class ForumParser {
 
 //    private Elements posts;
 //    private Document page;
-    private int count = 9;
+    private int count = 17;
+    private int min = 14;
     private static Pattern godPattern = Pattern.compile("http.?://godville\\.net/gods/");
     private static Pattern logPattern = Pattern.compile("http.?://(?:godville|gv\\.erinome)\\.net/duels/log/");
     private static Pattern idPostPtrn = Pattern.compile("post_(\\d*)-row");
@@ -36,9 +37,10 @@ public class ForumParser {
         Elements posts = page.select("tr[class$=\"post hentry\"]");
         int cnt = 0;
         for (Element post:posts){
-            if (cnt++ <= count ) {
+            if (cnt <= count && cnt > min ) {
                 parsePost(post, pageNum);
             }//else  {return;}
+            cnt++;
         }
     }
 
@@ -76,7 +78,8 @@ public class ForumParser {
                         Elements logLinks = grandСhildren.get(2).select("a[href]");
                         for(Element logLink:logLinks){
                             String id = DefaultIDCalculator.getID(logLink.attr("href") );
-                            System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
+                            //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
+                            String test = (idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
                         }
                         searchResult = false;
                         existResult  = true;
