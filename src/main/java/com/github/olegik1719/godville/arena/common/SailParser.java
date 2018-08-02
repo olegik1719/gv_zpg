@@ -1,6 +1,7 @@
 package com.github.olegik1719.godville.arena.common;
 
 import com.github.olegik1719.godville.arena.chronicgetters.AnyChronicGetter;
+import com.github.olegik1719.godville.arena.chronicgetters.CashChronicGetter;
 import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
 import lombok.Getter;
 import org.jsoup.Jsoup;
@@ -407,7 +408,7 @@ public class SailParser {
 
     private int allBig;       // Всего вывезено кладов
     private Document marine;      // Документ Jsoup с хроникой
-    private static ChronicGetter logGetter = new AnyChronicGetter();
+    private static CashChronicGetter logGetter = new CashChronicGetter();
 
     public SailParser(String HTMLLog, String god){
         marine = Jsoup.parse(HTMLLog);
@@ -595,8 +596,9 @@ public class SailParser {
         return this.toString("; ");
     }
 
-    public static String justCalculateLog(String ID, String Particiant){
-        SailParser sailParser = new SailParser(logGetter.getHtml(ID),Particiant);
+    public static String justCalculateLog(String ID, String Participant){
+        logGetter.setDisk("res/marine/");
+        SailParser sailParser = new SailParser(logGetter.getHtml(ID),Participant);
         return sailParser.toString();
     }
 }
