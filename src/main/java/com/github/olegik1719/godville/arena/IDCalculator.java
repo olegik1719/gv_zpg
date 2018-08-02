@@ -8,5 +8,5 @@ public interface IDCalculator {
      * @param url -- ссылка на хронику
      * @return -- возвращает символы-индентификатор.
      */
-    String getID(String url);
+    static String getID(String url){return url;}
 }

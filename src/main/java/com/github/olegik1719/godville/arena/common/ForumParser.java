@@ -1,5 +1,6 @@
 package com.github.olegik1719.godville.arena.common;
 
+import com.github.olegik1719.godville.arena.DefaultIDCalculator;
 import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
 import com.github.olegik1719.godville.arena.chronicgetters.FileChronicGetter;
 import javafx.css.Match;
@@ -20,6 +21,7 @@ public class ForumParser {
     private static Pattern godPattern = Pattern.compile("http.?://godville\\.net/gods/");
     private static Pattern logPattern = Pattern.compile("http.?://(?:godville|gv\\.erinome)\\.net/duels/log/");
     private static Pattern idPostPtrn = Pattern.compile("post_(\\d*)-row");
+    private static Pattern resultPtrn = Pattern.compile("Результат(.?) заплыв(а|ов)");
     private int     themeNumbr = 3638;
 
     public ForumParser(int thNumber){
@@ -41,6 +43,7 @@ public class ForumParser {
     private void parsePost(Element post, String pageNum){
         String dateParse = "tr>td[class$=\"author vcard\"]>div[class$=\"post_info\"]>div[class$=\"date\"]";
         String datePost  = post.select(dateParse).text();
+//        System.out.println(datePost);
         Matcher idPM = idPostPtrn.matcher(post.attr("id"));
         String idPost;
         if (idPM.find()) {
@@ -56,12 +59,41 @@ public class ForumParser {
         //Elements links = postText.select("a[href]");
         Elements children = postText.children();
         String idGog = null;
-        if (idPost.equalsIgnoreCase("1564071")) {
+        String nomination = null;
+        boolean searchResult = false;
+        boolean existResult  = false;
+        if (idPost.equalsIgnoreCase("1564071") /*|| true*/) {
             for (Element child : children) {
-                System.out.println(child.toString());
-                System.out.println("================");
+                //System.out.println(child.children().size());
+
+                if (searchResult) {
+                    Elements grandСhildren = child.children();
+//                    for (Element grandChild : grandСhildren){
+//                        System.out.println(grandChild.toString());
+//                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!");
+//                    }
+                    if (godPattern.matcher(grandСhildren.get(0).selectFirst("a[href]").attr("href")).find()){
+                        idGog = grandСhildren.get(0).selectFirst("a[href]").text();
+                        nomination = grandСhildren.get(1).text();
+                        Elements logLinks = grandСhildren.get(2).select("a[href]");
+                        for(Element logLink:logLinks){
+                            System.out.println(idGog + ": " + nomination + "; " + DefaultIDCalculator.getID(logLink.attr("href") )+ "; " + datePost);
+                        }
+                        searchResult = false;
+                        existResult  = true;
+                    }else {
+                        System.out.println(linkToPost);
+                    }
+                }
+                if (resultPtrn.matcher(child.text()).find()){
+                    //System.out.println("!!!!!!!!!!!!!!!!!!!!!!");
+                    searchResult = true;
+                }
             }
         }
+//        if (!existResult){
+//            System.out.println(linkToPost);
+//        }
     }
 
 //    String text  = link.text();
