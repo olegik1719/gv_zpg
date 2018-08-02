@@ -40,7 +40,7 @@ public class ForumParser {
 
     private void parsePost(Element post, String pageNum){
         String dateParse = "tr>td[class$=\"author vcard\"]>div[class$=\"post_info\"]>div[class$=\"date\"]";
-        //System.out.println("Date: " + post.select(dateParse).text());
+        String datePost  = post.select(dateParse).text();
         Matcher idPM = idPostPtrn.matcher(post.attr("id"));
         String idPost;
         if (idPM.find()) {
@@ -48,19 +48,20 @@ public class ForumParser {
         }else{
             idPost = post.attr("id");
         }
-        System.out.println(idPost);
-        System.out.println("https://godville.net/forums/show_topic/"+themeNumbr+"?page="+pageNum+"#post_"+idPost);
-        //System.out.println(post.toString());
+        //System.out.println(idPost);
+        String linkToPost = "https://godville.net/forums/show_topic/"+themeNumbr+"?page="+pageNum+"#post_"+idPost;
+
         String postParse = "tr>td[class$=\"body entry-content p_content\"]";
         Element postText =  post.select(postParse).first();
         //Elements links = postText.select("a[href]");
         Elements children = postText.children();
         String idGog = null;
-
-//        for (Element child : children){
-//            System.out.println(child.toString());
-//            System.out.println("================");
-//        }
+        if (idPost.equalsIgnoreCase("1564071")) {
+            for (Element child : children) {
+                System.out.println(child.toString());
+                System.out.println("================");
+            }
+        }
     }
 
 //    String text  = link.text();
