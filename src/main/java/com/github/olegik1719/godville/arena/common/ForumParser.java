@@ -44,8 +44,8 @@ public class ForumParser {
     }
 
     private void parsePost(Element post, String pageNum){
-        String dateParse = "tr>td[class$=\"author vcard\"]>div[class$=\"post_info\"]>div[class$=\"date\"]";
-        String datePost  = post.select(dateParse).text();
+        String dateParse = "tr>td[class$=\"author vcard\"]>div[class$=\"post_info\"]>div[class$=\"date\"]> abbr[class$=\"updated\"]";
+        String datePost  = post.select(dateParse).attr("title");//.text();
 //        System.out.println(datePost);
         Matcher idPM = idPostPtrn.matcher(post.attr("id"));
         String idPost;
@@ -78,7 +78,7 @@ public class ForumParser {
                         for(Element logLink:logLinks){
                             String id = DefaultIDCalculator.getID(logLink.attr("href") );
                             //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
-                            String test = (idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
+                            String test = (idGog + ": " + nomination + "|| " + id + "|| " + datePost + "|| "+SailParser.justCalculateLog(id, idGog));
                             System.out.println(test);
                         }
                         searchResult = false;
