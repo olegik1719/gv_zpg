@@ -95,6 +95,7 @@ public class ForumParser {
         } catch (Exception e){
             //System.out.println("Какая-то ошибка:");
             //e.printStackTrace();
+            System.out.println(e.getMessage() + " in " + linkToPost );
             existResult = false;
         }
         if (!existResult){
