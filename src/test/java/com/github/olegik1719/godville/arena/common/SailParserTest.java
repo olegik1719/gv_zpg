@@ -1,15 +1,9 @@
 package com.github.olegik1719.godville.arena.common;
 
 import com.github.olegik1719.godville.arena.chronicgetters.WebChronicGetter;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.junit.Assert;
+import com.github.olegik1719.godville.arena.oceanarium.SailParser;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 

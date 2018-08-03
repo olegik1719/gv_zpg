@@ -1,8 +1,6 @@
-package com.github.olegik1719.godville.arena.common;
+package com.github.olegik1719.godville.arena.oceanarium;
 
-import com.github.olegik1719.godville.arena.chronicgetters.AnyChronicGetter;
 import com.github.olegik1719.godville.arena.chronicgetters.CashChronicGetter;
-import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
 import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -120,6 +118,7 @@ public class SailParser {
     private static String[] empties = {
             "Принимая шлепки вёсел за аплодисменты, из мрачных глубин появляется ищущая признания .+\\.$",
             ".+ надувает губу, чтобы не утонуть\\.$",
+            "%hero% обнаруживает тайник с провизией, скрытый за живописным водопадом\\.$",
             "%hero% покидает остров с набитым пузом — туземцы здесь очень агрессивные\\.$",
             "Навстречу со всех плавников несётся .+\\.$",
             "Островитяне уверили, что продукты к ним завезут ближайшим цунами, а пока они вынуждены поститься\\.$",
@@ -765,12 +764,12 @@ public class SailParser {
                 + bigOut + delim
                 + drown + delim
                 + tugs  + delim
-                + allBig + delim;
+                + allBig;
     }
 
     @Override
     public String toString() {
-        return this.toString("|| ");
+        return this.toString("|");
     }
 
     public static String justCalculateLog(String ID, String Participant){

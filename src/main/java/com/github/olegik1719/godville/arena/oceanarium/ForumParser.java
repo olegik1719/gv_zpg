@@ -1,10 +1,8 @@
-package com.github.olegik1719.godville.arena.common;
+package com.github.olegik1719.godville.arena.oceanarium;
 
 import com.github.olegik1719.godville.arena.DefaultIDCalculator;
 import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
 import com.github.olegik1719.godville.arena.chronicgetters.FileChronicGetter;
-import javafx.css.Match;
-import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,6 +21,7 @@ public class ForumParser {
     private static Pattern idPostPtrn = Pattern.compile("post_(\\d*)-row");
     private static Pattern resultPtrn = Pattern.compile("Результат(.?) заплыв(а|ов)");
     private int     themeNumbr = 3638;
+    private Oceanarium oceanarium = new Oceanarium();
 
     public ForumParser(int thNumber){
         themeNumbr = thNumber;
@@ -91,13 +90,15 @@ public class ForumParser {
                         for(Element logLink:logLinks){
                             String id = DefaultIDCalculator.getID(logLink.attr("href") );
                             //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
-                            String test = (idGog + "|| " + nomination + "|| " + id + "|| " + datePost + "|| "+SailParser.justCalculateLog(id, idGog));
+                            String test = (idGog + "| " + nomination + "| " + id + "| " + datePost + "|"+ SailParser.justCalculateLog(id, idGog) + "|" + linkToPost);
+                            //oceanarium.addLog(idGog,nomination,linkToPost,datePost,id);
                             System.out.println(test);
                         }
                         searchResult = false;
                         existResult  = true;
                     }else {
-                        System.out.println(linkToPost);
+                        //System.out.println(linkToPost);
+                        throw new RuntimeException("Not found Link to result");
                     }
                 }
                 if (resultPtrn.matcher(child.text()).find()){
@@ -109,10 +110,10 @@ public class ForumParser {
             //System.out.println("Какая-то ошибка:");
             //e.printStackTrace();
             System.out.println(linkToPost  + " : " + e.getMessage());
-            existResult = false;
+            existResult = true;
         }
         if (!existResult){
-            System.out.println(linkToPost);
+            System.out.println(linkToPost + " : No results");
         }
     }
 
