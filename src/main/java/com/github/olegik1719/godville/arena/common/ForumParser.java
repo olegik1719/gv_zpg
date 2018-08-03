@@ -79,7 +79,7 @@ public class ForumParser {
                             String id = DefaultIDCalculator.getID(logLink.attr("href") );
                             //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
                             String test = (idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
-                            //System.out.println(test);
+                            System.out.println(test);
                         }
                         searchResult = false;
                         existResult  = true;
@@ -95,7 +95,7 @@ public class ForumParser {
         } catch (Exception e){
             //System.out.println("Какая-то ошибка:");
             //e.printStackTrace();
-            System.out.println(e.getMessage() + " in " + linkToPost );
+            //System.out.println(e.getMessage() + " in " + linkToPost );
             existResult = false;
         }
         if (!existResult){
