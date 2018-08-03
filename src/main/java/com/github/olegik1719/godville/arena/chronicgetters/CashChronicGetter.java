@@ -37,7 +37,7 @@ public class CashChronicGetter implements ChronicGetter {
             }else
                 try (PrintWriter out = new PrintWriter(disk+chronicleID+".html")) {
                     out.println(result);
-                    Thread.sleep(10000);
+                    //Thread.sleep(10000);
                 } catch (Exception e) {
                     System.out.println("getHTML");
                     e.printStackTrace();
