@@ -32,9 +32,9 @@ public class CashChronicGetter implements ChronicGetter {
     public String getHtml(String chronicleID) {
         String result;
         if ((result = fileGetter.getHtml(chronicleID)).equals(""))
-            if ((result = webGetter.getHtml(chronicleID)).equals(""))
-                return "";
-            else
+            if ((result = webGetter.getHtml(chronicleID)).equals("")) {
+                throw new RuntimeException("https://godville.net/duels/log/"+chronicleID);
+            }else
                 try (PrintWriter out = new PrintWriter(disk+chronicleID+".html")) {
                     out.println(result);
                     Thread.sleep(10000);
