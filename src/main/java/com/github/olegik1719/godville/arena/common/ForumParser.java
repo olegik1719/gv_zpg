@@ -76,7 +76,6 @@ public class ForumParser {
                         nomination = grandСhildren.get(1).text();
                         Elements logLinks = grandСhildren.get(2).select("a[href]");
                         for(Element logLink:logLinks){
-                            Thread.sleep(10000);
                             String id = DefaultIDCalculator.getID(logLink.attr("href") );
                             //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
                             String test = (idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
@@ -94,6 +93,7 @@ public class ForumParser {
             }
         } catch (Exception e){
             System.out.println("Какая-то ошибка:");
+            e.printStackTrace();
             existResult = false;
         }
         if (!existResult){
