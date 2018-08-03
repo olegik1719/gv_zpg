@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 @Getter
 public class SailParser {
     private static final SimpleDateFormat LOG_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
-    //private static final SimpleDateFormat FOR_DATE_FORMATTER = new SimpleDateFormat("YYYY-MM-DDThh:mm:ssXX");
+    private static final SimpleDateFormat FOR_DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     private static String[] smallFishGet ={
             ".+ послана на дно морское\\. %hero% находит сундучок\\. 📦$",
@@ -752,7 +752,7 @@ public class SailParser {
 
     public String toString(String delim) {
         return ID + delim
-                + LOG_DATE_FORMATTER.format( sailDate) + delim
+                + FOR_DATE_FORMATTER.format( sailDate) + delim
                 + influence + delim
                 + escape + delim
                 + smallGetFish + delim
