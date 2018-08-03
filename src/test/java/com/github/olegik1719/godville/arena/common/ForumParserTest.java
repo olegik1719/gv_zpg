@@ -14,5 +14,6 @@ public class ForumParserTest {
         forumParser.parsePosts("113");
         forumParser.parsePosts("114");
         forumParser.parsePosts("115");
+        forumParser.parsePosts("116");
     }
 }

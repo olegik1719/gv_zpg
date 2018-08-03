@@ -79,11 +79,12 @@ public class ForumParser {
                             String id = DefaultIDCalculator.getID(logLink.attr("href") );
                             //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
                             String test = (idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
+                            //System.out.println(test);
                         }
                         searchResult = false;
                         existResult  = true;
                     }else {
-                        System.out.println(linkToPost);
+                        //System.out.println(linkToPost);
                     }
                 }
                 if (resultPtrn.matcher(child.text()).find()){
@@ -92,12 +93,12 @@ public class ForumParser {
                 }
             }
         } catch (Exception e){
-            System.out.println("Какая-то ошибка:");
-            e.printStackTrace();
+            //System.out.println("Какая-то ошибка:");
+            //e.printStackTrace();
             existResult = false;
         }
         if (!existResult){
-            System.out.println(linkToPost);
+            //System.out.println(linkToPost);
         }
     }
 
