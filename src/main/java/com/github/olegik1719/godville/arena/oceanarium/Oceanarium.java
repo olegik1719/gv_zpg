@@ -2,6 +2,7 @@ package com.github.olegik1719.godville.arena.oceanarium;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,29 +11,36 @@ import java.util.HashSet;
 
 public class Oceanarium {
 
-    private HashMap<Particiant, ArrayList<String>> results = new HashMap<>(); // Участник -- посты с результатом
-    private HashMap<String,String> dateOfPosts = new HashMap<>();   // post -- дата
-    private HashMap<String,ArrayList<String>> resLog = new HashMap<>(); // res -- Список логов
+    private HashMap<String,HashMap<String,String>> results; // Участник Х (Лог Х Номинация)
+    // Пост - результат
+    private HashMap<Post, HashMap<String,String>> posts; // Пост X (Участник Х Лог)
 
-    public void addLog(String idGod, String nomination, String linkToPost, String dateOfPost, String idLog){
-        Particiant particiant = new Particiant(idGod,nomination);
-        dateOfPosts.put(linkToPost,dateOfPost);
-        resLog.putIfAbsent(linkToPost,new ArrayList<>()).add(idLog);
-        results.putIfAbsent(particiant,new ArrayList<>()).add(linkToPost);
-    }
-
-    public ArrayList<String> getResults(){
-        ArrayList<String> getRes= new ArrayList<>();
-        //HashSet<Particiant> particiants = results.keySet();
-        //results.keySet().stream().
-        return new ArrayList<>();
-    }
-
-    @AllArgsConstructor
+    @Getter
     @EqualsAndHashCode
-    private class Particiant{
-        String idGog;
-        String nomination;
+    @AllArgsConstructor
+    public class Post{
+        private String post;
+        private String date;
     }
 
+    public Oceanarium(){
+        results = new HashMap<>();
+        posts = new HashMap<>();
+    }
+
+    public void addLog(String idGod, String nomination, String idLog){
+        HashMap<String,String> result = new HashMap<>();
+        result.put(idLog, nomination);
+        results.merge(idGod,result, (old, now) -> {old.putAll(now); return old;});
+    }
+
+    public void addPost(String linkToPost, String dateToPost, String idGod, String idLog){
+        HashMap<String, String> result = new HashMap<>();
+        result.put(idGod, idLog);
+        posts.merge(new Post(linkToPost,dateToPost),result,(old,now)->{old.putAll(now); return old;});
+    }
+
+    public String getResults(){
+        return null;
+    }
 }

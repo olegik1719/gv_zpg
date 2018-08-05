@@ -65,12 +65,19 @@ public class ForumParser {
         boolean searchResult = false;
         boolean existResult  = false;
         try {
+            if (idPost.equals("1564052")
+                    || idPost.equals("1564293")
+                    || idPost.equals("1565648")
+            ){
+                return;
+            }
             for (Element child : children) {
                 //System.out.println(child.children().size());
 
                 if (searchResult) {
                     Elements grandСhildren = child.children();
-                    if (godPattern.matcher(grandСhildren.get(0).selectFirst("a[href]").attr("href")).find()){
+                    if (godPattern.matcher(grandСhildren.get(0).selectFirst("a[href]").attr("href")).find()
+                            || idPost.equals("1564317")){
                         idGog = grandСhildren.get(0).selectFirst("a[href]").text();
                         nomination = grandСhildren.get(1).text();
                         if(nomination.toLowerCase().lastIndexOf("драко") > 0){
@@ -86,14 +93,16 @@ public class ForumParser {
                         }else if(nomination.toLowerCase().lastIndexOf("косатк") > 0){
                             nomination = "Косатки";
                         }
-                        Elements logLinks = grandСhildren.get(2).select("a[href]");
-                        for(Element logLink:logLinks){
-                            String id = DefaultIDCalculator.getID(logLink.attr("href") );
-                            //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
-                            String test = (idGog + "| " + nomination + "| " + id + "| " + datePost + "|"+ SailParser.justCalculateLog(id, idGog) + "|" + linkToPost);
-                            //oceanarium.addLog(idGog,nomination,linkToPost,datePost,id);
-                            System.out.println(test);
-                        }
+                            Elements logLinks = grandСhildren.get(2).select("a[href]");
+                            for (Element logLink : logLinks) {
+                                String id = DefaultIDCalculator.getID(logLink.attr("href"));
+                                //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
+                                //String test = (idGog + "| " + nomination + "| " + id + "| " + datePost + "|"+ SailParser.justCalculateLog(id, idGog) + "|" + linkToPost);
+                                oceanarium.addLog(idGog,nomination,id);
+                                oceanarium.addPost(linkToPost,datePost,idGog,id);
+                                //System.out.println(test);
+                            }
+
                         searchResult = false;
                         existResult  = true;
                     }else {
@@ -110,6 +119,9 @@ public class ForumParser {
             //System.out.println("Какая-то ошибка:");
             //e.printStackTrace();
             System.out.println(linkToPost  + " : " + e.getMessage());
+//            if (e.getMessage().equalsIgnoreCase("null")){
+//                e.printStackTrace();
+//            }
             existResult = true;
         }
         if (!existResult){
