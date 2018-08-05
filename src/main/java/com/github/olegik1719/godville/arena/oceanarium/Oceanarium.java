@@ -51,13 +51,10 @@ public class Oceanarium {
 
     public String getResults(String delim){
         //results.keySet().stream().sorted().flatMap(s -> results.get(s).keySet().stream().map(t -> t+delim+s))
-        String result = results.keySet().stream().flatMap(s -> results.get(s).keySet()
-                .stream().map(t -> SailParser.justCalculateLog(t,s, delim) )).sorted().collect(Collectors.joining("\n"));
+        String result = results.keySet().stream()
+                .flatMap(s -> results.get(s).keySet().stream()
+                        .map(t -> results.get(s).get(t) + delim +  SailParser.justCalculateLog(t,s, delim) ))
+                .sorted().collect(Collectors.joining("\n"));
         return result;
-    }
-
-    private class Record{
-        String idGod;
-        String result;
     }
 }

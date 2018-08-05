@@ -14,5 +14,7 @@ public class ForumParserTest {
         forumParser.parsePosts("114");
         forumParser.parsePosts("115");
         forumParser.parsePosts("116");
+        forumParser.parsePosts("117");
+        System.out.println(forumParser.toString());
     }
 }
