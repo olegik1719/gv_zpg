@@ -129,6 +129,10 @@ public class ForumParser {
         }
     }
 
+    @Override
+    public String toString(){
+        return oceanarium.getResults("|");
+    }
 //    String text  = link.text();
 //    String linkNeeded = link.attr("href");
 //    if (godPattern.matcher(linkNeeded).find()){

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class Oceanarium {
 
@@ -40,7 +41,23 @@ public class Oceanarium {
         posts.merge(new Post(linkToPost,dateToPost),result,(old,now)->{old.putAll(now); return old;});
     }
 
-    public String getResults(){
-        return null;
+//    private String getGodsResult(String idGod, char delim){
+//        results.get(idGod).keySet().stream().map(s-> {
+//            String result =
+//        }
+//        } )
+//        return null;
+//    }
+
+    public String getResults(String delim){
+        //results.keySet().stream().sorted().flatMap(s -> results.get(s).keySet().stream().map(t -> t+delim+s))
+        String result = results.keySet().stream().flatMap(s -> results.get(s).keySet()
+                .stream().map(t -> SailParser.justCalculateLog(t,s, delim) )).sorted().collect(Collectors.joining("\n"));
+        return result;
+    }
+
+    private class Record{
+        String idGod;
+        String result;
     }
 }

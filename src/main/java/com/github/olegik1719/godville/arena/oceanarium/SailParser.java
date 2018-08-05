@@ -787,9 +787,13 @@ public class SailParser {
         return this.toString("|");
     }
 
-    public static String justCalculateLog(String ID, String Participant){
+    public static String justCalculateLog(String ID, String Participant, String delim){
         logGetter.setDisk("res/marine/");
         SailParser sailParser = new SailParser(logGetter.getHtml(ID),Participant);
-        return sailParser.toString();
+        return sailParser.toString(delim);
+    }
+
+    public static String justCalculateLog(String ID, String Participant){
+        return justCalculateLog(ID,Participant,"|");
     }
 }
