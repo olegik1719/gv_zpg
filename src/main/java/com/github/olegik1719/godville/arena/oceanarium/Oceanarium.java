@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class Oceanarium {
 
-    private static final SimpleDateFormat LOG_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
+    private static final SimpleDateFormat FOR_DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
     private HashMap<String,HashMap<String,String>> results; // Участник Х (Лог Х Номинация)
     // Пост - результат
     //private HashMap<Post, HashMap<String,HashSet<String>>> posts; // Пост X (Участник Х Лог)
@@ -33,8 +33,9 @@ public class Oceanarium {
 
         private Date parseDate(){
             try {
-                return LOG_DATE_FORMATTER.parse(date);
+                return FOR_DATE_FORMATTER.parse(date);
             }catch (Exception e){
+                System.out.println(date);
                 return null;
             }
         }
@@ -97,7 +98,7 @@ public class Oceanarium {
                                             //+ results.get(s) + delim // лог?
                                             + posts.get(s).get(t).toString(delim) + delim
                                             + sailParser.toString(delim) + delim// результат
-                                            + (posts.get(s).get(t).parseDate().getTime() - sailParser.getSailDate().getTime())/ (24 * 60 * 60 * 1000);
+                                            + (posts.get(s).get(t).parseDate().getTime() - sailParser.getSailDate().getTime())/ (60 * 60 * 1000);
                                 }
                         ))
 
