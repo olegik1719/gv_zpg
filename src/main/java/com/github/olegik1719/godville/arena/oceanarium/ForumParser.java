@@ -84,17 +84,17 @@ public class ForumParser {
                         idGog = grandСhildren.get(0).selectFirst("a[href]").text();
                         nomination = grandСhildren.get(1).text();
                         if(nomination.toLowerCase().lastIndexOf("ракон") >= 0){
-                            nomination = "Морские Драконы";
+                            nomination = "6. Морские Драконы";
                         }else if (nomination.toLowerCase().lastIndexOf("лосос") >= 0) {
-                            nomination = "Лосось";
+                            nomination = "1. Лососи";
                         }else if(nomination.toLowerCase().lastIndexOf("дельфин") >= 0){
-                            nomination = "Дельфины";
+                            nomination = "2. Дельфины";
                         }else if(nomination.toLowerCase().lastIndexOf("китов") >= 0){
-                            nomination = "Китовые акулы";
+                            nomination = "4. Китовые акулы";
                         }else if(nomination.toLowerCase().lastIndexOf("акул") >= 0){
-                            nomination = "Акулы";
+                            nomination = "3. Акулы";
                         }else if(nomination.toLowerCase().lastIndexOf("косатк") >= 0){
-                            nomination = "Косатки";
+                            nomination = "5. Косатки";
                         }
                         Elements logLinks = grandСhildren.get(2).select("a[href]");
                         for (Element logLink : logLinks) {
