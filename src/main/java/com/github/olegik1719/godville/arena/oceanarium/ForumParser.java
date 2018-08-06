@@ -61,6 +61,10 @@ public class ForumParser {
         //System.out.println(idPost);
         String linkToPost = "https://godville.net/forums/show_topic/"+themeNumbr+"?post="+idPost;
 
+        if (idPost.equals("1565608")) {
+            System.out.println(post.text());
+        }
+
         String postParse = "tr>td[class$=\"body entry-content p_content\"]";
         Element postText =  post.select(postParse).first();
         //Elements links = postText.select("a[href]");
@@ -78,7 +82,7 @@ public class ForumParser {
                     if (godPattern.matcher(grandСhildren.get(0).selectFirst("a[href]").attr("href")).find()){
                         idGog = grandСhildren.get(0).selectFirst("a[href]").text();
                         nomination = grandСhildren.get(1).text();
-                        if(nomination.toLowerCase().lastIndexOf("драко") > 0){
+                        if(nomination.toLowerCase().lastIndexOf("ракон") > 0){
                             nomination = "Морские Драконы";
                         }else if (nomination.toLowerCase().lastIndexOf("лосос") > 0) {
                             nomination = "Лососи";

@@ -141,7 +141,7 @@ public class OceanariumTest {
         }
 
         if (brokenPosts.isEmpty()) {
-            System.out.println(oceanarium.getResults("|"));
+            //System.out.println(oceanarium.getResults("|"));
         }else {
             System.out.println(brokenPosts);
         }
