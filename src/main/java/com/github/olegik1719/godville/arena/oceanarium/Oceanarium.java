@@ -3,8 +3,10 @@ package com.github.olegik1719.godville.arena.oceanarium;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.SneakyThrows;
 
 import java.security.PublicKey;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class Oceanarium {
 
+    private static final SimpleDateFormat LOG_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy hh:mm X");
     private HashMap<String,HashMap<String,String>> results; // Участник Х (Лог Х Номинация)
     // Пост - результат
     //private HashMap<Post, HashMap<String,HashSet<String>>> posts; // Пост X (Участник Х Лог)
@@ -27,6 +30,14 @@ public class Oceanarium {
     public class Post{
         private String post;
         private String date;
+
+        private Date parseDate(){
+            try {
+                return LOG_DATE_FORMATTER.parse(date);
+            }catch (Exception e){
+                return null;
+            }
+        }
 
         @Override
         public String toString() {
@@ -73,14 +84,23 @@ public class Oceanarium {
         forumParser.parsePosts(page, this);
     }
 
+
+
+    @SneakyThrows
     public String getResults(String delim){
         String result = results.keySet().stream() // Список участников
                 .flatMap(s -> results.get(s).keySet().stream() // список логов
-                        .map(t -> results.get(s).get(t) + delim // номинация
-                                + s + delim // имя бога
-                                //+ results.get(s) + delim // лог?
-                                + posts.get(s).get(t).toString(delim) + delim
-                                +  SailParser.justCalculateLog(t,s, delim) )) // результат
+                        .map(t -> { SailParser sailParser = new SailParser(t,s);
+
+                                    return results.get(s).get(t) + delim // номинация
+                                            + s + delim // имя бога
+                                            //+ results.get(s) + delim // лог?
+                                            + posts.get(s).get(t).toString(delim) + delim
+                                            + sailParser.toString(delim) + delim// результат
+                                            + (posts.get(s).get(t).parseDate().getTime() - sailParser.getSailDate().getTime())/ (24 * 60 * 60 * 1000);
+                                }
+                        ))
+
                 .sorted().collect(Collectors.joining("\n"));
         return result;
     }

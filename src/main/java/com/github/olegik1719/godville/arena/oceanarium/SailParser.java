@@ -618,7 +618,13 @@ public class SailParser {
     private Document marine;      // Документ Jsoup с хроникой
     private static CashChronicGetter logGetter = new CashChronicGetter();
 
-    public SailParser(String HTMLLog, String god){
+    public SailParser(String idLog, String god){
+        logGetter.setDisk("res/marine/");
+        this.fillFields(logGetter.getHtml(idLog),god);
+
+    }
+
+    private SailParser fillFields(String HTMLLog, String god){
         marine = Jsoup.parse(HTMLLog);
 
         // set Date
@@ -781,6 +787,7 @@ public class SailParser {
                 }
             }
         }
+        return this;
     }
 
     public String toString(String delim) {
@@ -806,8 +813,7 @@ public class SailParser {
     }
 
     public static String justCalculateLog(String ID, String Participant, String delim){
-        logGetter.setDisk("res/marine/");
-        SailParser sailParser = new SailParser(logGetter.getHtml(ID),Participant);
+        SailParser sailParser = new SailParser(ID,Participant);
         return sailParser.toString(delim);
     }
 
