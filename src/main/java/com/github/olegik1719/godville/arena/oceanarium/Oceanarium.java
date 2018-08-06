@@ -50,14 +50,14 @@ public class Oceanarium {
     }
 
     public void addPost(String linkToPost, String dateToPost, String idGod, String idLog){
-        System.out.println(linkToPost + " " + dateToPost + " " + idGod + " " + idLog);
+//        System.out.println(linkToPost + " " + dateToPost + " " + idGod + " " + idLog);
         posts.putIfAbsent(idGod,new HashMap<>());
-        System.out.println(posts.get(idGod).size());
+//        System.out.println(posts.get(idGod).size());
         posts.get(idGod).computeIfPresent(idLog,(l,p)->{if (p.post.compareTo(linkToPost)<0)
             return new Post(linkToPost, dateToPost);
         else return p;});
         posts.get(idGod).putIfAbsent(idLog,new Post(linkToPost,dateToPost));
-        System.out.println(posts.get(idGod).get(idLog));
+//        System.out.println(posts.get(idGod).get(idLog));
 
         //posts.merge(idGod,result,(old,now) -> {old.get(idLog).addAll(now.get(idLog));return old;});
         //posts.merge(idGod,result,(old,now) -> {now.merge(idLog,post,(s1,s2)->{s2.addAll(s1);return s2;}); return now;});
