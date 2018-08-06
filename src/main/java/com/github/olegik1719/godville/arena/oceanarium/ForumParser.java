@@ -59,7 +59,7 @@ public class ForumParser {
             idPost = post.attr("id");
         }
         //System.out.println(idPost);
-        String linkToPost = "https://godville.net/forums/show_topic/"+themeNumbr+"?post="+idPost;
+        String linkToPost = "https://godville.net/forums/redirect_to_post/"+themeNumbr+"?post="+idPost;
 
 
 
@@ -80,17 +80,17 @@ public class ForumParser {
                     if (godPattern.matcher(grandСhildren.get(0).selectFirst("a[href]").attr("href")).find()){
                         idGog = grandСhildren.get(0).selectFirst("a[href]").text();
                         nomination = grandСhildren.get(1).text();
-                        if(nomination.toLowerCase().lastIndexOf("ракон") > 0){
+                        if(nomination.toLowerCase().lastIndexOf("ракон") >= 0){
                             nomination = "Морские Драконы";
-                        }else if (nomination.toLowerCase().lastIndexOf("лосос") > 0) {
-                            nomination = "Лососи";
-                        }else if(nomination.toLowerCase().lastIndexOf("дельфин") > 0){
+                        }else if (nomination.toLowerCase().lastIndexOf("лосос") >= 0) {
+                            nomination = "Лосось";
+                        }else if(nomination.toLowerCase().lastIndexOf("дельфин") >= 0){
                             nomination = "Дельфины";
-                        }else if(nomination.toLowerCase().lastIndexOf("китов") > 0){
+                        }else if(nomination.toLowerCase().lastIndexOf("китов") >= 0){
                             nomination = "Китовые акулы";
-                        }else if(nomination.toLowerCase().lastIndexOf("акул") > 0){
+                        }else if(nomination.toLowerCase().lastIndexOf("акул") >= 0){
                             nomination = "Акулы";
-                        }else if(nomination.toLowerCase().lastIndexOf("косатк") > 0){
+                        }else if(nomination.toLowerCase().lastIndexOf("косатк") >= 0){
                             nomination = "Косатки";
                         }
                         Elements logLinks = grandСhildren.get(2).select("a[href]");
