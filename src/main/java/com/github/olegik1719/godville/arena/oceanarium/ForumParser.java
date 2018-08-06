@@ -61,9 +61,7 @@ public class ForumParser {
         //System.out.println(idPost);
         String linkToPost = "https://godville.net/forums/show_topic/"+themeNumbr+"?post="+idPost;
 
-        if (idPost.equals("1565608")) {
-            System.out.println(post.text());
-        }
+
 
         String postParse = "tr>td[class$=\"body entry-content p_content\"]";
         Element postText =  post.select(postParse).first();
@@ -95,15 +93,16 @@ public class ForumParser {
                         }else if(nomination.toLowerCase().lastIndexOf("косатк") > 0){
                             nomination = "Косатки";
                         }
-                            Elements logLinks = grandСhildren.get(2).select("a[href]");
-                            for (Element logLink : logLinks) {
-                                String id = DefaultIDCalculator.getID(logLink.attr("href"));
-                                oceanarium.addResult(linkToPost,datePost,idGog,nomination,id);
-                            }
+                        Elements logLinks = grandСhildren.get(2).select("a[href]");
+                        for (Element logLink : logLinks) {
+                            String id = DefaultIDCalculator.getID(logLink.attr("href"));
+                            oceanarium.addResult(linkToPost,datePost,idGog,nomination,id);
+                            existResult  = true;
+                        }
 
                         searchResult = false;
-                        existResult  = true;
                     }else {
+                        //System.out.println(postText.toString());
                         throw new RuntimeException("Not found Link to result");
                     }
                 }

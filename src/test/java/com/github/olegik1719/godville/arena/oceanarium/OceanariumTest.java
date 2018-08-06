@@ -140,8 +140,73 @@ public class OceanariumTest {
 
         }
 
+        {//1565581
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1565581"
+                    ,"2018-07-26T21:19:44+03:00"
+                    , "Асайя"
+                    , "Косатки"
+                    ,"awq3uj5");
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1565581"
+                    ,"2018-07-26T21:19:44+03:00"
+                    , "Асайя"
+                    , "Косатки"
+                    ,"tj0dgxu");
+            brokenPosts.remove(1565581);
+        }
+        {//1565608
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1565608"
+                    ,"2018-07-26T23:01:00+03:00"
+                    , "Тина Делла"
+                    , "Морской Дракон"
+                    ,"ll03cbp");
+            brokenPosts.remove(1565608);
+        }
+        {//1567518
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1567518"
+                    ,"2018-07-31T15:11:31+03:00"
+                    , "Katzenjammer"
+                    , "Дельфины"
+                    ,"f4xwqg7");
+            brokenPosts.remove(1567518);
+        }
+        {//1567910
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1567910"
+                    ,"2018-08-01T05:38:17+03:00"
+                    , "MachtFrei"
+                    , "Дельфины"
+                    ,"3c00qzz");
+
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1567910"
+                    ,"2018-08-01T05:38:17+03:00"
+                    , "MachtFrei"
+                    , "Дельфины"
+                    ,"rryyepp");
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1567910"
+                    ,"2018-08-01T05:38:17+03:00"
+                    , "MachtFrei"
+                    , "Дельфины"
+                    ,"96qa6l7");
+            brokenPosts.remove(1567910);
+        }
+        {//1569411
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1569411"
+                    ,"2018-08-05T08:19:35+03:00"
+                    , "MachtFrei"
+                    , "Дельфины"
+                    ,"37z5m1y");
+            brokenPosts.remove(1569411);
+        }
+        {//1569731
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1569731"
+                    ,"2018-08-06T00:09:17+03:00"
+                    , "MachtFrei"
+                    , "Дельфины"
+                    ,"1kz9k0q");
+            brokenPosts.remove(1569731);
+        }
+
         if (brokenPosts.isEmpty()) {
-            //System.out.println(oceanarium.getResults("|"));
+            System.out.println(oceanarium.getResults("|"));
         }else {
             System.out.println(brokenPosts);
         }
