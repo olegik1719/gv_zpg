@@ -74,6 +74,9 @@ public class ForumParser {
         try {
             for (Element child : children) {
                 //System.out.println(child.children().size());
+//                if (idPost.equals("1568645")){
+//                    System.out.println(idPost + child.children().size());
+//                }
 
                 if (searchResult) {
                     Elements grandСhildren = child.children();
@@ -99,6 +102,9 @@ public class ForumParser {
                             oceanarium.addResult(linkToPost,datePost,idGog,nomination,id);
                             existResult  = true;
                         }
+//                        if (idPost.equals("1568645")){
+//                            System.out.println(idPost + logLinks.size());
+//                        }
 
                         searchResult = false;
                     }else {
