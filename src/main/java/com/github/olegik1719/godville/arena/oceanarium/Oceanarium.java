@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +16,8 @@ public class Oceanarium {
     private HashMap<String,HashMap<String,String>> results; // Участник Х (Лог Х Номинация)
     // Пост - результат
     private HashMap<Post, HashMap<String,String>> posts; // Пост X (Участник Х Лог)
+
+    private ForumParser forumParser = new ForumParser(3638);
 
     @Getter
     @EqualsAndHashCode
@@ -41,20 +44,29 @@ public class Oceanarium {
         posts.merge(new Post(linkToPost,dateToPost),result,(old,now)->{old.putAll(now); return old;});
     }
 
-//    private String getGodsResult(String idGod, char delim){
-//        results.get(idGod).keySet().stream().map(s-> {
-//            String result =
-//        }
-//        } )
-//        return null;
-//    }
+    public void addResult(String linkToPost, String dateToPost, String idGod, String nomination,String idLog){
+        addLog(idGod,nomination,idLog);
+        addPost(linkToPost,dateToPost,idGod,idLog);
+    }
+
+    public void addForumPage(String page){
+        forumParser.parsePosts(page, this);
+    }
 
     public String getResults(String delim){
-        //results.keySet().stream().sorted().flatMap(s -> results.get(s).keySet().stream().map(t -> t+delim+s))
         String result = results.keySet().stream()
                 .flatMap(s -> results.get(s).keySet().stream()
                         .map(t -> results.get(s).get(t) + delim +  SailParser.justCalculateLog(t,s, delim) ))
                 .sorted().collect(Collectors.joining("\n"));
         return result;
+    }
+
+    public String getErrors(){
+        String result = forumParser.getBrokenLinks().stream().sorted().collect(Collectors.joining("\n"));
+        return result;
+    }
+
+    public ArrayList<String> getBroken(){
+        return forumParser.getBrokenPosts().stream().sorted().collect(Collectors.toCollection(ArrayList::new));
     }
 }

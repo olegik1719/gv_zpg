@@ -3,11 +3,13 @@ package com.github.olegik1719.godville.arena.oceanarium;
 import com.github.olegik1719.godville.arena.DefaultIDCalculator;
 import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
 import com.github.olegik1719.godville.arena.chronicgetters.FileChronicGetter;
+import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,17 +19,20 @@ public class ForumParser {
 //    private Document page;
     //private int count = 50;
     private static Pattern godPattern = Pattern.compile("http.?://godville\\.net/gods/");
-    private static Pattern logPattern = Pattern.compile("http.?://(?:godville|gv\\.erinome)\\.net/duels/log/");
+    //private static Pattern logPattern = Pattern.compile("http.?://(?:godville|gv\\.erinome)\\.net/duels/log/");
     private static Pattern idPostPtrn = Pattern.compile("post_(\\d*)-row");
     private static Pattern resultPtrn = Pattern.compile("Результат(.?) заплыв(а|ов)");
-    private int     themeNumbr = 3638;
-    private Oceanarium oceanarium = new Oceanarium();
+    private int     themeNumbr;
+    @Getter
+    private HashSet<String> brokenLinks = new HashSet<>();
+    @Getter
+    private HashSet<String> brokenPosts = new HashSet<>();
 
     public ForumParser(int thNumber){
         themeNumbr = thNumber;
     }
 
-    public void parsePosts(String saved){
+    public void parsePosts(String saved, Oceanarium oceanarium){
         ChronicGetter getter = new FileChronicGetter("res/forum/", ".htm");
         Document page = Jsoup.parse(getter.getHtml(saved));
         String pageNumParse = "span[class=\"current\"]";
@@ -36,13 +41,13 @@ public class ForumParser {
         int cnt = 0;
         for (Element post:posts){
         //    if (cnt <= count && cnt > min ) {
-                parsePost(post, pageNum);
+                parsePost(post, pageNum, oceanarium);
 //            }//else  {return;}
 //            cnt++;
         }
     }
 
-    private void parsePost(Element post, String pageNum){
+    private void parsePost(Element post, String pageNum, Oceanarium oceanarium){
         String dateParse = "tr>td[class$=\"author vcard\"]>div[class$=\"post_info\"]>div[class$=\"date\"]> abbr[class$=\"updated\"]";
         String datePost  = post.select(dateParse).attr("title");//.text();
 //        System.out.println(datePost);
@@ -54,7 +59,7 @@ public class ForumParser {
             idPost = post.attr("id");
         }
         //System.out.println(idPost);
-        String linkToPost = "https://godville.net/forums/show_topic/"+themeNumbr+"?page="+pageNum+"#post_"+idPost;
+        String linkToPost = "https://godville.net/forums/show_topic/"+themeNumbr+"?post="+idPost;
 
         String postParse = "tr>td[class$=\"body entry-content p_content\"]";
         Element postText =  post.select(postParse).first();
@@ -65,19 +70,12 @@ public class ForumParser {
         boolean searchResult = false;
         boolean existResult  = false;
         try {
-            if (idPost.equals("1564052")
-                    || idPost.equals("1564293")
-                    || idPost.equals("1565648")
-            ){
-                return;
-            }
             for (Element child : children) {
                 //System.out.println(child.children().size());
 
                 if (searchResult) {
                     Elements grandСhildren = child.children();
-                    if (godPattern.matcher(grandСhildren.get(0).selectFirst("a[href]").attr("href")).find()
-                            || idPost.equals("1564317")){
+                    if (godPattern.matcher(grandСhildren.get(0).selectFirst("a[href]").attr("href")).find()){
                         idGog = grandСhildren.get(0).selectFirst("a[href]").text();
                         nomination = grandСhildren.get(1).text();
                         if(nomination.toLowerCase().lastIndexOf("драко") > 0){
@@ -96,58 +94,29 @@ public class ForumParser {
                             Elements logLinks = grandСhildren.get(2).select("a[href]");
                             for (Element logLink : logLinks) {
                                 String id = DefaultIDCalculator.getID(logLink.attr("href"));
-                                //System.out.println(idGog + ": " + nomination + "; " + id + "; " + datePost + "; "+SailParser.justCalculateLog(id, idGog));
-                                //String test = (idGog + "| " + nomination + "| " + id + "| " + datePost + "|"+ SailParser.justCalculateLog(id, idGog) + "|" + linkToPost);
-                                oceanarium.addLog(idGog,nomination,id);
-                                oceanarium.addPost(linkToPost,datePost,idGog,id);
-                                //System.out.println(test);
+                                oceanarium.addResult(linkToPost,datePost,idGog,nomination,id);
                             }
 
                         searchResult = false;
                         existResult  = true;
                     }else {
-                        //System.out.println(linkToPost);
                         throw new RuntimeException("Not found Link to result");
                     }
                 }
                 if (resultPtrn.matcher(child.text()).find()){
-                    //System.out.println("!!!!!!!!!!!!!!!!!!!!!!");
                     searchResult = true;
                 }
             }
         } catch (Exception e){
-            //System.out.println("Какая-то ошибка:");
-            //e.printStackTrace();
-            System.out.println(linkToPost  + " : " + e.getMessage());
-//            if (e.getMessage().equalsIgnoreCase("null")){
-//                e.printStackTrace();
-//            }
+            brokenLinks.add(linkToPost + " | " + e.getMessage());
+            brokenPosts.add(idPost);
             existResult = true;
         }
         if (!existResult){
-            System.out.println(linkToPost + " : No results");
+            brokenLinks.add(linkToPost + " | " + "No ress");
+            brokenPosts.add(idPost);
         }
     }
 
-    @Override
-    public String toString(){
-        return oceanarium.getResults("|");
-    }
-//    String text  = link.text();
-//    String linkNeeded = link.attr("href");
-//    if (godPattern.matcher(linkNeeded).find()){
-//        idGog = text;
-//    }else {
-//        if (logPattern.matcher(linkNeeded).find()) {
-//            System.out.println("Для бога '" + idGog + "' найдена хроника: " + linkNeeded);
-//        } else {
-//            System.out.println(link.toString());
-//        }
-//    }
-//    return;
-//    return;
-//    System.out.println(post.toString());
-//    System.out.println("Date: " + post.select(dateParse).text());
-//    System.out.println(postText.text());
-//    System.out.println(postText.toString());
+
 }
