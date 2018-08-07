@@ -1,7 +1,7 @@
-package com.github.olegik1719.godville.arena.common;
+package com.github.olegik1719.godville.duels.common;
 
-import com.github.olegik1719.godville.arena.arena.Duel;
-import com.github.olegik1719.godville.arena.arena.Participant;
+import com.github.olegik1719.godville.duels.arena.Duel;
+import com.github.olegik1719.godville.duels.arena.Participant;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

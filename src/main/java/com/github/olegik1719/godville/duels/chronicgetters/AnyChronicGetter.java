@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.arena.chronicgetters;
+package com.github.olegik1719.godville.duels.chronicgetters;
 
 public class AnyChronicGetter implements ChronicGetter {
 

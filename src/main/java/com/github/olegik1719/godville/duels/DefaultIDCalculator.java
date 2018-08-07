@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.arena;
+package com.github.olegik1719.godville.duels;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

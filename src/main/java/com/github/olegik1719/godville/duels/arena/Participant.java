@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.arena.arena;
+package com.github.olegik1719.godville.duels.arena;
 
 /*
 Общие:

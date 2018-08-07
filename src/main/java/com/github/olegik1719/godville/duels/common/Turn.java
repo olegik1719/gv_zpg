@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.arena.common;
+package com.github.olegik1719.godville.duels.common;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

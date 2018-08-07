@@ -1,16 +1,14 @@
-package com.github.olegik1719.godville.arena.oceanarium;
+package com.github.olegik1719.godville.duels.oceanarium;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class Oceanarium {

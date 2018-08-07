@@ -1,9 +1,9 @@
-package com.github.olegik1719.godville.arena;
+package com.github.olegik1719.godville.duels;
 
-import com.github.olegik1719.godville.arena.arena.Participant;
-import com.github.olegik1719.godville.arena.chronicgetters.AnyChronicGetter;
-import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
-import com.github.olegik1719.godville.arena.common.ArenaParser;
+import com.github.olegik1719.godville.duels.arena.Participant;
+import com.github.olegik1719.godville.duels.chronicgetters.AnyChronicGetter;
+import com.github.olegik1719.godville.duels.chronicgetters.ChronicGetter;
+import com.github.olegik1719.godville.duels.common.ArenaParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;

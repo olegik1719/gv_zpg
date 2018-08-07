@@ -1,6 +1,5 @@
-package com.github.olegik1719.godville.arena.chronicgetters;
+package com.github.olegik1719.godville.duels.chronicgetters;
 
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 public class CashChronicGetter implements ChronicGetter {

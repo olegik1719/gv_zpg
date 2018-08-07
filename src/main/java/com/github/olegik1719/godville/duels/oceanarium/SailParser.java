@@ -1,6 +1,6 @@
-package com.github.olegik1719.godville.arena.oceanarium;
+package com.github.olegik1719.godville.duels.oceanarium;
 
-import com.github.olegik1719.godville.arena.chronicgetters.CashChronicGetter;
+import com.github.olegik1719.godville.duels.chronicgetters.CashChronicGetter;
 import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

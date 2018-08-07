@@ -1,14 +1,9 @@
-package com.github.olegik1719.godville.arena.oceanarium;
+package com.github.olegik1719.godville.duels.oceanarium;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
-
-import static org.junit.Assert.*;
 
 public class OceanariumTest {
 

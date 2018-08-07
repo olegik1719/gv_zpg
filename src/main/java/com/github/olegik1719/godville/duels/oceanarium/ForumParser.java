@@ -1,8 +1,8 @@
-package com.github.olegik1719.godville.arena.oceanarium;
+package com.github.olegik1719.godville.duels.oceanarium;
 
-import com.github.olegik1719.godville.arena.DefaultIDCalculator;
-import com.github.olegik1719.godville.arena.chronicgetters.ChronicGetter;
-import com.github.olegik1719.godville.arena.chronicgetters.FileChronicGetter;
+import com.github.olegik1719.godville.duels.DefaultIDCalculator;
+import com.github.olegik1719.godville.duels.chronicgetters.ChronicGetter;
+import com.github.olegik1719.godville.duels.chronicgetters.FileChronicGetter;
 import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -1,7 +1,7 @@
-package com.github.olegik1719.godville.arena.common;
+package com.github.olegik1719.godville.duels.common;
 
-import com.github.olegik1719.godville.arena.chronicgetters.WebChronicGetter;
-import com.github.olegik1719.godville.arena.oceanarium.SailParser;
+import com.github.olegik1719.godville.duels.chronicgetters.WebChronicGetter;
+import com.github.olegik1719.godville.duels.oceanarium.SailParser;
 import org.junit.Before;
 import org.junit.Test;
 

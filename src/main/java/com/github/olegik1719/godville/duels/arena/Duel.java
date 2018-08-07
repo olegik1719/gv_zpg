@@ -1,7 +1,7 @@
-package com.github.olegik1719.godville.arena.arena;
+package com.github.olegik1719.godville.duels.arena;
 
 
-import com.github.olegik1719.godville.arena.common.Turn;
+import com.github.olegik1719.godville.duels.common.Turn;
 import lombok.AllArgsConstructor;
 
 import java.util.Date;

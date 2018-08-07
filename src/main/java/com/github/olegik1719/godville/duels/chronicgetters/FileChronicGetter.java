@@ -1,4 +1,4 @@
-package com.github.olegik1719.godville.arena.chronicgetters;
+package com.github.olegik1719.godville.duels.chronicgetters;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
