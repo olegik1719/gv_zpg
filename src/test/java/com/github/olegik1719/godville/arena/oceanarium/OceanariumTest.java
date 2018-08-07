@@ -206,11 +206,44 @@ public class OceanariumTest {
         }
 
         brokenPosts.remove(1569952);
+        brokenPosts.remove(1570011);
+
+        { //1570209
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1570209"
+                    ,"2018-08-06T20:51:32+03:00"
+                    , "Эльт"
+                    , "3. Акулы"
+                    ,"d4ey9yb");
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1570209"
+                    ,"2018-08-06T20:51:32+03:00"
+                    , "Эльт"
+                    , "3. Акулы"
+                    ,"mp7x9f8");
+            brokenPosts.remove(1570209);
+        }
+
+        brokenPosts.remove(1570222);
+        brokenPosts.remove(1570227);
+        brokenPosts.remove(1570276);
+
+        {//1570278
+            oceanarium.addResult("https://godville.net/forums/redirect_to_post/3638?post=1570278"
+                    ,"2018-08-06T22:44:20+03:00"
+                    , "Просто Богиня"
+                    , "2. Дельфины"
+                    ,"0sj1e31");
+            brokenPosts.remove(1570278);
+        }
+
+        brokenPosts.remove(1570279);
 
         if (brokenPosts.isEmpty()) {
             System.out.println(oceanarium.getResults("|"));
         }else {
-            System.out.println(brokenPosts);
+            for(int idPost:brokenPosts){
+                System.out.println(idPost + " : https://godville.net/forums/redirect_to_post/3638?post="+idPost);
+            }
+
         }
     }
 }
